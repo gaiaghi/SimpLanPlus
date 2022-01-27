@@ -11,6 +11,7 @@ public interface Node {
   //Indent indica la stringa che descrive l'ast che viene prima del nodo in esame  
   String toPrint(String indent);
   
+
   
   //fa il type checking e ritorna il tipo dell'espressione/identificatore
   //throws exception ?
