@@ -22,7 +22,7 @@ public interface Node {
   String codeGeneration();
   
   
-  //analisi semantica??
+  //analisi semantica?? --> variabili già dichiarate/non dichiarate
   ArrayList<SemanticError> checkSemantics(Environment env);
   
   

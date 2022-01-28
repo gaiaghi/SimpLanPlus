@@ -18,25 +18,113 @@ public interface SimpLanPlusListener extends ParseTreeListener {
 	 */
 	void exitBlock(SimpLanPlusParser.BlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SimpLanPlusParser#statement}.
+	 * Enter a parse tree produced by the {@code assignmentL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatement(SimpLanPlusParser.StatementContext ctx);
+	void enterAssignmentL(SimpLanPlusParser.AssignmentLContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SimpLanPlusParser#statement}.
+	 * Exit a parse tree produced by the {@code assignmentL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatement(SimpLanPlusParser.StatementContext ctx);
+	void exitAssignmentL(SimpLanPlusParser.AssignmentLContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SimpLanPlusParser#declaration}.
+	 * Enter a parse tree produced by the {@code deletionL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaration(SimpLanPlusParser.DeclarationContext ctx);
+	void enterDeletionL(SimpLanPlusParser.DeletionLContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SimpLanPlusParser#declaration}.
+	 * Exit a parse tree produced by the {@code deletionL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaration(SimpLanPlusParser.DeclarationContext ctx);
+	void exitDeletionL(SimpLanPlusParser.DeletionLContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code printL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintL(SimpLanPlusParser.PrintLContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code printL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintL(SimpLanPlusParser.PrintLContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code retL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterRetL(SimpLanPlusParser.RetLContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code retL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitRetL(SimpLanPlusParser.RetLContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code iteL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterIteL(SimpLanPlusParser.IteLContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code iteL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitIteL(SimpLanPlusParser.IteLContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code callL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCallL(SimpLanPlusParser.CallLContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code callL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCallL(SimpLanPlusParser.CallLContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code blockL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockL(SimpLanPlusParser.BlockLContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code blockL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockL(SimpLanPlusParser.BlockLContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code decFunL}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterDecFunL(SimpLanPlusParser.DecFunLContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code decFunL}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitDecFunL(SimpLanPlusParser.DecFunLContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code decVarL}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterDecVarL(SimpLanPlusParser.DecVarLContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code decVarL}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitDecVarL(SimpLanPlusParser.DecVarLContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SimpLanPlusParser#decFun}.
 	 * @param ctx the parse tree

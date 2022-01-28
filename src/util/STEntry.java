@@ -9,7 +9,6 @@ public class STEntry {
 	private Node type;
 	
 	//Da aggiungere:  effetti, reference a DecFunNode
-	
 	//Effetti: una lista
 	
 	public STEntry (int nestingLvl, int offset) {

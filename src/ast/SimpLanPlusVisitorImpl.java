@@ -41,17 +41,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		return new BlockNode(declarations, statements);
 	}
 	
-	@Override 
-	public Node visitStatement(SimpLanPlusParser.StatementContext ctx) {
-		//TODO
-		return null; 
-	}
-	
-	@Override
-	public Node visitDeclaration(SimpLanPlusParser.DeclarationContext ctx) {
-		//TODO
-		return null;
-	}
 	
 	@Override 
 	public Node visitDecFun(SimpLanPlusParser.DecFunContext ctx) {
@@ -59,6 +48,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		return null;
 	}
 	
+	@Override
 	public Node visitDecVar (SimpLanPlusParser.DecVarContext ctx) {
 //		decVar      : type ID ('=' exp)? ';' ;
 		

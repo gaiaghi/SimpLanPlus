@@ -18,7 +18,7 @@ public class Environment {
 		this.offset = offset;
 	}
 	
-	//generazione environment vuoto
+	//costruttore per environment vuoto
 	public Environment() {
 		this( new ArrayList<>(), -1, 0);
 	}
@@ -40,10 +40,12 @@ public class Environment {
 	
 	//bisogna controllare che l'id non sia già presente
 	public void addEntry(String id, STEntry entry) {
-		
+		//TODO
 	}
+	
 	//da controllare gli errori
 	public STEntry lookup (String id) {
+		//TODO
 		return null;
 	}
 	

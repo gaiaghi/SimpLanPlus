@@ -17,17 +17,68 @@ public interface SimpLanPlusVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(SimpLanPlusParser.BlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimpLanPlusParser#statement}.
+	 * Visit a parse tree produced by the {@code assignmentL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStatement(SimpLanPlusParser.StatementContext ctx);
+	T visitAssignmentL(SimpLanPlusParser.AssignmentLContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimpLanPlusParser#declaration}.
+	 * Visit a parse tree produced by the {@code deletionL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaration(SimpLanPlusParser.DeclarationContext ctx);
+	T visitDeletionL(SimpLanPlusParser.DeletionLContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code printL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrintL(SimpLanPlusParser.PrintLContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code retL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRetL(SimpLanPlusParser.RetLContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code iteL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIteL(SimpLanPlusParser.IteLContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code callL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallL(SimpLanPlusParser.CallLContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blockL}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockL(SimpLanPlusParser.BlockLContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code decFunL}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDecFunL(SimpLanPlusParser.DecFunLContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code decVarL}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDecVarL(SimpLanPlusParser.DecVarLContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimpLanPlusParser#decFun}.
 	 * @param ctx the parse tree

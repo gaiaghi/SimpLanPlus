@@ -22,18 +22,18 @@ import java.util.ArrayList;
 
 block	    : '{' declaration* statement* '}';
 
-statement   : assignment ';'
-	    | deletion ';'
-	    | print ';'
-	    | ret ';'
-	    | ite
-	    | call ';'
-	    | block;
+statement   : assignment ';'	#assignmentL
+	    | deletion ';'			#deletionL
+	    | print ';'				#printL
+	    | ret ';'				#retL
+	    | ite					#iteL
+	    | call ';'				#callL
+	    | block					#blockL;
+	    
 	    
 
-
-declaration : decFun
-            | decVar ;
+declaration : decFun			#decFunL
+            | decVar 			#decVarL;
 
 decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
 

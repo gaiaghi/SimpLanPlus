@@ -9,7 +9,8 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-//
+
+import ast.SimpLanPlusVisitorImpl;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
 import parser.SPPErrorListener;
@@ -64,6 +65,9 @@ public class SimpLanPlus{
 			System.err.println("There are (" + parser.getNumberOfSyntaxErrors() +") syntax errors in the file. Impossible to compile.");
             System.exit(1);
 		}
+		
+		//Tree visitor
+		SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
 		
 				
 		
