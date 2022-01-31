@@ -5,20 +5,23 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class NegExpNode implements Node {
-	//grammar rule:
-	//exp	    : '-' exp
+public class AssignmentLNode implements Node {
 	
-	private Node exp;
+	private Node assignNode;
 	
-	public NegExpNode(Node exp) {
-		this.exp = exp;
+	public AssignmentLNode(Node visitAssignment) {
+		this.assignNode = visitAssignment;
 	}
 
+	
 	@Override
-	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toPrint(String s) {
+		return s + assignNode;
+	}
+	
+	@Override
+	public String toString() {
+		return this.toPrint("");
 	}
 
 	@Override

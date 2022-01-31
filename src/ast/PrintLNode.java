@@ -5,22 +5,26 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class NotExpNode implements Node {
-	//grammar rule:
-	//exp	    : '!' exp
+public class PrintLNode implements Node {
+//	statement   : 	print ';'				#printL
 	
-	private Node exp;
+	private Node print;
 	
-	public NotExpNode(Node exp) {
-		this.exp = exp;
+	public PrintLNode(Node print) {
+		this.print = print;
+	}
+
+	
+	@Override
+	public String toPrint(String s) {
+		return s + print;
 	}
 
 	@Override
-	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString() {
+		return this.toPrint("");
 	}
-
+	
 	@Override
 	public Node typeCheck() {
 		// TODO Auto-generated method stub

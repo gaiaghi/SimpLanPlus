@@ -5,21 +5,24 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class BoolTypeNode implements Node {
+public class DecFunLNode implements Node {
+
+	private Node decFun;
 	
-	//grammar rule:
-	//type	    : 'bool'
-	
-	public BoolTypeNode() {
-		// TODO Auto-generated constructor stub
+	public DecFunLNode(Node decFun) {
+		this.decFun = decFun;
 	}
 
 	@Override
-	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toPrint(String s) {
+		return s + this.decFun;
 	}
-
+	
+	@Override
+	public String toString() {
+		return this.toPrint("");
+	}
+	
 	@Override
 	public Node typeCheck() {
 		// TODO Auto-generated method stub

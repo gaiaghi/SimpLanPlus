@@ -5,20 +5,24 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class BaseExpNode implements Node {
-	//grammar rule:
-	//exp	    : '(' exp ')'
+public class RetLNode implements Node{
+//	statement   : ret ';'				#retL
 	
-	private Node exp;
+	private Node ret;
 	
-	public BaseExpNode(Node exp) {
-		this.exp = exp;
+	public RetLNode(Node ret) {
+		this.ret = ret;
+	}
+
+	
+	@Override
+	public String toPrint(String s) {
+		return s + ret;
 	}
 	
 	@Override
-	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString() {
+		return this.toPrint("");
 	}
 
 	@Override

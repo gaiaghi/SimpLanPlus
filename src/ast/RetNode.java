@@ -5,23 +5,26 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class CallExpNode implements Node {
+public class RetNode implements Node {
+
+//	ret	    : 'return' (exp)?;
+
+	private Node exp;
 	
-	//gramma rule:
-	//exp	    : call
-	
-	private CallNode call;
-	
-	public CallExpNode(CallNode call) {
-		this.call = call;
+	public RetNode(Node exp) {
+		this.exp = exp;
 	}
 
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		return indent + "Return: " + (this.exp == null ? "void" : this.exp);
 	}
 
+	@Override
+	public String toString() {
+		return this.toPrint("");
+	}
+	
 	@Override
 	public Node typeCheck() {
 		// TODO Auto-generated method stub

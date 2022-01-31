@@ -5,20 +5,41 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class NumberNode implements Node {
-	//grammar rule:
-	//exp	    : NUMBER
+public class LhsNode implements Node {
+//	lhs         : ID | lhs '^' ;
 	
-	private int val;
+	private Node id;
+	private LhsNode lhs;
 	
-	public NumberNode(int val) {
-		this.val = val;
+	public LhsNode(Node id, LhsNode lhs) {
+		
+		this.id = id;
+		this.lhs = lhs;
+		
 	}
-
+	
+	public Node getId() {
+		return this.id;
+	}
+	
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		if (this.lhs == null)
+			return indent + this.id;
+		else
+			return indent + this.lhs + "^";
+	}
+	
+	public int getDereferenceNum() {
+		if (this.lhs != null)
+			return this.lhs.getDereferenceNum() + 1;
+		return 0;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return this.toPrint("");
 	}
 
 	@Override

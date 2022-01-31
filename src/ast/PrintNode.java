@@ -5,19 +5,23 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class IntTypeNode implements Node {
-
-	//grammar rule:
-	//type	    : 'int'
+public class PrintNode implements Node {
+	//	 print	    : 'print' exp;
 	
-	public IntTypeNode() {
-		// TODO Auto-generated constructor stub
-	}
+	private Node exp;
 
+	public PrintNode(Node exp) {
+		this.exp = exp;
+	}
+	
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		return indent + "Print: " + this.exp;
+	}
+	
+	@Override
+	public String toString() {
+		return this.toPrint(""); 
 	}
 
 	@Override
@@ -43,5 +47,7 @@ public class IntTypeNode implements Node {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 
 }

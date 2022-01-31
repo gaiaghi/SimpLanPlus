@@ -5,21 +5,24 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class NewExpNode implements Node {
-
-	//grammar rule:
-	//exp	    : new type
+public class DecVarLNode implements Node{
+//	grammar rule:
+//	declaration:	decVar 			#decVarL;
 	
-	private Node type;
+	private Node decVar;
 	
-	public NewExpNode(Node type) {
-		this.type = type;
+	public DecVarLNode(Node decVar) {
+		this.decVar = decVar;
 	}
 
 	@Override
-	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toPrint(String s) {
+		return s + this.decVar;
+	}
+	
+	@Override
+	public String toString() {
+		return this.toPrint("");
 	}
 
 	@Override

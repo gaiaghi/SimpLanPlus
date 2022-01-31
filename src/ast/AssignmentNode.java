@@ -4,29 +4,29 @@ import java.util.ArrayList;
 
 import util.Environment;
 import util.SemanticError;
-import util.STEntry;
 
-public class CallNode implements Node {
+public class AssignmentNode implements Node {
+
+//	assignment  : lhs '=' exp ;
 	
-	//grammar rule:
-	//call        : ID '(' (exp(',' exp)*)? ')';
+	private Node exp;
+	private Node lhs;
 	
-	private IdNode id;
-	private STEntry entry; 
-	private ArrayList<Node> parlist; 
-	private int nestinglevel;
+	public AssignmentNode(Node lhs, Node exp) {
+		this.exp = exp;
+		this.lhs = lhs;
+	}
 	
-	public CallNode(IdNode id, ArrayList<Node> args) {
-		this.id = id;
-	    parlist = args;
+	@Override
+	public String toPrint(String indent) {
+		return indent + "Assignment: " + this.lhs + " = " + this.exp;
 	}
 
 	@Override
-	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString() {
+		return this.toPrint("");
 	}
-
+	
 	@Override
 	public Node typeCheck() {
 		// TODO Auto-generated method stub
@@ -50,5 +50,6 @@ public class CallNode implements Node {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 }

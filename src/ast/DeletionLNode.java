@@ -5,21 +5,25 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class PointerTypeNode implements Node {
-
-	//grammar rule:
-	//type	    : '^' type
+public class DeletionLNode implements Node {
+//	statement   : deletion ';'			#deletionL
 	
-	private Node type;
+	private Node deletion;
 	
-	public PointerTypeNode(Node type) {
-		this.type = type; 
+	public DeletionLNode(Node deletion) {
+		this.deletion = deletion;
 	}
+	
 
 	@Override
-	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toPrint(String s) {
+		return s + deletion;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return this.toPrint("");
 	}
 
 	@Override

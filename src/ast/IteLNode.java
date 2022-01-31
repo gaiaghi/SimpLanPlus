@@ -5,20 +5,25 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class BoolNode implements Node {
-	//grammar rule:
-	//exp	    : BOOL
+public class IteLNode implements Node{
+//	statement   :	ite					#iteL
 	
-	private Boolean val;
+	private Node ite;
 	
-	public BoolNode(Boolean val) {
-		this.val = val;
+	
+	public IteLNode(Node ite) {
+		this.ite = ite;
 	}
 
+	
 	@Override
-	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toPrint(String s) {
+		return s + ite;
+	}
+	
+	@Override
+	public String toString() {
+		return this.toPrint("");
 	}
 
 	@Override
@@ -44,5 +49,6 @@ public class BoolNode implements Node {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+//	statement   :	ite					#iteL
+	
 }

@@ -5,25 +5,27 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class IteNode implements Node {
-	
-	//grammar rule
-	//ite         : 'if' '(' exp ')' statement ('else' statement)?;
-	
-	private Node cond;
-	private Node thenStm;
-	private Node elseStm;
-  
-	public IteNode(Node cond, Node thenStm, Node elseStm) {
-		this.cond = cond;
-		this.thenStm = thenStm;
-		this.elseStm = elseStm;
-	}
+public class ArgNode implements Node {
 
+	private Node type;
+	private Node id;
+	
+	public ArgNode(Node type, Node id) {
+		this.type = type;
+		this.id = id;
+	}
+	
+	public Node getType() {
+		return this.type;
+	}
+	
+	public Node getId() {
+		return this.id;
+	}
+	
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		return indent + "Arg: " + this.type.toPrint(indent) + this.id.toPrint(indent);
 	}
 
 	@Override
