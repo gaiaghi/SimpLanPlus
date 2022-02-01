@@ -208,6 +208,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitType(SimpLanPlusParser.TypeContext ctx) { 
+		//grammar rule:
+		//grammar rule:
 		//type        : 'int'
 		//			  | 'bool'
     	//			  | '^' type ;
@@ -225,6 +227,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitIte(SimpLanPlusParser.IteContext ctx) { 
+		//grammar rule:
 		//ite         : 'if' '(' exp ')' statement ('else' statement)?;
 		Node cond = visit(ctx.exp());
 		Node thenStm = visit(ctx.statement(0));
@@ -236,6 +239,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public CallNode visitCall(SimpLanPlusParser.CallContext ctx) { 
+		//grammar rule:
 		//call        : ID '(' (exp(',' exp)*)? ')';
 		
 		//this corresponds to a function invocation
@@ -264,6 +268,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitBaseExp(SimpLanPlusParser.BaseExpContext ctx) { 
+		//grammar rule:
 		//exp	    : '(' exp ')'
 		Node baseExp = visit(ctx.exp());
 		return new BaseExpNode(baseExp); 
@@ -272,6 +277,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitNegExp(SimpLanPlusParser.NegExpContext ctx) { 
+		//grammar rule:
 		//exp	    : '-' exp
 		Node negExp = visit(ctx.exp());
 		return new NegExpNode(negExp); 
@@ -280,6 +286,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitNotExp(SimpLanPlusParser.NotExpContext ctx) { 
+		//grammar rule:
 		//exp	    : '!' exp
 		Node notExp = visit(ctx.exp());
 		return new NotExpNode(notExp);  
@@ -288,15 +295,16 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitDerExp(SimpLanPlusParser.DerExpContext ctx) { 
+		//grammar rule:
 		//exp	    : lhs
-		//bisogna prima definire visitLhs
-		//TODO
-		return visitChildren(ctx); 
+		LhsNode lhs = visitLhs(ctx.lhs());
+		return new DerExpNode(lhs); 
 	}
 	
 	
 	@Override 
 	public Node visitNewExp(SimpLanPlusParser.NewExpContext ctx) { 
+		//grammar rule:
 		//exp	    : new type
 		Node type = visitType(ctx.type());
 		return new NewExpNode(type);
@@ -305,7 +313,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitBinExp(SimpLanPlusParser.BinExpContext ctx) { 
-		/* exp	    :
+		/*grammar rule:
+		  exp	    :
 	  	    | left=exp op=('*' | '/')               right=exp   
 	    	| left=exp op=('+' | '-')               right=exp   
 		    | left=exp op=('<' | '<=' | '>' | '>=') right=exp   
@@ -323,6 +332,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitCallExp(SimpLanPlusParser.CallExpContext ctx) { 
+		//grammar rule:
 		//exp	    : call	
 		CallNode call = visitCall(ctx.call());
 		return new CallExpNode(call);
@@ -331,6 +341,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitBoolExp(SimpLanPlusParser.BoolExpContext ctx) { 
+		//grammar rule:
 		//exp	    : BOOL
 		return new BoolNode(Boolean.parseBoolean(ctx.getText())); 
 	}
@@ -338,6 +349,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	
 	@Override 
 	public Node visitValExp(SimpLanPlusParser.ValExpContext ctx) { 
+		//grammar rule:
 		//exp	    : NUMBER
 		return new NumberNode(Integer.parseInt(ctx.getText())); 
 	}
