@@ -22,8 +22,10 @@ public class IteNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		return indent +"If:\n"
+				+cond.toPrint(indent +"  ")
+				+thenStm.toPrint(indent +"  ")
+				+elseStm.toPrint(indent +"  ");
 	}
 
 	@Override

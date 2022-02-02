@@ -16,8 +16,7 @@ public class IntTypeNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		return indent +"IntType";
 	}
 
 	@Override

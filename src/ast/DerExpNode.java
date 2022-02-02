@@ -18,8 +18,7 @@ public class DerExpNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		return lhs.toPrint(indent);
 	}
 
 	@Override

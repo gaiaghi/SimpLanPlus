@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import ast.Node;
 import ast.SimpLanPlusVisitorImpl;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
@@ -68,6 +69,10 @@ public class SimpLanPlus{
 		
 		//Tree visitor
 		SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
+		//generazione AST
+		Node ast = visitor.visit(parser.block()); 
+		System.out.println("Visualizing AST...");
+		System.out.println(ast.toPrint(""));
 		
 				
 		

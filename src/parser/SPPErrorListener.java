@@ -51,8 +51,8 @@ public class SPPErrorListener extends BaseErrorListener{
 		errors.add(errorMsg);
 	}
 	
-	public ArrayList getErrors() {
-		return new ArrayList(errors);
+	public ArrayList<String> getErrors() {
+		return new ArrayList<String>(errors);
 	}
 	
 	

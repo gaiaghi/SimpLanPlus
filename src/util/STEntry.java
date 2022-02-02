@@ -43,10 +43,12 @@ public class STEntry {
 	}
 	
 	//sempre per la stampa dell'ast (anche in simplan)
-	public String toPrint(String s) {
+	public String toPrint(String indent) {
 		//da aggiungere stato degli effetti
-		return s + "STentry: (Nesting Level: "+ this.nestingLvl + ", Type: "+ this.type +
-				", offset: "+this.offset+ ", status: ";
+		return indent + "STEntry: Nesting Level = " +this.nestingLvl 
+				+"\n" +indent +"STEntry: Type = \n" +this.type.toPrint(indent +"  ")
+				+"\n" +indent +"STEntry: Offset = " +this.offset
+				+"\n" +indent +"STEntry: Status = ";
 	}
 	
 	//stampa del singolo entry

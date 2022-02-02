@@ -18,15 +18,18 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	//context ctx: contesto che contiene tutte le informazioni di una frase riconosciuta dal parser.
 	//conosce il token di inizio e di fine della frase, e permette l'accesso ad ogni elemento.
 	@Override
-	public Node visitBlock(SimpLanPlusParser.BlockContext ctx) {
+	public BlockNode visitBlock(SimpLanPlusParser.BlockContext ctx) {
 //		grammar rule:
 //		block	    : '{' declaration* statement* '}';
 
 		ArrayList<Node> declarations = new ArrayList<>();
 		ArrayList<Node> statements = new ArrayList<>();
 		
+		System.out.println("dec "+ctx.declaration());
+		
 		//visita e aggiunta delle dichiarazioni
 		for (DeclarationContext dec : ctx.declaration()) {
+			System.out.println("for dec ");
 			declarations.add( visit(dec) );
 			
 			//dove ctx.declaration() è un metodo del contesto della regola block.
@@ -36,9 +39,13 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		
 		//visita e aggiunta degli statements
 		for (StatementContext stm : ctx.statement()) {
+			System.out.println("for stm ");
 			statements.add( visit(stm) );
 		}
-				
+		
+		System.out.println("dec " +declarations.size());
+		System.out.println("stm "+statements.size());
+		
 		return new BlockNode(declarations, statements);
 	}
 	
@@ -117,14 +124,14 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 //		grammar rule:
 //		decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
 		Node type = visit(ctx.type());
-		Node id = new IdNode(ctx.ID().getText());
+		IdNode id = new IdNode(ctx.ID().getText());
 		
 		ArrayList<Node> args = new ArrayList<>();
 		for (SimpLanPlusParser.ArgContext arg : ctx.arg()) {
 			args.add( visit(arg) );
 		}
 		
-		Node block = visit(ctx.block());
+		BlockNode block = visitBlock(ctx.block());
 		return new DecFunNode(type, id, args, block);
 	}
 	
@@ -135,7 +142,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		
 		Node type = visit(ctx.type());
 		Node exp = visit(ctx.exp());
-		Node id = new IdNode(ctx.ID().getText());
+		IdNode id = new IdNode(ctx.ID().getText());
 		
 		return new DecVarNode(type, id, exp);
 		
@@ -175,7 +182,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		 }
 		 //id
 		 else {
-			 Node id = new IdNode(ctx.ID().getText());
+			 IdNode id = new IdNode(ctx.ID().getText());
 			 return new LhsNode(id, null);
 		 }
 		 
@@ -250,15 +257,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		//POSSO CANCELLARE TUTTA QUESTA PARTE COMMENTATA?
-		// IN SimpLanPlus C'è LA "print"
-		//especial check for stdlib func
-		//this is WRONG, THIS SHOULD BE DONE IN A DIFFERENT WAY
-		//JUST IMAGINE THERE ARE 800 stdlib functions...
-		/*if(ctx.ID().getText().equals("print"))
-			res = new PrintNode(args.get(0));
-		
-		else*/
 		//instantiate the invocation
 		CallNode res = new CallNode(new IdNode(ctx.ID().getText()), args);
 		

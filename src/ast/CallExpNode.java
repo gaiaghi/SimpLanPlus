@@ -18,8 +18,7 @@ public class CallExpNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		return call.toPrint(indent);
 	}
 
 	@Override

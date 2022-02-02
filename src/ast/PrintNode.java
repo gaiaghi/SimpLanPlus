@@ -16,7 +16,7 @@ public class PrintNode implements Node {
 	
 	@Override
 	public String toPrint(String indent) {
-		return indent + "Print: " + this.exp;
+		return indent + "Print:\n" + this.exp.toPrint(indent +"  ");
 	}
 	
 	@Override

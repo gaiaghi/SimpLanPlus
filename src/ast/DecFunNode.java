@@ -9,11 +9,11 @@ public class DecFunNode implements Node {
 //   decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
 
 	private Node type;
-	private Node id;
+	private IdNode id;
 	private ArrayList<Node> args;
-	private Node block;
+	private BlockNode block;
 	
-	public DecFunNode(Node type, Node id, ArrayList<Node> args, Node block) {
+	public DecFunNode(Node type, IdNode id, ArrayList<Node> args, BlockNode block) {
 		this.type = type;
 		this.id = id;
 		this.args = args;
@@ -23,14 +23,33 @@ public class DecFunNode implements Node {
 	
 	@Override
 	public String toPrint(String indent) {
-		String argList = this.args.get(0).toPrint(indent);
-		for (int i = 1; i<  this.args.size(); i++)
-			argList = argList + ", " + this.args.get(i).toPrint(indent);
+		String argList = "";
+		if( args.size() > 0 )
+		{
+			argList = "\n";
+			for (int i = 0; i<  this.args.size(); i++)
+				argList = argList + "\n" + this.args.get(i).toPrint(indent +"  ");
+		}
 		
-		String dec = indent + "Fun. declaration: ( "+ id + ": " + argList 
-				+ " -> " + this.type.toPrint(indent) + "; body: " 
-				+ this.block.toPrint(indent) + " )"; 
-		return dec;
+		String dec = "";
+		if( block.getDeclarationsSize() > 0 )
+		{
+			dec = "\n";
+			ArrayList<Node> decs = block.getDeclarations();
+			for (int i = 0; i<  block.getDeclarationsSize(); i++)
+				dec = dec + "\n" + decs.get(i).toPrint(indent +"  ");
+		}
+		
+		String body = "";
+		if( block.getStatementsSize() > 0 )
+		{
+			body = "\n";
+			ArrayList<Node> stms = block.getStatements();
+			for (int i = 0; i<  block.getStatementsSize(); i++)
+				body = body + "\n" + stms.get(i).toPrint(indent +"  ");
+		}
+		
+		return indent +"Fun: " +id.getId() +"\n" +type.toPrint(indent +"  ") +argList +dec +body;
 	}
 	
 	@Override

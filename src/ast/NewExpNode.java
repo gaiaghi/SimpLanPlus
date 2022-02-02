@@ -18,8 +18,7 @@ public class NewExpNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		return indent +"New:\n" +type.toPrint(indent);
 	}
 
 	@Override

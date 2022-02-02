@@ -14,8 +14,8 @@ public class CallLNode implements Node {
 	}
 	
 	@Override
-	public String toPrint(String s) {
-		return s + call;
+	public String toPrint(String indent) {
+		return call.toPrint(indent);
 	}
 	
 	@Override

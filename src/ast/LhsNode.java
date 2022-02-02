@@ -8,27 +8,28 @@ import util.SemanticError;
 public class LhsNode implements Node {
 //	lhs         : ID | lhs '^' ;
 	
-	private Node id;
+	private IdNode id;
 	private LhsNode lhs;
 	
-	public LhsNode(Node id, LhsNode lhs) {
+	public LhsNode(IdNode id, LhsNode lhs) {
 		
 		this.id = id;
 		this.lhs = lhs;
 		
 	}
 	
-	public Node getId() {
+	public IdNode getId() {
 		return this.id;
 	}
 	
 	@Override
 	public String toPrint(String indent) {
 		if (this.lhs == null)
-			return indent + this.id;
+			return indent + "Id: " +this.id.getId();
 		else
-			return indent + this.lhs + "^";
-	}
+			return lhs.toPrint("") + "^";
+	}			
+	
 	
 	public int getDereferenceNum() {
 		if (this.lhs != null)

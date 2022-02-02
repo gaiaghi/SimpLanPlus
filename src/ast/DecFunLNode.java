@@ -14,8 +14,8 @@ public class DecFunLNode implements Node {
 	}
 
 	@Override
-	public String toPrint(String s) {
-		return s + this.decFun;
+	public String toPrint(String indent) {
+		return indent + this.decFun.toPrint(indent);
 	}
 	
 	@Override

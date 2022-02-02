@@ -17,7 +17,8 @@ public class RetNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent + "Return: " + (this.exp == null ? "void" : this.exp);
+		return indent + "Return:\n" 
+				+(this.exp == null ? indent +"  voidType" : this.exp.toPrint(indent +"  "));
 	}
 
 	@Override

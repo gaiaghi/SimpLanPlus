@@ -11,13 +11,12 @@ public class BoolTypeNode implements Node {
 	//type	    : 'bool'
 	
 	public BoolTypeNode() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		return indent +"BoolType";
 	}
 
 	@Override

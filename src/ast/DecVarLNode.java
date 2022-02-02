@@ -16,8 +16,9 @@ public class DecVarLNode implements Node{
 	}
 
 	@Override
-	public String toPrint(String s) {
-		return s + this.decVar;
+	public String toPrint(String indent) {
+		System.out.println("DecVarLNode");
+		return this.decVar.toPrint(indent);
 	}
 	
 	@Override

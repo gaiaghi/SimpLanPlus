@@ -10,11 +10,11 @@ import util.SemanticError;
 public class DecVarNode implements Node{
 	
 	private Node type;
-	private Node id;
+	private IdNode id;
 	private Node exp;
 	
 	
-	public DecVarNode(Node type, Node id, Node exp) {
+	public DecVarNode(Node type, IdNode id, Node exp) {
 		this.id = id;
 		this.exp = exp;
 		this.type = type;
@@ -23,8 +23,10 @@ public class DecVarNode implements Node{
 
 	@Override
 	public String toPrint(String indent) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("DecVarNode");
+		return indent +"Var: " +id.getId() 
+		+"\n" +type.toPrint(indent +"  ") 
+		+"\n" +exp.toPrint(indent +"  ");
 	}
 	
 	@Override

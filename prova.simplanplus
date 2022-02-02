@@ -1,4 +1,4 @@
-{int x=4t;
-bool k = 8i;}
+{int x=4;
+bool k = 8;}
 
 /*#{int x=4t;}*/

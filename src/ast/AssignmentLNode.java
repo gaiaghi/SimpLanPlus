@@ -15,8 +15,8 @@ public class AssignmentLNode implements Node {
 
 	
 	@Override
-	public String toPrint(String s) {
-		return s + assignNode;
+	public String toPrint(String indent) {
+		return assignNode.toPrint(indent);
 	}
 	
 	@Override

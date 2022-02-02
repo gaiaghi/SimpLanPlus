@@ -16,8 +16,8 @@ public class BlockLNode implements Node {
 	
 
 	@Override
-	public String toPrint(String s) {
-		return s + block;
+	public String toPrint(String indent) {
+		return block.toPrint(indent);
 	}
 	
 	@Override

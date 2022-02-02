@@ -17,8 +17,8 @@ public class IteLNode implements Node{
 
 	
 	@Override
-	public String toPrint(String s) {
-		return s + ite;
+	public String toPrint(String indent) {
+		return ite.toPrint(indent);
 	}
 	
 	@Override
