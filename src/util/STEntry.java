@@ -13,7 +13,7 @@ public class STEntry {
 	
 	public STEntry (int nestingLvl, int offset) {
 		this.nestingLvl = nestingLvl;
-		this.offset = offset;
+		this.offset = offset; 
 	}
 	
 	public STEntry(int nestingLvl, Node type, int offset) {

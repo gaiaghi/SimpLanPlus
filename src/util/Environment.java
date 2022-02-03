@@ -37,6 +37,14 @@ public class Environment {
 		return this.nestingLvl;
 	}
 	
+	public int getOffset() {
+		return this.offset;
+	}
+	
+	public void updateOffset() {
+		offset--;
+	}
+	
 	public HashMap<String, STEntry> getCurrentScope(){
 		return this.symbolTable.get(nestingLvl);
 	}
@@ -47,7 +55,6 @@ public class Environment {
 			getCurrentScope().put(id, entry);
 		else
 			throw new MultipleDecException("Multiple declaration: "+id);
-			
 	}
 	
 	

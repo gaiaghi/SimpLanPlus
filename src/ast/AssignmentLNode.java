@@ -10,7 +10,7 @@ public class AssignmentLNode implements Node {
 	private Node assignNode;
 	
 	public AssignmentLNode(Node visitAssignment) {
-		this.assignNode = visitAssignment;
+		this.assignNode = visitAssignment; 
 	}
 
 	
@@ -38,8 +38,7 @@ public class AssignmentLNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		return assignNode.checkSemantics(env);
 	}
 
 	@Override

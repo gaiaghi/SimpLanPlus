@@ -11,7 +11,7 @@ public class RetLNode implements Node{
 	private Node ret;
 	
 	public RetLNode(Node ret) {
-		this.ret = ret;
+		this.ret = ret; 
 	}
 
 	
@@ -39,8 +39,7 @@ public class RetLNode implements Node{
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		return ret.checkSemantics(env);
 	}
 
 	@Override

@@ -1,8 +1,11 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import exception.MultipleDecException;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 
 
@@ -17,7 +20,7 @@ public class DecVarNode implements Node{
 	public DecVarNode(Node type, IdNode id, Node exp) {
 		this.id = id;
 		this.exp = exp;
-		this.type = type;
+		this.type = type; 
 		
 	}
 
@@ -47,8 +50,23 @@ public class DecVarNode implements Node{
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+  		
+		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+  	  
+  		//TODO env.offset = -2;
+  		//PROF: STentry entry = new STentry(env.nestingLevel,type, env.offset--);
+  		// controlla offset passato come parametro
+        STEntry entry = new STEntry(env.getNestingLevel(), type, env.getOffset()); 
+        
+        try {
+        	env.addEntry(id.getId(), entry);
+        }catch(MultipleDecException e) {
+        	res.add(new SemanticError("Var id "+id+" already declared"));
+        }
+        
+        res.addAll(exp.checkSemantics(env));
+        
+        return res;
 	}
 
 	@Override

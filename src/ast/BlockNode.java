@@ -23,6 +23,7 @@ public class BlockNode implements Node {
 		int i;
 		for(i=0; i<declarations.size(); i++)
 			str = str +"\n" + declarations.get(i).toPrint(indent +"  ");
+		
 		for(i=0; i<statements.size(); i++)
 			str = str +"\n" + statements.get(i).toPrint(indent +"  ");
 		
@@ -48,8 +49,26 @@ public class BlockNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		
+		env.addScope();
+		
+		//check semantics in declaration
+		if(declarations.size() > 0){
+			//TODO env.offset = -2;
+		for(Node n : declarations)
+			res.addAll(n.checkSemantics(env));
+		}
+  
+		//check semantics in statement
+		if(statements.size() > 0){
+			for(Node n : statements)
+				res.addAll(n.checkSemantics(env));
+		}     
+  
+		env.removeScope();
+  
+		return res;
 	}
 
 	@Override

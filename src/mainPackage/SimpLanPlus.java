@@ -14,6 +14,8 @@ import ast.Node;
 import ast.SimpLanPlusVisitorImpl;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
+import util.Environment;
+import util.SemanticError;
 import parser.SPPErrorListener;
 
 
@@ -30,7 +32,8 @@ public class SimpLanPlus{
 			inputCode = CharStreams.fromFileName(fileName);
 		} 
 		catch (IOException e) {
-			System.out.println("The file " + fileName + " was not found");
+			System.err.println("The file " + fileName + " was not found");
+			System.exit(1);
 		}
 		
 //		//SimpLanPlus lexer
@@ -40,8 +43,13 @@ public class SimpLanPlus{
 		SimpLanPlusParser parser = new SimpLanPlusParser(new CommonTokenStream(lexer));
 		parser.removeErrorListeners();
 		SPPErrorListener listener = new SPPErrorListener();
-		parser.addErrorListener(listener);
-
+		try {
+			parser.addErrorListener(listener);
+		}
+		catch (NullPointerException e) {
+			System.err.println("Error in addErrorListener: " +e.getMessage());
+			System.exit(1);
+		}
 		
 		//checking lexical errors
 		if (lexer.errorCount() > 0) {
@@ -64,14 +72,22 @@ public class SimpLanPlus{
             System.exit(1);
 		}
 		
+		
 		//Tree visitor
 		SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
-		//generazione AST
 		Node ast = visitor.visit(parser.block()); 
 		System.out.println("Visualizing AST...");
 		System.out.println(ast.toPrint(""));
 		
-				
+		
+		//checking semantic errors
+		/*Environment env = new Environment();	
+		ArrayList<SemanticError> err = ast.checkSemantics(env);
+		if(err.size()>0){
+			System.out.println("You had: " +err.size()+" semantic errors:");
+			for(SemanticError e : err)
+				System.out.println("\t" + e);
+		}*/
 		
 
 	}

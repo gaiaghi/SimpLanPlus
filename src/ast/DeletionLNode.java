@@ -11,7 +11,7 @@ public class DeletionLNode implements Node {
 	private Node deletion;
 	
 	public DeletionLNode(Node deletion) {
-		this.deletion = deletion;
+		this.deletion = deletion; 
 	}
 	
 
@@ -40,8 +40,7 @@ public class DeletionLNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		return deletion.checkSemantics(env);
 	}
 
 	@Override

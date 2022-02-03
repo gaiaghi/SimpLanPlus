@@ -11,7 +11,7 @@ public class PrintLNode implements Node {
 	private Node print;
 	
 	public PrintLNode(Node print) {
-		this.print = print;
+		this.print = print; 
 	}
 
 	
@@ -39,8 +39,7 @@ public class PrintLNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		return print.checkSemantics(env);
 	}
 
 	@Override

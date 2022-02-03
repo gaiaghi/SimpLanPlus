@@ -11,7 +11,7 @@ public class BlockLNode implements Node {
 	private Node block;
 	
 	public BlockLNode(Node block) {
-		this.block = block;
+		this.block = block; 
 	}
 	
 
@@ -39,8 +39,7 @@ public class BlockLNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		return block.checkSemantics(env);
 	}
 
 	@Override
