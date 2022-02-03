@@ -42,8 +42,13 @@ public class IteNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> res = new ArrayList<>();
+		res.addAll(cond.checkSemantics(env));
+		res.addAll(thenStm.checkSemantics(env));
+		if (elseStm != null)
+			res.addAll(elseStm.checkSemantics(env));
+		
+		return res;
 	}
 
 	@Override

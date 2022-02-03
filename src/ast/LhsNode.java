@@ -57,8 +57,10 @@ public class LhsNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		if (lhs == null)
+			return id.checkSemantics(env);
+		else
+			return lhs.checkSemantics(env);
 	}
 
 	@Override

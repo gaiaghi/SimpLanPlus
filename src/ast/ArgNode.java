@@ -6,7 +6,8 @@ import util.Environment;
 import util.SemanticError;
 
 public class ArgNode implements Node {
-
+//	arg         : type ID;
+	
 	private Node type;
 	private Node id;
 	
@@ -42,8 +43,7 @@ public class ArgNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<SemanticError>();
 	}
 
 	@Override

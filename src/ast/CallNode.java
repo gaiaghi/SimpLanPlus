@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
+import parser.SimpLanPlusParser.ExpContext;
 import util.Environment;
 import util.SemanticError;
 import util.STEntry;
@@ -14,7 +15,7 @@ public class CallNode implements Node {
 	private IdNode id;
 	private STEntry entry; 
 	private ArrayList<Node> parlist; 
-	private int nestinglevel;
+	private int nestingLvl;
 	
 	public CallNode(IdNode id, ArrayList<Node> args) {
 		this.id = id;
@@ -36,6 +37,7 @@ public class CallNode implements Node {
 	@Override
 	public Node typeCheck() {
 		// TODO Auto-generated method stub
+		//controllo numero e tipo parametri qui
 		return null;
 	}
 
@@ -47,8 +49,20 @@ public class CallNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> res = new ArrayList<>();
+	
+		//controllo dichiarazione id
+		res.addAll(id.checkSemantics(env));
+		
+		if (res.size()==0) {
+			this.nestingLvl = env.getNestingLevel(); 
+			
+			//controllo parametri
+			for(Node par : parlist)
+				res.addAll(par.checkSemantics(env));
+		}
+		
+		return res;
 	}
 
 	@Override

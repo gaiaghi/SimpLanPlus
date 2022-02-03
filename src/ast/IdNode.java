@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
 import util.Environment;
 import util.STEntry;
 import util.SemanticError;
@@ -10,7 +11,7 @@ public class IdNode implements Node {
 	
 	private String id;
 	private STEntry entry;
-	private int nestingLvl; //da aggiungere durante l'analisi semantica
+	private int nestingLvl; //nesting level corrente
 	
 	public IdNode(String id) {
 		this.id = id;
@@ -58,8 +59,17 @@ public class IdNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> res = new ArrayList<>();
+		int nestLvl = env.getNestingLevel();
+		
+		try { //declared id
+			this.entry = env.lookup(this.id);
+			this.nestingLvl = env.getNestingLevel();
+		} catch (MissingDecException e) { // id not declared
+			res.add(new SemanticError(e.getMessage()));
+		}
+		
+		return res;
 	}
 
 	@Override
