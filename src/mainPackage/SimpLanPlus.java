@@ -35,8 +35,6 @@ public class SimpLanPlus{
 		
 //		//SimpLanPlus lexer
 		SimpLanPlusLexer lexer = new SimpLanPlusLexer(inputCode);
-		//lexer.removeErrorListeners();
-		//lexer.addErrorListener(new SPPErrorListener());
 		
 		//SimpLanPlus parser
 		SimpLanPlusParser parser = new SimpLanPlusParser(new CommonTokenStream(lexer));
@@ -44,7 +42,6 @@ public class SimpLanPlus{
 		SPPErrorListener listener = new SPPErrorListener();
 		parser.addErrorListener(listener);
 
-		ParseTree tree = parser.block();
 		
 		//checking lexical errors
 		if (lexer.errorCount() > 0) {
