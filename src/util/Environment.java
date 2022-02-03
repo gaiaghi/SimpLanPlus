@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
+
 
 public class Environment {
 	
@@ -38,16 +41,26 @@ public class Environment {
 		return this.symbolTable.get(nestingLvl);
 	}
 	
-	//bisogna controllare che l'id non sia già presente
-	public void addEntry(String id, STEntry entry) {
-		//TODO
+	public void addEntry(String id, STEntry entry) throws MultipleDecException {
+		
+		if (!getCurrentScope().containsKey(id))
+			getCurrentScope().put(id, entry);
+		else
+			throw new MultipleDecException("Multiple declaration: "+id);
+			
 	}
 	
-	//da controllare gli errori
-	public STEntry lookup (String id) {
-		//TODO
-		return null;
+	
+	public STEntry lookup (String id) throws MissingDecException {
+		for (int i = nestingLvl; i>=0; i--) {
+			HashMap scope = symbolTable.get(i);
+			if (scope.containsKey(id))
+				return symbolTable.get(i).get(id);
+		}
+		
+		throw new MissingDecException("Missing declaration: "+id);
 	}
+	
 	
 	public void addScope(HashMap<String,STEntry> scope) {
 		this.symbolTable.add(scope);

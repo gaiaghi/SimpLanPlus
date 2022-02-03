@@ -1,4 +1,5 @@
 {int x=4;
-bool k = 8;}
+bool k = 8;;
+print(k+x);}
 
 /*#{int x=4t;}*/

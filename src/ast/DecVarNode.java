@@ -23,7 +23,6 @@ public class DecVarNode implements Node{
 
 	@Override
 	public String toPrint(String indent) {
-		System.out.println("DecVarNode");
 		return indent +"Var: " +id.getId() 
 		+"\n" +type.toPrint(indent +"  ") 
 		+"\n" +exp.toPrint(indent +"  ");

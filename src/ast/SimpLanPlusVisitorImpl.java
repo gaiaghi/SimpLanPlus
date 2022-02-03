@@ -25,11 +25,9 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		ArrayList<Node> declarations = new ArrayList<>();
 		ArrayList<Node> statements = new ArrayList<>();
 		
-		System.out.println("dec "+ctx.declaration());
 		
 		//visita e aggiunta delle dichiarazioni
 		for (DeclarationContext dec : ctx.declaration()) {
-			System.out.println("for dec ");
 			declarations.add( visit(dec) );
 			
 			//dove ctx.declaration() è un metodo del contesto della regola block.
@@ -39,12 +37,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		
 		//visita e aggiunta degli statements
 		for (StatementContext stm : ctx.statement()) {
-			System.out.println("for stm ");
 			statements.add( visit(stm) );
 		}
-		
-		System.out.println("dec " +declarations.size());
-		System.out.println("stm "+statements.size());
 		
 		return new BlockNode(declarations, statements);
 	}

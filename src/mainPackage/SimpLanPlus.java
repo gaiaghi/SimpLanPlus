@@ -30,7 +30,7 @@ public class SimpLanPlus{
 			inputCode = CharStreams.fromFileName(fileName);
 		} 
 		catch (IOException e) {
-			System.out.println("the file " + fileName + " was not found");
+			System.out.println("The file " + fileName + " was not found");
 		}
 		
 //		//SimpLanPlus lexer
