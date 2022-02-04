@@ -1,5 +1,9 @@
-{int x=4;
-bool k = 8;;
-print(k+x);}
+{^int x = new int; x^=2; print(x^+3);}
+
+//{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
+
+/*{int x=4;
+bool x = 8;
+print(k+x);}*/
 
 /*#{int x=4t;}*/

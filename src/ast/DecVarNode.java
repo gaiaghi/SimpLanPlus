@@ -26,7 +26,7 @@ public class DecVarNode implements Node{
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +"Var: " +id.getId() 
+		return indent +"Var: " +id.getId()
 		+"\n" +type.toPrint(indent +"  ") 
 		+"\n" +exp.toPrint(indent +"  ");
 	}
@@ -55,13 +55,16 @@ public class DecVarNode implements Node{
   	  
   		//TODO env.offset = -2;
   		//PROF: STentry entry = new STentry(env.nestingLevel,type, env.offset--);
-  		// controlla offset passato come parametro
+		//dovo decrementare l'offset dopo aver creato una nuova entry?
+  		//controlla offset passato come parametro
         STEntry entry = new STEntry(env.getNestingLevel(), type, env.getOffset()); 
+        env.updateOffset(); //decremento offset
         
         try {
         	env.addEntry(id.getId(), entry);
+        	id.setSTEntry(entry);
         }catch(MultipleDecException e) {
-        	res.add(new SemanticError("Var id "+id+" already declared"));
+        	res.add(new SemanticError("Var id "+id.getId() +" already declared"));
         }
         
         res.addAll(exp.checkSemantics(env));

@@ -69,27 +69,29 @@ public class SimpLanPlus{
 				System.err.println(syErrors.get(i));
 		
 			System.err.println("There are (" + parser.getNumberOfSyntaxErrors() +") syntax errors in the file. Impossible to compile.");
-            System.exit(1);
+            System.exit(1); 
 		}
 		
 		
 		//Tree visitor
 		SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
 		Node ast = visitor.visit(parser.block()); 
+			
+		//checking semantic errors
+		Environment env = new Environment();	
+		ArrayList<SemanticError> err = ast.checkSemantics(env);
+		if(err.size()>0){
+			System.err.println("You had: " +err.size()+" semantic errors:");
+			for(SemanticError e : err)
+				System.err.println("\t" + e);
+			//System.exit(1);
+		}
+		
+		
 		System.out.println("Visualizing AST...");
 		System.out.println(ast.toPrint(""));
 		
 		
-		//checking semantic errors
-		/*Environment env = new Environment();	
-		ArrayList<SemanticError> err = ast.checkSemantics(env);
-		if(err.size()>0){
-			System.out.println("You had: " +err.size()+" semantic errors:");
-			for(SemanticError e : err)
-				System.out.println("\t" + e);
-		}*/
-		
-
 	}
 	
 }

@@ -9,9 +9,9 @@ public class ArgNode implements Node {
 //	arg         : type ID;
 	
 	private Node type;
-	private Node id;
+	private IdNode id;
 	
-	public ArgNode(Node type, Node id) {
+	public ArgNode(Node type, IdNode id) {
 		this.type = type;
 		this.id = id;
 	}
@@ -20,13 +20,13 @@ public class ArgNode implements Node {
 		return this.type;
 	}
 	
-	public Node getId() {
+	public IdNode getId() {
 		return this.id;
 	}
 	
 	@Override
 	public String toPrint(String indent) {
-		return indent + "Arg:\n" + this.type.toPrint(indent +"  ") +"\n"+  this.id.toPrint(indent +"  ");
+		return indent + "Arg: " +this.id.getId() +"\n" +this.type.toPrint(indent +"  ");
 	}
 
 	@Override

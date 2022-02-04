@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 // THIS IS THE PARSER INPUT
 
-block	    : '{' declaration* statement* '}';
+block	    : '{' declaration* statement* '}' ;
 
 statement   : assignment ';'	#assignmentL
 	    | deletion ';'			#deletionL
@@ -35,7 +35,7 @@ statement   : assignment ';'	#assignmentL
 declaration : decFun			#decFunL
             | decVar 			#decVarL;
 
-decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
+decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block;
 
 decVar      : type ID ('=' exp)? ';' ;
 

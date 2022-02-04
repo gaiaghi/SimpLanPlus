@@ -19,7 +19,7 @@ public class BlockNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		String str = indent +"Block:";
+		String str = "Block:";
 		int i;
 		for(i=0; i<declarations.size(); i++)
 			str = str +"\n" + declarations.get(i).toPrint(indent +"  ");
@@ -27,7 +27,7 @@ public class BlockNode implements Node {
 		for(i=0; i<statements.size(); i++)
 			str = str +"\n" + statements.get(i).toPrint(indent +"  ");
 		
-		return str;
+		return indent + str;
 	}
 	
 	@Override

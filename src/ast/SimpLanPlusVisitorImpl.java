@@ -126,6 +126,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		}
 		
 		BlockNode block = visitBlock(ctx.block());
+		
 		return new DecFunNode(type, id, args, block);
 	}
 	
@@ -147,9 +148,9 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 //		 grammar rule:
 //		 arg         : type ID;
 		 Node type = visit(ctx.type());
-		 Node id = new IdNode(ctx.ID().getText());
+		 IdNode id = new IdNode(ctx.ID().getText());
 		 
-		 return new ArgNode(type,id);
+		 return new ArgNode(type, id);
 			 
 	 }
 	 
@@ -161,7 +162,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		 Node exp = visit(ctx.exp());
 		 Node lhs = visit(ctx.lhs());
 		 
-		 return new AssignmentNode(exp, lhs);
+		 return new AssignmentNode(lhs,exp);
 	 }
 	 
 	 @Override 

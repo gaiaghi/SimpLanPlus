@@ -24,10 +24,18 @@ public class LhsNode implements Node {
 	
 	@Override
 	public String toPrint(String indent) {
+		String str = indent +"Id: " +this.id.getId();
+		for(int i=0; i<getDereferenceNum(); i++)
+			str = str + "^";
+		str = str + "\n" +this.id.getSTEntry().toPrint(indent +"  ");
+		return str;
+		
+		/*
 		if (this.lhs == null)
-			return indent + "Id: " +this.id.getId();
+			return indent + "Id: " +this.id.getId() 
+					+"\n" +this.id.getSTEntry().toPrint(indent +"  ");
 		else
-			return lhs.toPrint("") + "^";
+			return lhs.toPrint(indent) +"^" ;*/
 	}			
 	
 	

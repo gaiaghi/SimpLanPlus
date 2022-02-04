@@ -24,14 +24,15 @@ public class CallNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		String str = "Call:\n" +id.toPrint(indent +"  ");
+		String str = "Call: " +id.getId() 
+					+"\n" +id.getSTEntry().toPrint(indent +"  ");
 		if(parlist.size() > 0)
 			str = str + "\n";
 		
 		for(int i=0; i<parlist.size(); i++)
 			str = str + parlist.get(i).toPrint(indent +"  ");
 		
-		return str;
+		return indent +str;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package util;
 
+import ast.ArrowTypeNode;
 import ast.Node;
 
 //entry of the Symbol Table
@@ -30,6 +31,11 @@ public class STEntry {
 //		
 //	}
 	
+	
+	public void setType(Node type) {
+		this.type = type;
+	}
+	
 	public Node getType() {
 		return this.type;
 	}
@@ -45,10 +51,17 @@ public class STEntry {
 	//sempre per la stampa dell'ast (anche in simplan)
 	public String toPrint(String indent) {
 		//da aggiungere stato degli effetti
-		return indent + "STEntry: Nesting Level = " +this.nestingLvl 
-				+"\n" +indent +"STEntry: Type = \n" +this.type.toPrint(indent +"  ")
-				+"\n" +indent +"STEntry: Offset = " +this.offset
-				+"\n" +indent +"STEntry: Status = ";
+		
+		String str = indent + "STEntry: Nesting Level = " +this.nestingLvl +"\n";
+		if(type instanceof ArrowTypeNode) 
+			str = str +indent +"STEntry: Type = \n" +this.type.toPrint(indent +"  ");
+		else
+			str = str +indent +"STEntry: Type = " +this.type.toPrint("");
+		
+		str = str +"\n" +indent +"STEntry: Offset = " +this.offset
+				  +"\n" +indent +"STEntry: Status = ";
+		
+		return str;
 	}
 	
 	//stampa del singolo entry
