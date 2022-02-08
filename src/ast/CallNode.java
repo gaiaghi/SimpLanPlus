@@ -2,9 +2,11 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.TypeErrorException;
 import parser.SimpLanPlusParser.ExpContext;
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanPlusLib;
 import util.STEntry;
 
 public class CallNode implements Node {
@@ -36,10 +38,23 @@ public class CallNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		//controllo numero e tipo parametri qui
-		return null;
+	public Node typeCheck() throws TypeErrorException {
+		//controllo che l'id corrisponda ad una funzione
+		ArrowTypeNode funType = (ArrowTypeNode) entry.getType();
+		if( !(funType instanceof ArrowTypeNode) )
+			throw new TypeErrorException("invocation of a non-function " +id);
+		
+		//controllo che la chiamata abbia il numero corretto di parametri
+	     ArrayList<Node> par_formali = funType.getParList();
+	     if ( !(par_formali.size() == parlist.size()) ) 
+	    	 throw new TypeErrorException("wrong number of parameters in the invocation of " +id);
+	     
+	     //controllo che il tipo dei parametri sia corretto
+	     for (int i=0; i<parlist.size(); i++) 
+	    	 if ( !(SimpLanPlusLib.isSubtype( (parlist.get(i)).typeCheck(), par_formali.get(i)) ) ) 
+	    		 throw new TypeErrorException("wrong type for "+(i+1)+"-th parameter in the invocation of " +id);
+	        
+	     return funType.getRet();
 	}
 
 	@Override

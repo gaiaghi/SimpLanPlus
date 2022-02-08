@@ -5,25 +5,20 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class CallExpNode implements Node {
+public class VoidTypeNode implements Node {
+
+	public VoidTypeNode() {
 	
-	//gramma rule:
-	//exp	    : call
-	
-	private CallNode call;
-	
-	public CallExpNode(CallNode call) {
-		this.call = call;
 	}
 
 	@Override
 	public String toPrint(String indent) {
-		return call.toPrint(indent);
+		return indent +"VoidType";
 	}
 
 	@Override
 	public Node typeCheck() {
-		return call.typeCheck();
+		return null;
 	}
 
 	@Override
@@ -34,7 +29,7 @@ public class CallExpNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		return call.checkSemantics(env);
+		return new ArrayList<SemanticError>();
 	}
 
 	@Override

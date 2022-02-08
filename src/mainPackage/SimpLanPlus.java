@@ -89,12 +89,13 @@ public class SimpLanPlus{
 		}
 		
 		
+		
 		//type-checking bottom-up 
 		try {
 			Node type = ast.typeCheck(); 
 			System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
 		}catch(TypeErrorException e){
-			System.err.println(e.getMessage());
+			System.err.println("Type error: " +e.getMessage());
 			System.exit(1);
 		}
 		

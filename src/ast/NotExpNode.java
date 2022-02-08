@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
 
@@ -21,9 +22,11 @@ public class NotExpNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+	public Node typeCheck() throws TypeErrorException{
+		if( !(exp.typeCheck() instanceof BoolTypeNode) )
+			throw new TypeErrorException("this expression " +exp +" is not bool type.");
+		
+		return new BoolTypeNode();
 	}
 
 	@Override

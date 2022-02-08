@@ -2,8 +2,10 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanPlusLib;
 
 public class IteNode implements Node {
 	
@@ -29,9 +31,18 @@ public class IteNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+	public Node typeCheck() throws TypeErrorException {
+		Node condType = cond.typeCheck();
+		if ( !(SimpLanPlusLib.isSubtype(condType, new BoolTypeNode() )) ) 
+			throw new TypeErrorException("if condition is not bool type.");
+		
+	    Node thenType = thenStm.typeCheck();
+	    Node elseType = elseStm.typeCheck();
+	    if ( !(SimpLanPlusLib.isSubtype(thenType, elseType)) ) 
+			throw new TypeErrorException("incompatible types in then else branches.");
+	    
+	    return thenType;
+		
 	}
 
 	@Override

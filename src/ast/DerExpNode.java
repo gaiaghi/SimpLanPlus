@@ -23,8 +23,7 @@ public class DerExpNode implements Node {
 
 	@Override
 	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+		return lhs.typeCheck();
 	}
 
 	@Override

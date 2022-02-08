@@ -117,7 +117,12 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	public Node visitDecFun(SimpLanPlusParser.DecFunContext ctx) {
 //		grammar rule:
 //		decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
-		Node type = visit(ctx.type());
+		
+		Node type;
+		if( ctx.type() != null )
+			type = visit(ctx.type());
+		else
+			type = new VoidTypeNode();
 		IdNode id = new IdNode(ctx.ID().getText());
 		
 		ArrayList<Node> args = new ArrayList<>();

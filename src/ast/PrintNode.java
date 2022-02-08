@@ -2,8 +2,10 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanPlusLib;
 
 public class PrintNode implements Node {
 	//	 print	    : 'print' exp;
@@ -25,9 +27,13 @@ public class PrintNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+	public Node typeCheck() throws TypeErrorException {
+		Node expType = exp.typeCheck();
+		
+		if( SimpLanPlusLib.isSubtype(expType, new VoidTypeNode() ))
+			throw new TypeErrorException("print argument is void type.");
+		
+		return expType;
 	}
 
 	@Override

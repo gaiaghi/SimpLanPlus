@@ -23,8 +23,7 @@ public class NewExpNode implements Node {
 
 	@Override
 	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+		return new PointerTypeNode(type);
 	}
 
 	@Override

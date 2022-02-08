@@ -1,4 +1,6 @@
-{^int x = new int; x^=2; print(x^+3);}
+{void f(int x) {print x+1;} f(1);}
+
+//{^int x = new int; x^=2; print(x^+3);}
 
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
 
