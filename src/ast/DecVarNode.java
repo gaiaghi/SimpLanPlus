@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import exception.MultipleDecException;
+import exception.TypeErrorException;
 import util.Environment;
 import util.STEntry;
 import util.SemanticError;
+import util.SimpLanPlusLib;
 
 
 //decVar      : type ID ('=' exp)? ';' ;
@@ -37,9 +39,14 @@ public class DecVarNode implements Node{
 	}
 
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+	public Node typeCheck() throws TypeErrorException {
+		
+		if (exp == null)
+			return null; //valore di ritorno non utilizzato
+		if (! SimpLanPlusLib.isSubtype(exp.typeCheck(), type))
+			 throw new TypeErrorException("expression "+exp+" cannot be assigned to variable "+id.getId()+" of type "+type.toPrint(""));
+			
+		return null; //valore di ritorno non utilizzato
 	}
 
 	@Override

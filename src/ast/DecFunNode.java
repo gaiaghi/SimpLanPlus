@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import exception.MultipleDecException;
+import exception.TypeErrorException;
 import util.Environment;
 import util.STEntry;
 import util.SemanticError;
+import util.SimpLanPlusLib;
 
 public class DecFunNode implements Node {
 //   decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
@@ -61,9 +63,11 @@ public class DecFunNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+	public Node typeCheck() throws TypeErrorException{
+		
+		if(! SimpLanPlusLib.isSubtype(block.typeCheck(), type))
+			throw new TypeErrorException("wrong return type for function "+ id.getId());
+		return null; //valore di ritorno non usato
 	}
 
 	@Override

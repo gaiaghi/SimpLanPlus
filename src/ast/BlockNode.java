@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
 
@@ -36,9 +37,17 @@ public class BlockNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+	public Node typeCheck() throws TypeErrorException{
+		for (Node dec: declarations)
+			dec.typeCheck();
+		
+		//DA FINIRE
+		ArrayList<Node> types = new ArrayList<>();
+		for (Node stm: statements){
+			
+		}
+		
+		return new VoidTypeNode();
 	}
 
 	@Override
