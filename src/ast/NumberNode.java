@@ -22,8 +22,7 @@ public class NumberNode implements Node {
 
 	@Override
 	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+		return new IntTypeNode();
 	}
 
 	@Override

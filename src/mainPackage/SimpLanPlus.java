@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import ast.Node;
 import ast.SimpLanPlusVisitorImpl;
+import exception.TypeErrorException;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
 import util.Environment;
@@ -84,8 +85,19 @@ public class SimpLanPlus{
 			System.err.println("You had: " +err.size()+" semantic errors:");
 			for(SemanticError e : err)
 				System.err.println("\t" + e);
-			//System.exit(1);
+			System.exit(1);
 		}
+		
+		
+		//type-checking bottom-up 
+		try {
+			Node type = ast.typeCheck(); 
+			System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
+		}catch(TypeErrorException e){
+			System.err.println(e.getMessage());
+			System.exit(1);
+		}
+		
 		
 		
 		System.out.println("Visualizing AST...");
