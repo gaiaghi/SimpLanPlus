@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
 
@@ -22,7 +23,7 @@ public class DerExpNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() {
+	public Node typeCheck() throws TypeErrorException{
 		return lhs.typeCheck();
 	}
 

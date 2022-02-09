@@ -3,6 +3,7 @@ package ast;
 import java.util.ArrayList;
 
 import exception.MissingDecException;
+import exception.TypeErrorException;
 import util.Environment;
 import util.STEntry;
 import util.SemanticError;
@@ -46,9 +47,13 @@ public class IdNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+	public Node typeCheck() throws TypeErrorException{
+		Node idType = entry.getType();
+		if (idType instanceof ArrowTypeNode) {
+			throw new TypeErrorException("wrong usage of function identifier "+ id);
+		}
+			  
+		return idType;
 	}
 
 	@Override

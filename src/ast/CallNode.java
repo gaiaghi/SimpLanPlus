@@ -40,7 +40,8 @@ public class CallNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException {
 		//controllo che l'id corrisponda ad una funzione
-		ArrowTypeNode funType = (ArrowTypeNode) entry.getType();
+//		ArrowTypeNode funType = (ArrowTypeNode) entry.getType();
+		ArrowTypeNode funType = (ArrowTypeNode) id.getSTEntry().getType();
 		if( !(funType instanceof ArrowTypeNode) )
 			throw new TypeErrorException("invocation of a non-function " +id);
 		

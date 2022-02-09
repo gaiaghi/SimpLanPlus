@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
 
@@ -52,9 +53,14 @@ public class LhsNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
-		return null;
+	public Node typeCheck() throws TypeErrorException{
+		if (lhs == null)
+			return id.typeCheck();	
+		
+		int derefNum = getDereferenceNum();
+		
+		//da controllare se funziona!
+		return ((PointerTypeNode) lhs.typeCheck()).getPointedType();
 	}
 
 	@Override

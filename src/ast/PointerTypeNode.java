@@ -23,7 +23,6 @@ public class PointerTypeNode implements Node {
 
 	@Override
 	public Node typeCheck() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -42,6 +41,10 @@ public class PointerTypeNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public Node getPointedType () {
+		return this.type;
 	}
 
 }

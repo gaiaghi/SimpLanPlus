@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
 
@@ -24,8 +25,10 @@ public class DeletionNode implements Node{
 	}
 	
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
+	public Node typeCheck() throws TypeErrorException{
+		if (!(id.typeCheck() instanceof PointerTypeNode))
+			throw new TypeErrorException("cannot delete the non pointer variable " + id.getId());
+		
 		return null;
 	}
 

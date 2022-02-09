@@ -2,17 +2,19 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanPlusLib;
 
 public class AssignmentNode implements Node {
 
 //	assignment  : lhs '=' exp ;
 	
 	private Node exp;
-	private Node lhs;
+	private LhsNode lhs;
 	
-	public AssignmentNode(Node lhs, Node exp) {
+	public AssignmentNode(LhsNode lhs, Node exp) {
 		this.exp = exp;
 		this.lhs = lhs;
 	}
@@ -28,8 +30,12 @@ public class AssignmentNode implements Node {
 	}
 	
 	@Override
-	public Node typeCheck() {
-		// TODO Auto-generated method stub
+	public Node typeCheck() throws TypeErrorException {
+		Node expType = exp.typeCheck();
+		Node lhsType = lhs.typeCheck();
+		if (! SimpLanPlusLib.isSubtype(expType, lhsType))
+			throw new TypeErrorException("cannot assign "+expType.toPrint("") +
+					" value for variable " + lhs.getId().getId() + " of type " + lhsType.toPrint(""));
 		return null;
 	}
 

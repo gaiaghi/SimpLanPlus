@@ -39,15 +39,31 @@ public class BlockNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException{
 		for (Node dec: declarations)
-			dec.typeCheck();
+			dec.typeCheck(); 
 		
-		//DA FINIRE
+		//lista dei nodi che hanno un return
 		ArrayList<Node> types = new ArrayList<>();
 		for (Node stm: statements){
+			Node stmType = stm.typeCheck();		//controllo su tutti gli statement 
 			
+			//Nodi RetLNode e nodi BlockLNode e IteLNode che non siano NullType
+			if ( stm instanceof RetLNode ||
+					 ( (stm instanceof BlockLNode || stm instanceof IteLNode) 
+							 && !(stmType instanceof NullTypeNode) )
+				)
+				types.add(stmType);	
+		} 
+		
+		if (types.size() > 0){
+			//controllo: i tipi di ritorno devono essere uguali
+			if ( ! types.stream().allMatch(types.get(0)::equals) )
+				throw new TypeErrorException("block with multiple return statements having mismatching types.");
+			else
+				return types.get(0);
 		}
 		
-		return new VoidTypeNode();
+		//se non ci sono ReturnNode restituisce NullTypeNode
+		return new NullTypeNode();
 	}
 
 	@Override

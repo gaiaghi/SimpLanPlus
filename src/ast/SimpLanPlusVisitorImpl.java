@@ -141,6 +141,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 //		decVar      : type ID ('=' exp)? ';' ;
 		
 		Node type = visit(ctx.type());
+//		System.out.println(ctx.type().getText()); 
 		Node exp = visit(ctx.exp());
 		IdNode id = new IdNode(ctx.ID().getText());
 		
@@ -165,7 +166,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 //		 assignment  : lhs '=' exp ;
 		 
 		 Node exp = visit(ctx.exp());
-		 Node lhs = visit(ctx.lhs());
+		 LhsNode lhs = visitLhs(ctx.lhs());
 		 
 		 return new AssignmentNode(lhs,exp);
 	 }
@@ -207,7 +208,10 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	 public Node visitRet(SimpLanPlusParser.RetContext ctx) {
 //		 grammar rule:
 //		 ret	    : 'return' (exp)?;
-		 return new RetNode(visit(ctx.exp()));
+		 if (ctx.exp() != null) 
+			 return new RetNode(visit(ctx.exp()));
+		 else
+			 return new RetNode(null);
 	 }
 	
 	

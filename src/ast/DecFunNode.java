@@ -64,9 +64,15 @@ public class DecFunNode implements Node {
 
 	@Override
 	public Node typeCheck() throws TypeErrorException{
+		Node bodyType = block.typeCheck();
 		
-		if(! SimpLanPlusLib.isSubtype(block.typeCheck(), type))
+		//se il blocco non ha nessun RetNode e la funzione è void:
+		if ((bodyType instanceof NullTypeNode) && (type instanceof VoidTypeNode))
+			return null;
+		
+		if(! SimpLanPlusLib.isSubtype(bodyType, type))
 			throw new TypeErrorException("wrong return type for function "+ id.getId());
+		
 		return null; //valore di ritorno non usato
 	}
 
