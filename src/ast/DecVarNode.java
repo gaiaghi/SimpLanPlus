@@ -28,9 +28,15 @@ public class DecVarNode implements Node{
 
 	@Override
 	public String toPrint(String indent) {
+		String expString;
+		if (exp != null)
+			expString = "\n" +exp.toPrint(indent +"  ");
+		else
+			expString = "";
+		
 		return indent +"Var: " +id.getId()
 		+"\n" +type.toPrint(indent +"  ") 
-		+"\n" +exp.toPrint(indent +"  ");
+		+ expString;
 	}
 	
 	@Override
@@ -74,7 +80,8 @@ public class DecVarNode implements Node{
         	res.add(new SemanticError("Var id "+id.getId() +" already declared"));
         }
         
-        res.addAll(exp.checkSemantics(env));
+        if (exp != null)
+        	res.addAll(exp.checkSemantics(env));
         
         return res;
 	}

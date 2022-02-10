@@ -123,7 +123,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 			type = visit(ctx.type());
 		else
 			type = new VoidTypeNode();
-		IdNode id = new IdNode(ctx.ID().getText());
+		IdNode id = new IdNode(ctx.ID().getText(),0);
 		
 		ArrayList<Node> args = new ArrayList<>();
 		for (SimpLanPlusParser.ArgContext arg : ctx.arg()) {
@@ -141,9 +141,16 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 //		decVar      : type ID ('=' exp)? ';' ;
 		
 		Node type = visit(ctx.type());
-//		System.out.println(ctx.type().getText()); 
-		Node exp = visit(ctx.exp());
-		IdNode id = new IdNode(ctx.ID().getText());
+		//conta quante "^" sono presenti nella dichiarazione (che precedono il tipo)
+		long countPointer = ctx.type().getText().chars().filter(ch -> ch == '^').count();
+		
+		Node exp;
+		if( ctx.exp() != null )
+			exp = visit(ctx.exp());
+		else
+			exp = null;
+		
+		IdNode id = new IdNode(ctx.ID().getText(), countPointer);
 		
 		return new DecVarNode(type, id, exp);
 		
@@ -153,8 +160,10 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	 public Node visitArg(SimpLanPlusParser.ArgContext ctx) {
 //		 grammar rule:
 //		 arg         : type ID;
-		 Node type = visit(ctx.type());
-		 IdNode id = new IdNode(ctx.ID().getText());
+		Node type = visit(ctx.type());
+		//conta quante "^" sono presenti nella dichiarazione
+		long countPointer = ctx.type().getText().chars().filter(ch -> ch == '^').count();
+		IdNode id = new IdNode(ctx.ID().getText(), countPointer);
 		 
 		 return new ArgNode(type, id);
 			 
@@ -183,7 +192,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		 }
 		 //id
 		 else {
-			 IdNode id = new IdNode(ctx.ID().getText());
+			 IdNode id = new IdNode(ctx.ID().getText(),0);
 			 return new LhsNode(id, null);
 		 }
 		 
@@ -193,7 +202,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	 public Node visitDeletion(SimpLanPlusParser.DeletionContext ctx) {
 //		 grammar rule:
 //		 deletion    : 'delete' ID;
-		 IdNode id = new IdNode(ctx.ID().getText());
+		 IdNode id = new IdNode(ctx.ID().getText(),0);
 		 return new DeletionNode(id);
 	 }
 	 
@@ -262,7 +271,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 			args.add(visit(exp));
 		
 		//instantiate the invocation
-		CallNode res = new CallNode(new IdNode(ctx.ID().getText()), args);
+		CallNode res = new CallNode(new IdNode(ctx.ID().getText(),0), args);
 		
 		return res;
 	}

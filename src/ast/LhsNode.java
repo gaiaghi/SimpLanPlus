@@ -58,7 +58,8 @@ public class LhsNode implements Node {
 			return id.typeCheck();	
 		
 		int derefNum = getDereferenceNum();
-		
+		if (derefNum >1+ id.getDereferenceNum())
+			throw new TypeErrorException("too many dereference operations at pointer " + id.getId());
 		//da controllare se funziona!
 		return ((PointerTypeNode) lhs.typeCheck()).getPointedType();
 	}

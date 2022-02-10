@@ -13,9 +13,11 @@ public class IdNode implements Node {
 	private String id;
 	private STEntry entry;
 	private int nestingLvl; //nesting level corrente
+	private long dereferenceNum;
 	
-	public IdNode(String id) {
+	public IdNode(String id, long dereferenceNum) {
 		this.id = id;
+		this.dereferenceNum = dereferenceNum;
 	}
 	
 	public String getId() {
@@ -33,6 +35,10 @@ public class IdNode implements Node {
 	
 	public int getNestingLevel() {
 		return this.nestingLvl;
+	}
+	
+	public long getDereferenceNum () {
+		return this.dereferenceNum;
 	}
 	
 	
