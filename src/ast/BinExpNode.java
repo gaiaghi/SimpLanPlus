@@ -65,7 +65,7 @@ public class BinExpNode implements Node {
 				
 			case "==":
 			case "!=":
-				if( SimpLanPlusLib.isSubtype(left, right) )
+				if( !SimpLanPlusLib.isSubtype(left, right) )
 					throw new TypeErrorException("the " +op +"operator require 2 int type expressions or 2 bool type expressions.");
 				return new BoolTypeNode();
 		}

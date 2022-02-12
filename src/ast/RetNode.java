@@ -11,9 +11,11 @@ public class RetNode implements Node {
 //	ret	    : 'return' (exp)?;
 
 	private Node exp;
+	private boolean inFunction;
 	
 	public RetNode(Node exp) {
 		this.exp = exp;
+		this.inFunction = false;
 	}
 
 	@Override
@@ -43,16 +45,25 @@ public class RetNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		if(exp != null)
-			return exp.checkSemantics(env);
+		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
-		return new ArrayList<>();
+		if(exp != null)
+			res.addAll(exp.checkSemantics(env));
+		
+		if( !inFunction )
+			res.add(new SemanticError("Non ci devono essere return nel blocco. Non è una funzione."));
+		
+		return res;
 	}
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void setInFunction(boolean b){
+		inFunction = b;
 	}
 
 }

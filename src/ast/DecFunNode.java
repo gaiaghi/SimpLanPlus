@@ -22,7 +22,8 @@ public class DecFunNode implements Node {
 		this.type = type;
 		this.id = id;
 		this.args = args;
-		this.block = block;		
+		this.block = block;	
+		this.block.setInFunction(true);
 	}
 	
 	@Override
@@ -66,11 +67,17 @@ public class DecFunNode implements Node {
 	public Node typeCheck() throws TypeErrorException{
 		Node bodyType = block.typeCheck();
 		
+		/*
 		//se il blocco non ha nessun RetNode e la funzione è void:
 		if ((bodyType instanceof NullTypeNode) && (type instanceof VoidTypeNode))
 			return null;
+		*/
 		
-		if(! SimpLanPlusLib.isSubtype(bodyType, type))
+		if ( (bodyType == null) && (type instanceof VoidTypeNode) )
+			return null;
+		
+		
+		if( ! SimpLanPlusLib.isSubtype(bodyType, type) )
 			throw new TypeErrorException("wrong return type for function "+ id.getId());
 		
 		return null; //valore di ritorno non usato
@@ -123,6 +130,8 @@ public class DecFunNode implements Node {
 			//set func type
 			entry.setType( new ArrowTypeNode(parTypes, type) );
 			
+			/* 	COMMENTO QUESTA PARTE PERCHè è LA RIPETIZIONE 
+			 * DEL checkSemantics di BlockNode
 			//check semantics in the dec list
 			if(block.getDeclarationsSize() > 0){
 				//TODO env.offset = -2;
@@ -134,6 +143,9 @@ public class DecFunNode implements Node {
 			//res.addAll(((Node) block.getStatements()).checkSemantics(env));
 			for(Node n : block.getStatements())
 				res.addAll(n.checkSemantics(env));
+			*/
+			res.addAll(block.checkSemantics(env));
+			
 	  
 			//close scope
 			env.removeScope();

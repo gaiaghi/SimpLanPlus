@@ -48,5 +48,10 @@ public class BlockLNode implements Node {
 		return null;
 	}
 
+	
+	public void setInFunction(boolean b) {
+		((BlockNode) block).setInFunction(b);
+	}
+	
 
 }

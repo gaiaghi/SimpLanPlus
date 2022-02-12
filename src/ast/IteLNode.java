@@ -48,6 +48,10 @@ public class IteLNode implements Node{
 		// TODO Auto-generated method stub
 		return null;
 	}
-//	statement   :	ite					#iteL
+
+	
+	public void setInFunction(boolean b) {
+		((IteNode) ite).setInFunction(b);
+	}
 	
 }

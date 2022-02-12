@@ -47,5 +47,9 @@ public class RetLNode implements Node{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public void setInFunction(boolean b) {
+		((RetNode) ret).setInFunction(b);
+	}
 
 }

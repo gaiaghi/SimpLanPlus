@@ -251,7 +251,9 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		//ite         : 'if' '(' exp ')' statement ('else' statement)?;
 		Node cond = visit(ctx.exp());
 		Node thenStm = visit(ctx.statement(0));
-		Node elseStm = visit(ctx.statement(1));
+		Node elseStm = null;
+		if( ctx.statement(1) != null )
+			elseStm = visit(ctx.statement(1));
 		
 		return new IteNode(cond, thenStm, elseStm);
 	}

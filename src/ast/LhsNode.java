@@ -29,14 +29,8 @@ public class LhsNode implements Node {
 		for(int i=0; i<getDereferenceNum(); i++)
 			str = str + "^";
 		str = str + "\n" +this.id.getSTEntry().toPrint(indent +"  ");
-		return str;
 		
-		/*
-		if (this.lhs == null)
-			return indent + "Id: " +this.id.getId() 
-					+"\n" +this.id.getSTEntry().toPrint(indent +"  ");
-		else
-			return lhs.toPrint(indent) +"^" ;*/
+		return str;
 	}			
 	
 	

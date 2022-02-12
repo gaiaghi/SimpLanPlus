@@ -15,19 +15,25 @@ public class IteNode implements Node {
 	private Node cond;
 	private Node thenStm;
 	private Node elseStm;
+	private boolean inFunction;
   
 	public IteNode(Node cond, Node thenStm, Node elseStm) {
 		this.cond = cond;
 		this.thenStm = thenStm;
 		this.elseStm = elseStm;
+		this.inFunction = false;
 	}
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +"If:\n"
+		String str = indent +"If:\n"
 				+cond.toPrint(indent +"  ")
-				+thenStm.toPrint(indent +"  ")
-				+elseStm.toPrint(indent +"  ");
+				+"\n" +indent +"Then:\n" +thenStm.toPrint(indent +"  ");
+		
+		if( elseStm != null )
+				str = str +"\n" +indent +"Else:\n" +elseStm.toPrint(indent +"  ");
+		
+		return str;
 	}
 
 	@Override
@@ -37,7 +43,12 @@ public class IteNode implements Node {
 			throw new TypeErrorException("if condition is not bool type.");
 		
 	    Node thenType = thenStm.typeCheck();
-	    Node elseType = elseStm.typeCheck();
+	    Node elseType = null;
+	    if( elseStm != null )
+	    	elseType = elseStm.typeCheck();
+	    else
+	    	return thenType;
+	    
 	    if ( !(SimpLanPlusLib.isSubtype(thenType, elseType)) ) 
 			throw new TypeErrorException("incompatible types in then else branches.");
 	    
@@ -66,6 +77,30 @@ public class IteNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void setInFunction(boolean b){
+		inFunction = b;
+		
+		if( thenStm instanceof BlockLNode )
+			((BlockLNode) thenStm).setInFunction(b);
+		
+		else if( thenStm instanceof IteLNode )
+			((IteLNode) thenStm).setInFunction(b);
+		
+		else if( thenStm instanceof RetLNode )
+			((RetLNode) thenStm).setInFunction(b);
+		
+		if( elseStm != null ) {
+			if( elseStm instanceof BlockLNode )
+				((BlockLNode) elseStm).setInFunction(b);
+			
+			else if( elseStm instanceof IteLNode )
+				((IteLNode) elseStm).setInFunction(b);
+			
+			else if( elseStm instanceof RetLNode )
+				((RetLNode) elseStm).setInFunction(b);
+		}
 	}
 
 }

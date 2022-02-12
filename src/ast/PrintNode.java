@@ -33,7 +33,7 @@ public class PrintNode implements Node {
 		if( SimpLanPlusLib.isSubtype(expType, new VoidTypeNode() ))
 			throw new TypeErrorException("print argument is void type.");
 		
-		return expType;
+		return null;
 	}
 
 	@Override
