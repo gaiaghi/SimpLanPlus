@@ -39,6 +39,7 @@ public class SimpLanPlus{
 		
 //		//SimpLanPlus lexer
 		SimpLanPlusLexer lexer = new SimpLanPlusLexer(inputCode);
+
 		
 		//SimpLanPlus parser
 		SimpLanPlusParser parser = new SimpLanPlusParser(new CommonTokenStream(lexer));
@@ -62,6 +63,11 @@ public class SimpLanPlus{
             
             System.exit(1);
         } 
+
+		//Tree visitor
+		SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
+		Node ast = visitor.visit(parser.block()); 
+		
 		
 		//checking syntactical errors
 		if(parser.getNumberOfSyntaxErrors()>0) {
@@ -74,9 +80,6 @@ public class SimpLanPlus{
 		}
 		
 		
-		//Tree visitor
-		SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
-		Node ast = visitor.visit(parser.block()); 
 			
 		//checking semantic errors
 		Environment env = new Environment();	

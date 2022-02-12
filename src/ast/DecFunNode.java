@@ -130,20 +130,23 @@ public class DecFunNode implements Node {
 			//set func type
 			entry.setType( new ArrowTypeNode(parTypes, type) );
 			
-			
-			//check semantics in the dec list
-			if(block.getDeclarationsSize() > 0){
-				//TODO env.offset = -2;
-				for(Node n : block.getDeclarations())
-					res.addAll(n.checkSemantics(env));
-			}
-	 
-			//check body
-			//res.addAll(((Node) block.getStatements()).checkSemantics(env));
-			for(Node n : block.getStatements())
-				res.addAll(n.checkSemantics(env));
+//			//check semantics in the dec list
+//			if(block.getDeclarationsSize() > 0){
+//				//TODO env.offset = -2;
+//				for(Node n : block.getDeclarations())
+//					res.addAll(n.checkSemantics(env));
+//			}
+//	 
+//			//check body
+//			//res.addAll(((Node) block.getStatements()).checkSemantics(env));
+//			for(Node n : block.getStatements())
+//				res.addAll(n.checkSemantics(env));
 	  
 			//close scope
+			
+			block.setIsFunBody(true);
+			res.addAll(block.checkSemantics(env));
+			
 			env.removeScope();
 			
         }catch(MultipleDecException e) {

@@ -14,11 +14,13 @@ public class BlockNode implements Node {
 	private ArrayList<Node> declarations;
 	private ArrayList<Node> statements;
 	private boolean inFunction;
+	private boolean isFunBody;
 	
 	public BlockNode(ArrayList<Node> declarations, ArrayList<Node> statements) {
 		this.declarations = declarations;
 		this.statements = statements;
 		this.inFunction = false;
+		this.isFunBody = false;
 	}
 
 	@Override
@@ -111,7 +113,9 @@ public class BlockNode implements Node {
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
-		env.addScope();
+		//se è il blocco che definisce il corpo della funzione non devo creare un nuovo scope
+		if(! isFunBody)
+			env.addScope();
 		
 		//check semantics in declaration
 		if(declarations.size() > 0){
@@ -126,7 +130,7 @@ public class BlockNode implements Node {
 				res.addAll(n.checkSemantics(env));*/
 			
 			// NEW
-			ArrayList<Integer> returns_index = new ArrayList<Integer>(); 
+			ArrayList<Integer> returns_index = new ArrayList<Integer>();
 			for(int i=0; i<statements.size(); i++ ) {
 				Node n = statements.get(i);
 				res.addAll(n.checkSemantics(env));
@@ -140,11 +144,11 @@ public class BlockNode implements Node {
 				 * 			ma se ci sono devono essere gli ultimi	
 				 */
 				if( returns_index.size() > 1 )
-					res.add(new SemanticError("Ci sono più return nello stesso blocco."));
+					res.add(new SemanticError("there cannot be multiple returns in the same block."));
 				else {	
 					if( returns_index.size() == 1 && 
 						returns_index.get(0) != statements.size()-1 )
-						res.add(new SemanticError("Il return non è l'ultimo stm del blocco. Codice irraggiungibile."));
+						res.add(new SemanticError("the return stm is not the last statement in the block. Unreachable code."));
 				}
 			}
 			/* inFunc==F --> non ci devono essere return
@@ -152,8 +156,9 @@ public class BlockNode implements Node {
 			 */
 			
 		}     
-  
-		env.removeScope();
+
+		if(! isFunBody)
+			env.removeScope();
   
 		return res;
 	}
@@ -193,6 +198,14 @@ public class BlockNode implements Node {
 			if( n instanceof RetLNode )
 				((RetLNode) n).setInFunction(b);
 		}	
+	}
+	
+	public boolean getIsFunBody() {
+		return this.isFunBody;
+	}
+	
+	public void setIsFunBody(boolean isFunBody) {
+		this.isFunBody = isFunBody;
 	}
 	
 }
