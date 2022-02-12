@@ -83,25 +83,19 @@ public class BlockNode implements Node {
 		if( inFunction ) {
 			if( statements.size() > 0 ) {
 				if (types.size() > 0){
-					/*for(int i=0; i<types.size(); i++) {
+					for(int i=0; i<types.size(); i++) {
 						if( ! SimpLanPlusLib.isSubtype(types.get(i), types.get(0)) )
 							throw new TypeErrorException("block with multiple return statements having mismatching types.");
-					}*/	
+					}
 				}
 				
 				
 				return statements.get( statements.size()-1 ).typeCheck();
 			}
 			else
-				return null;
+				return null; //return implicito, NullType
 		}
 		else {
-			if( statements.size() > 0 ) {
-				if( statements.get( statements.size()-1 ) instanceof CallLNode )
-					return statements.get( statements.size()-1 ).typeCheck();
-				else
-					return null;
-			}
 			return null;
 		}
 			
@@ -122,8 +116,8 @@ public class BlockNode implements Node {
 		//check semantics in declaration
 		if(declarations.size() > 0){
 			//TODO env.offset = -2;
-		for(Node n : declarations)
-			res.addAll(n.checkSemantics(env));
+			for(Node n : declarations)
+				res.addAll(n.checkSemantics(env));
 		}
 		
 		//check semantics in statement

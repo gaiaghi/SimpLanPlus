@@ -130,8 +130,7 @@ public class DecFunNode implements Node {
 			//set func type
 			entry.setType( new ArrowTypeNode(parTypes, type) );
 			
-			/* 	COMMENTO QUESTA PARTE PERCHè è LA RIPETIZIONE 
-			 * DEL checkSemantics di BlockNode
+			
 			//check semantics in the dec list
 			if(block.getDeclarationsSize() > 0){
 				//TODO env.offset = -2;
@@ -143,9 +142,6 @@ public class DecFunNode implements Node {
 			//res.addAll(((Node) block.getStatements()).checkSemantics(env));
 			for(Node n : block.getStatements())
 				res.addAll(n.checkSemantics(env));
-			*/
-			res.addAll(block.checkSemantics(env));
-			
 	  
 			//close scope
 			env.removeScope();
