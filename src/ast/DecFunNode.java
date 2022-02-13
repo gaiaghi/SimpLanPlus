@@ -144,7 +144,7 @@ public class DecFunNode implements Node {
 	  
 			//close scope
 			
-			block.setIsFunBody(true);
+			block.setIsFunBody(true); 
 			res.addAll(block.checkSemantics(env));
 			
 			env.removeScope();

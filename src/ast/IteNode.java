@@ -16,12 +16,18 @@ public class IteNode implements Node {
 	private Node thenStm;
 	private Node elseStm;
 	private boolean inFunction;
+	
+	private boolean thenRet;
+	private boolean elseRet;
   
 	public IteNode(Node cond, Node thenStm, Node elseStm) {
 		this.cond = cond;
 		this.thenStm = thenStm;
 		this.elseStm = elseStm;
 		this.inFunction = false;
+		
+		this.thenRet = findReturns(thenStm);
+		this.elseRet = findReturns(elseStm);
 	}
 
 	@Override
@@ -102,5 +108,34 @@ public class IteNode implements Node {
 				((RetLNode) elseStm).setInFunction(b);
 		}
 	}
+	
+	
+	public boolean isIfThenElse() {
+		if( elseStm != null )
+			return true;
+		return false;
+	}
+	
+	
+	private boolean findReturns(Node node) {
+		if( node != null ) {
+			if( node instanceof RetLNode ) {
+				return true;
+			}
+			else if( node instanceof BlockLNode )
+				return ((BlockLNode) node).getReturns();
+			
+			else if( node instanceof IteLNode )
+				return ((IteLNode) node).getReturns();
+		}
+		
+		return false;
+	}
+	
+	
+	public boolean getReturns() {
+		return thenRet && elseRet;
+	}
+	
 
 }

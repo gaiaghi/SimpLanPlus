@@ -54,4 +54,8 @@ public class IteLNode implements Node{
 		((IteNode) ite).setInFunction(b);
 	}
 	
+	
+	public boolean getReturns() {
+		return ((IteNode) ite).getReturns();
+	}
 }

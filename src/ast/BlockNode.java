@@ -13,14 +13,18 @@ public class BlockNode implements Node {
 
 	private ArrayList<Node> declarations;
 	private ArrayList<Node> statements;
-	private boolean inFunction;
-	private boolean isFunBody;
+	private boolean inFunction; //true: è dentro il corpo di una funzione
+	private boolean isFunBody; //true: è il blocco principale del corpo di una funzione
+	
+	private boolean returns;
 	
 	public BlockNode(ArrayList<Node> declarations, ArrayList<Node> statements) {
 		this.declarations = declarations;
 		this.statements = statements;
 		this.inFunction = false;
 		this.isFunBody = false;
+		
+		this.returns = findReturns();
 	}
 
 	@Override
@@ -126,34 +130,52 @@ public class BlockNode implements Node {
 		
 		//check semantics in statement
 		if(statements.size() > 0){
+			//OLD
 			/*for(Node n : statements) 
 				res.addAll(n.checkSemantics(env));*/
 			
 			// NEW
+			//creo una lista di indici degli stm che contengono "return"
 			ArrayList<Integer> returns_index = new ArrayList<Integer>();
+			
 			for(int i=0; i<statements.size(); i++ ) {
 				Node n = statements.get(i);
 				res.addAll(n.checkSemantics(env));
 				
-				if( n instanceof RetLNode )
-					returns_index.add(i);
-			}
+				//controllo se lo stm ha "return" al suo interno
+				if( inFunction ) {
+					if( n instanceof RetLNode ) {
+						returns_index.add(i);
+					}
+					else if ( n instanceof IteLNode ) {
+						if( ((IteLNode) n).getReturns() )
+							returns_index.add(i);
+					}
+					else if ( n instanceof BlockLNode ) {
+						if( ((BlockLNode) n).getReturns() )
+							returns_index.add(i);
+					}
+				}
+			}//end for
 			
+			
+			//Caso in cui il blocco è all'interno del corpo di una funzione
 			if( inFunction ) {
-				/* 	inFunc==V --> i return ci possono essere o no, 
-				 * 			ma se ci sono devono essere gli ultimi	
-				 */
+				//Controllo che non ci siano "return" multipli
 				if( returns_index.size() > 1 )
 					res.add(new SemanticError("there cannot be multiple returns in the same block."));
 				else {	
+					//Controllo la presenza di codice irranggiungibile, 
+					//		quindi il "return" deve essere in ultima posizione
 					if( returns_index.size() == 1 && 
 						returns_index.get(0) != statements.size()-1 )
 						res.add(new SemanticError("the return stm is not the last statement in the block. Unreachable code."));
 				}
 			}
-			/* inFunc==F --> non ci devono essere return
-			 * questo controllo viene fatto nella checkSemantics di RetNode
-			 */
+			//Caso in cui il blocco NON è all'interno del corpo di una funzione.
+			//Non ci possono essere "return".
+			//questo controllo viene fatto nella checkSemantics di RetNode
+			
 			
 		}     
 
@@ -192,10 +214,10 @@ public class BlockNode implements Node {
 			if( n instanceof BlockLNode )
 				((BlockLNode) n).setInFunction(b);
 			
-			if( n instanceof IteLNode )
+			else if( n instanceof IteLNode )
 				((IteLNode) n).setInFunction(b);
 			
-			if( n instanceof RetLNode )
+			else if( n instanceof RetLNode )
 				((RetLNode) n).setInFunction(b);
 		}	
 	}
@@ -206,6 +228,31 @@ public class BlockNode implements Node {
 	
 	public void setIsFunBody(boolean isFunBody) {
 		this.isFunBody = isFunBody;
+	}
+	
+	private boolean findReturns() {
+		ArrayList<Boolean> returns_list = new ArrayList<Boolean>();
+		for(Node n : statements) {
+			if( n instanceof BlockLNode )
+				returns_list.add( ((BlockLNode) n).getReturns() );
+			
+			else if( n instanceof IteLNode )
+				returns_list.add( ((IteLNode) n).getReturns() );
+			
+			else if( n instanceof RetLNode )
+				returns_list.add(true);
+		}	
+		
+		for( Boolean b : returns_list )
+			if( b )
+				return true;
+		
+		return false;
+	}
+	
+	
+	public boolean getReturns() {
+		return returns;
 	}
 	
 }

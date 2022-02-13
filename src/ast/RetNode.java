@@ -51,7 +51,7 @@ public class RetNode implements Node {
 			res.addAll(exp.checkSemantics(env));
 		
 		if( !inFunction )
-			res.add(new SemanticError("Non ci devono essere return nel blocco. Non è una funzione."));
+			res.add(new SemanticError("there cannot be return in the block. It is not a function."));
 		
 		return res;
 	}
@@ -65,5 +65,6 @@ public class RetNode implements Node {
 	public void setInFunction(boolean b){
 		inFunction = b;
 	}
+	
 
 }

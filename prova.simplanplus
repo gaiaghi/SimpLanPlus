@@ -1,5 +1,5 @@
 //questo codice dà errore----> adesso dovrebbe essere corretto
-{int x; x=2; int z;}
+//{int x; x=2; int z;}
 
 
 //questo codice dà errore----> adesso dovrebbe essere corretto
@@ -7,8 +7,25 @@
 //{ int y=10; if(y==9) print y; else y+8;  }
 
 
+//1 semantic errors: the return stm is not the last statement in the block. Unreachable code.
+//{int f(int x) {return(2); print(4); } }
 
-//{int f(int x) {return(2); print(4) }; }
+
+//Errore: caso return nella IF prima di un return
+//{int f(int x) { print(4); if(x==1) print x; else return; return(2);} }
+
+
+//You had: 2 semantic errors:
+//	the return stm is not the last statement in the block. Unreachable code.
+//	there cannot be multiple returns in the same block.
+//{int f(int x) { {return; print 5; } print(4); if(x==1) print x; else print 3; return(2);} }
+
+
+//You had: 1 semantic errors:
+//	there cannot be return in the block. It is not a function.
+//{int x=1; return; print 4;}
+
+
 
 //{int f(int x) {print x+1; {x=1;if(x==1)return x;}; return x+1; } f(1);}
 

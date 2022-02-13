@@ -53,5 +53,10 @@ public class BlockLNode implements Node {
 		((BlockNode) block).setInFunction(b);
 	}
 	
+	
+	public boolean getReturns() {
+		return ((BlockNode) block).getReturns();
+	}
+	
 
 }
