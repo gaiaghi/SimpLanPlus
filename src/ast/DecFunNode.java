@@ -71,11 +71,11 @@ public class DecFunNode implements Node {
 		//se il blocco non ha nessun RetNode e la funzione è void:
 		if ((bodyType instanceof NullTypeNode) && (type instanceof VoidTypeNode))
 			return null;
-		*/
+		
 		
 		if ( (bodyType == null) && (type instanceof VoidTypeNode) )
 			return null;
-		
+		*/
 		
 		if( ! SimpLanPlusLib.isSubtype(bodyType, type) )
 			throw new TypeErrorException("wrong return type for function "+ id.getId());

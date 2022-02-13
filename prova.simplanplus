@@ -26,19 +26,45 @@
 //{int x=1; return; print 4;}
 
 
+//Type error: incompatible types in then else branches.
+{int f(int x) {print x+1; {x=1;if(x==1) return 2; else print 2;} return x+1; } f(1);}
 
-//{int f(int x) {print x+1; {x=1;if(x==1)return x;}; return x+1; } f(1);}
+
+//Type checking: OK!
+//{int f(int x) {print x+1; {x=1;if(x==1) return x;} return x+1; } f(1);}
+
+
+//Type error: block with multiple return statements having mismatching types.
+//{int f(int x) {print x+1; {x=1; if(x==1) return ;} return x+1; } f(1);}
+
+
+//Type checking: OK!
+//{void f(int x) {print x+1; {x=1; if(x==1) return ;} x=1; } f(1);}
+
 
 //{void f(int x) {print x+1;} f(1);}
 
-//{int x;}
+
+//You had: 1 semantic errors:
+//	there cannot be return in the block. It is not a function.
+//{int x; return;}
+
 
 //{^^int z; ^^^int w; ^int x = new int; void f(int x) {print x+1; return;}; x^=2; z^=x; w^=x; f(6); print(x^+3);}
 
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
 
-/*{int x=4;
-bool x = 8;
-print(k+x);}*/
+//{int x=4; bool x = 8; print(k+x);}
 
-/*#{int x=4t;}*/
+
+//Errore  ---> ora funziona
+//{int x=4aaat;}
+
+
+//Errore  ---> ora funziona
+//d{int x=4;}
+
+
+//Non dà errore. Esegue come se il # non ci fosse.
+//forse è un carattere speciale??
+//#{int x=4;}

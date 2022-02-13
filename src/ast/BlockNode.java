@@ -52,6 +52,7 @@ public class BlockNode implements Node {
 			
 		//lista dei nodi che hanno un return
 		ArrayList<Node> types = new ArrayList<>();
+		
 		for (Node stm: statements){
 			Node stmType = stm.typeCheck();		//controllo su tutti gli statement 
 			
@@ -63,12 +64,17 @@ public class BlockNode implements Node {
 				)
 				types.add(stmType);*/
 			
-			if( stm instanceof RetLNode )
+			if( stmType != null ) {
 				types.add(stmType);
-			else if( stm instanceof BlockLNode && stmType != null )
-				types.add(stmType);
-			/*else if( stm instanceof IteLNode && stmType != null )
-				types.add(stmType);*/
+				
+				/*if( stm instanceof RetLNode )
+					types.add(stmType);
+				else if( stm instanceof BlockLNode && stmType != null )
+					types.add(stmType);
+				else if( stm instanceof IteLNode && stmType != null )
+					types.add(stmType);*/
+			}
+			
 					
 		} 
 		
@@ -93,8 +99,7 @@ public class BlockNode implements Node {
 						if( ! SimpLanPlusLib.isSubtype(types.get(i), types.get(0)) )
 							throw new TypeErrorException("block with multiple return statements having mismatching types.");
 					}
-				}
-				
+				}		
 				
 				return statements.get( statements.size()-1 ).typeCheck();
 			}
@@ -102,7 +107,7 @@ public class BlockNode implements Node {
 				return null; //return implicito, NullType
 		}
 		else {
-			return null;
+			return null; //non è il corpo di una funzione, non ho tipo di ritorno
 		}
 			
 	}
@@ -130,11 +135,6 @@ public class BlockNode implements Node {
 		
 		//check semantics in statement
 		if(statements.size() > 0){
-			//OLD
-			/*for(Node n : statements) 
-				res.addAll(n.checkSemantics(env));*/
-			
-			// NEW
 			//creo una lista di indici degli stm che contengono "return"
 			ArrayList<Integer> returns_index = new ArrayList<Integer>();
 			
@@ -175,8 +175,6 @@ public class BlockNode implements Node {
 			//Caso in cui il blocco NON è all'interno del corpo di una funzione.
 			//Non ci possono essere "return".
 			//questo controllo viene fatto nella checkSemantics di RetNode
-			
-			
 		}     
 
 		if(! isFunBody)
