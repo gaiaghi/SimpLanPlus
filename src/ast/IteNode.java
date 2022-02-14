@@ -58,6 +58,13 @@ public class IteNode implements Node {
 	    if ( !(SimpLanPlusLib.isSubtype(thenType, elseType)) ) 
 			throw new TypeErrorException("incompatible types in then else branches.");
 	    
+	    //isSubtype restituisce true se thenType=null (ovvero niente return) e elseType=VoidType (ovvero con return;)
+	    //se abbiamo questo caso all'interno  di una funzione allora dobbiamo restituire il tipo Void 
+	    //del ramo else,e non il tipo null del ramo then 
+	    if (inFunction && (thenType == null)) {
+	    	return elseType;
+	    }
+	    
 	    return thenType;
 		
 	}

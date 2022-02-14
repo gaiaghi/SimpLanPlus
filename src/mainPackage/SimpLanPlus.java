@@ -53,6 +53,11 @@ public class SimpLanPlus{
 			System.exit(1);
 		}
 		
+		
+		//Tree visitor
+		SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
+		Node ast = visitor.visit(parser.block()); 
+		
 		//checking lexical errors
 		if (lexer.errorCount() > 0) {
 			ArrayList lxErrors = lexer.getErrors();
@@ -64,10 +69,6 @@ public class SimpLanPlus{
             System.exit(1);
         } 
 
-		//Tree visitor
-		SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
-		Node ast = visitor.visit(parser.block()); 
-		
 		
 		//checking syntactical errors
 		if(parser.getNumberOfSyntaxErrors()>0) {

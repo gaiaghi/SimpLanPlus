@@ -1,70 +1,84 @@
-//questo codice dà errore----> adesso dovrebbe essere corretto
+//n1 - questo codice dà errore----> adesso dovrebbe essere corretto
 //{int x; x=2; int z;}
 
 
-//questo codice dà errore----> adesso dovrebbe essere corretto
+//n2 - questo codice dà errore----> adesso dovrebbe essere corretto
 //{int f(int x) {print x+1; {if(x>10)return x-1;}; return x+1; }; int y=10; y=f(y); if(y==9) print y; else y+8;  }
 //{ int y=10; if(y==9) print y; else y+8;  }
 
 
+//n3 -
 //1 semantic errors: the return stm is not the last statement in the block. Unreachable code.
 //{int f(int x) {return(2); print(4); } }
 
 
-//Errore: caso return nella IF prima di un return
+//n4 - Errore: caso return nella IF prima di un return
 //{int f(int x) { print(4); if(x==1) print x; else return; return(2);} }
 
-
-//You had: 2 semantic errors:
+//n5 - You had: 2 semantic errors:
 //	the return stm is not the last statement in the block. Unreachable code.
 //	there cannot be multiple returns in the same block.
 //{int f(int x) { {return; print 5; } print(4); if(x==1) print x; else print 3; return(2);} }
 
 
-//You had: 1 semantic errors:
+//n6 - You had: 1 semantic errors:
 //	there cannot be return in the block. It is not a function.
 //{int x=1; return; print 4;}
 
 
-//Type error: incompatible types in then else branches.
-{int f(int x) {print x+1; {x=1;if(x==1) return 2; else print 2;} return x+1; } f(1);}
+//n7 - Type error: incompatible types in then else branches.
+//{int f(int x) {print x+1; {x=1;if(x==1) return 2; else print 2;} return x+1; } f(1);}
 
 
-//Type checking: OK!
+//n8 - Type checking: OK!
 //{int f(int x) {print x+1; {x=1;if(x==1) return x;} return x+1; } f(1);}
 
 
-//Type error: block with multiple return statements having mismatching types.
+//n9 - Type error: block with multiple return statements having mismatching types.
 //{int f(int x) {print x+1; {x=1; if(x==1) return ;} return x+1; } f(1);}
 
 
-//Type checking: OK!
+//n10 - Type checking: OK!
 //{void f(int x) {print x+1; {x=1; if(x==1) return ;} x=1; } f(1);}
 
-
+//n11
 //{void f(int x) {print x+1;} f(1);}
 
 
-//You had: 1 semantic errors:
+//n12 - You had: 1 semantic errors:
 //	there cannot be return in the block. It is not a function.
 //{int x; return;}
 
+//n13
+//{^^int z; ^^^int w; ^int x = new int; void f(int x) {print x+1; return;} x^=2; z^=x; w^=x; f(6); print(x^+3);}
 
-//{^^int z; ^^^int w; ^int x = new int; void f(int x) {print x+1; return;}; x^=2; z^=x; w^=x; f(6); print(x^+3);}
-
+//n14
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
 
+//n15
 //{int x=4; bool x = 8; print(k+x);}
 
 
-//Errore  ---> ora funziona
+//n16 - Errore  ---> ora funziona
 //{int x=4aaat;}
 
 
-//Errore  ---> ora funziona
+//n17 - Errore  ---> ora funziona
 //d{int x=4;}
 
 
-//Non dà errore. Esegue come se il # non ci fosse.
-//forse è un carattere speciale??
+//n18 - Non dà errore. Esegue come se il # non ci fosse.
+//CORRETTO, adesso segnala invalid character: #
 //#{int x=4;}
+
+//n19 deve dare unreachable code OK
+//{ int f() { { return 1; } if (true) return 1;}}
+
+//p01 Non deve dare errore DA GUARDARE/CORREGGERE
+{ ^^int x; ^int y = new int; y^ = 1; x = new ^int; x^ = y; print x^^; }
+
+//p02 deve dare missing declaration - OK
+//{ ^int x = new int; x^ = 1; delete x; y = x^;  }
+
+//p06 non deve dare errore OK
+//{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(x); }
