@@ -51,11 +51,29 @@ public class LhsNode implements Node {
 		if (lhs == null)
 			return id.typeCheck();	
 		
+		//2 righe aggiunte per test
+		//System.out.println("Lhs "+id.getId() +"  "+getDereferenceNum());
+		//System.out.println("id "+id.getId() +"  "+id.getDereferenceNum()+"\n");
+		
 		int derefNum = getDereferenceNum();
-		if (derefNum >1+ id.getDereferenceNum())
+		//if (derefNum > 1 + id.getDereferenceNum() )
+		
+		//test
+		if (derefNum > id.getDereferenceNum() )
 			throw new TypeErrorException("too many dereference operations at pointer " + id.getId());
+		
 		//da controllare se funziona!
 		return ((PointerTypeNode) lhs.typeCheck()).getPointedType();
+		
+		/*
+		 * id.getDereferenceNum() è sempre uguale a 0 perchè:
+		 * 	- quando dichiaro il puntatore in visitDecVar viene calcolato il derefenceNum 
+		 * 		e viene passato al costruttore IdNode
+		 * 	- quando uso il puntatore creato prima, in visitLhs creo un nuovo IdNode con derefenceNum=0
+		 * 
+		 * non ho ancora l'ambiente quindi è giusto creare un nuovo IdNode.
+		 * in visitLhs dovrei contare con quante ^ viene usato
+		 * */
 	}
 
 	@Override

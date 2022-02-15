@@ -27,7 +27,7 @@
 
 
 //Type error: incompatible types in then else branches.
-{int f(int x) {print x+1; {x=1;if(x==1) return 2; else print 2;} return x+1; } f(1);}
+//{int f(int x) {print x+1; {x=1;if(x==1) return 2; else print 2;} return x+1; } f(1);}
 
 
 //Type checking: OK!
@@ -50,9 +50,24 @@
 //{int x; return;}
 
 
-//{^^int z; ^^^int w; ^int x = new int; void f(int x) {print x+1; return;}; x^=2; z^=x; w^=x; f(6); print(x^+3);}
+//{^^int z; ^^^int w; ^int x = new int; void f(int x) {print x+1; return;} x^=2; z^=x; w^=x; f(6); print(x^+3);}
+
+
+//Type error: too many dereference operations at pointer z
+//non dovrebbe dare errore
+//{^^int z; z^^=2;}
+
+
+//Type checking: OK!
+{^^int z; ^int x; x^=2; z^^=x^; z^=x;}
+
+
+//NON viene dato errore
+{^int x; x^^=2;}
+
 
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
+
 
 //{int x=4; bool x = 8; print(k+x);}
 

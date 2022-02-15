@@ -152,6 +152,9 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		
 		IdNode id = new IdNode(ctx.ID().getText(), countPointer);
 		
+		//test
+		//System.out.println("Dec. id: " +ctx.ID().getText() +"  derefNum = " +countPointer);
+		
 		return new DecVarNode(type, id, exp);
 		
 	}
@@ -188,11 +191,16 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		 //puntatore
 		 if (ctx.lhs() != null) {
 			 LhsNode lhs = visitLhs(ctx.lhs());
+			 
+			 //2 righe aggiunte per test
+			 lhs.getId().updateDereferenceNum();
+			 //System.out.println("visitLhs "+lhs.getId().getId() +"   "+lhs.getDereferenceNum());
+			 
 			 return new LhsNode(lhs.getId(), lhs);
 		 }
 		 //id
 		 else {
-			 IdNode id = new IdNode(ctx.ID().getText(),0);
+			 IdNode id = new IdNode(ctx.ID().getText(), 0);
 			 return new LhsNode(id, null);
 		 }
 		 

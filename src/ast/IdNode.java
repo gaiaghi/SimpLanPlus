@@ -88,5 +88,10 @@ public class IdNode implements Node {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	// test
+	public void updateDereferenceNum() {
+		dereferenceNum ++;
+	}
 
 }
