@@ -59,11 +59,11 @@
 
 
 //Type checking: OK!
-{^^int z; ^int x; x^=2; z^^=x^; z^=x;}
+//{^^int z; ^int x; x^=2; z^^=x^; z^=x;}
 
 
 //NON viene dato errore
-{^int x; x^^=2;}
+//{^int x; x^^=2;}
 
 
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}

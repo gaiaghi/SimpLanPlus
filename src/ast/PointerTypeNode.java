@@ -23,7 +23,8 @@ public class PointerTypeNode implements Node {
 
 	@Override
 	public Node typeCheck() {
-		return null;
+		//return null;
+		return type;
 	}
 
 	@Override
