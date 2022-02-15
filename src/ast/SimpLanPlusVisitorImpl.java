@@ -143,7 +143,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		Node type = visit(ctx.type());
 		//conta quante "^" sono presenti nella dichiarazione (che precedono il tipo)
 		long countPointer = ctx.type().getText().chars().filter(ch -> ch == '^').count();
-		
 		Node exp;
 		if( ctx.exp() != null )
 			exp = visit(ctx.exp());
