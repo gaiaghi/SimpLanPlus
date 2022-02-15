@@ -26,11 +26,7 @@
 //{int x=1; return; print 4;}
 
 
-<<<<<<< HEAD
-//Type error: incompatible types in then else branches.
-=======
 //n7 - Type error: incompatible types in then else branches.
->>>>>>> 7ea9f5e1aab0bdab5fd781652b4db3f80a1733a2
 //{int f(int x) {print x+1; {x=1;if(x==1) return 2; else print 2;} return x+1; } f(1);}
 
 
@@ -56,9 +52,6 @@
 //n13
 //{^^int z; ^^^int w; ^int x = new int; void f(int x) {print x+1; return;} x^=2; z^=x; w^=x; f(6); print(x^+3);}
 
-<<<<<<< HEAD
-//{^^int z; ^^^int w; ^int x = new int; void f(int x) {print x+1; return;} x^=2; z^=x; w^=x; f(6); print(x^+3);}
-
 
 //Type error: too many dereference operations at pointer z
 //non dovrebbe dare errore
@@ -76,12 +69,10 @@
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
 
 
-=======
 //n14
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
 
 //n15
->>>>>>> 7ea9f5e1aab0bdab5fd781652b4db3f80a1733a2
 //{int x=4; bool x = 8; print(k+x);}
 
 
@@ -97,14 +88,18 @@
 //CORRETTO, adesso segnala invalid character: #
 //#{int x=4;}
 
+
 //n19 deve dare unreachable code OK
 //{ int f() { { return 1; } if (true) return 1;}}
+
 
 //p01 Non deve dare errore DA GUARDARE/CORREGGERE
 { ^^int x; ^int y = new int; y^ = 1; x = new ^int; x^ = y; print x^^; }
 
+
 //p02 deve dare missing declaration - OK
 //{ ^int x = new int; x^ = 1; delete x; y = x^;  }
+
 
 //p06 non deve dare errore OK
 //{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(x); }
