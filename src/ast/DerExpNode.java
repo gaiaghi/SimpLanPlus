@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
@@ -34,7 +36,7 @@ public class DerExpNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
 		return lhs.checkSemantics(env);
 	}
 
@@ -42,6 +44,10 @@ public class DerExpNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public LhsNode getLhs() {
+		return lhs;
 	}
 
 }

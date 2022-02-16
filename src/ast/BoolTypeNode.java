@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import util.Environment;
 import util.SemanticError;
 
@@ -31,7 +33,7 @@ public class BoolTypeNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
 		return new ArrayList<SemanticError>();
 	}
 

@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
@@ -56,47 +58,18 @@ public class BlockNode implements Node {
 		for (Node stm: statements){
 			Node stmType = stm.typeCheck();		//controllo su tutti gli statement 
 			
-			
-			//Nodi RetLNode e nodi BlockLNode e IteLNode che non siano NullType
-			/*if ( stm instanceof RetLNode ||
-				//( (stm instanceof BlockLNode || stm instanceof IteLNode) && !(stmType instanceof NullTypeNode)
-				( (stm instanceof BlockLNode || stm instanceof IteLNode) && (stmType != null))
-				)
-				types.add(stmType);*/
-			
 			if( stmType != null ) {
 				types.add(stmType);
-				
-				/*if( stm instanceof RetLNode )
-					types.add(stmType);
-				else if( stm instanceof BlockLNode && stmType != null )
-					types.add(stmType);
-				else if( stm instanceof IteLNode && stmType != null )
-					types.add(stmType);*/
 			}
 			
 					
 		} 
-		
-		// faccio questo controllo solo quando inFunction==T
-		// se non sono in una funzione non dovrei avere return
-		// nella seconda IF non ci va la negazione
-		/*if (types.size() > 0){
-			//controllo: i tipi di ritorno devono essere uguali
-			if ( ! types.stream().allMatch(types.get(0)::equals) )
-				throw new TypeErrorException("block with multiple return statements having mismatching types.");
-			else
-				return types.get(0);
-		}*/
-		
-		
-		//se non ci sono ReturnNode restituisce NullTypeNode
-		//return new NullTypeNode();
+
 		if( inFunction ) {
 			if( statements.size() > 0 ) {
 				if (types.size() > 0){
 					for(int i=0; i<types.size(); i++) {
-						if( ! SimpLanPlusLib.isSubtype(types.get(i), types.get(0)) )
+						if( ! SimpLanPlusLib.isEquals(types.get(i), types.get(0)) )
 							throw new TypeErrorException("block with multiple return statements having mismatching types.");
 					}
 				}		
@@ -119,7 +92,7 @@ public class BlockNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
 		//se è il blocco che definisce il corpo della funzione non devo creare un nuovo scope

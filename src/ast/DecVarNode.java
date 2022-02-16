@@ -3,6 +3,7 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import exception.MissingDecException;
 import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
@@ -49,9 +50,33 @@ public class DecVarNode implements Node{
 		
 		if (exp == null)
 			return null; //valore di ritorno non utilizzato
-		if (! SimpLanPlusLib.isSubtype(exp.typeCheck(), type))
+		
+		Node expType = exp.typeCheck();
+		
+		//controllo puntatori
+		if( type instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
+			int derNumDec = SimpLanPlusLib.counterPointerNumber(type);
+			if( !(exp instanceof NewExpNode) ) {
+				long derNumExpDec = ((DerExpNode) exp).getLhs().getId().getDereferenceNum();
+				long derNumExp = ((DerExpNode) exp).getLhs().getDereferenceNum();
+				
+				if( derNumDec != (derNumExpDec - derNumExp) )
+					throw new TypeErrorException("not valid initialization of pointer "+id.getId());
+			}
+			else {
+				//exp instanceof NewExpNode
+				int countPointer = SimpLanPlusLib.counterPointerNumber(((NewExpNode) exp).getNode());
+				if( (derNumDec - countPointer) != 1 )
+					throw new TypeErrorException("incorrect new expression "+id.getId());	
+			}
+		}
+		
+		
+		if (! SimpLanPlusLib.isEquals(expType, type))
 			 throw new TypeErrorException("expression "+exp+" cannot be assigned to variable "+id.getId()+" of type "+type.toPrint(""));
-			
+		
+		
+		
 		return null; //valore di ritorno non utilizzato
 	}
 
@@ -62,7 +87,7 @@ public class DecVarNode implements Node{
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
   		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
   	  
@@ -70,7 +95,7 @@ public class DecVarNode implements Node{
   		//PROF: STentry entry = new STentry(env.nestingLevel,type, env.offset--);
 		//dovo decrementare l'offset dopo aver creato una nuova entry?
   		//controlla offset passato come parametro
-        STEntry entry = new STEntry(env.getNestingLevel(), type, env.getOffset()); 
+        STEntry entry = new STEntry(env.getNestingLevel(), type, env.getOffset(), id.getDereferenceNum()); 
         env.updateOffset(); //decremento offset
         
         try {
@@ -91,5 +116,6 @@ public class DecVarNode implements Node{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 }

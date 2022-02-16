@@ -12,6 +12,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import ast.Node;
 import ast.SimpLanPlusVisitorImpl;
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import exception.TypeErrorException;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
@@ -84,7 +86,17 @@ public class SimpLanPlus{
 			
 		//checking semantic errors
 		Environment env = new Environment();	
-		ArrayList<SemanticError> err = ast.checkSemantics(env);
+		ArrayList<SemanticError> err = new ArrayList();
+		try {
+			err = ast.checkSemantics(env);
+		} catch (MissingDecException | MultipleDecException e) {
+			/**
+			 * 
+			 * fai qualcosa
+			 * 
+			 */
+			e.printStackTrace();
+		} 
 		if(err.size()>0){
 			System.err.println("You had: " +err.size()+" semantic errors:");
 			for(SemanticError e : err)

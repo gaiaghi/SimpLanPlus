@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
@@ -30,7 +32,7 @@ public class PrintNode implements Node {
 	public Node typeCheck() throws TypeErrorException {
 		Node expType = exp.typeCheck();
 		
-		if( SimpLanPlusLib.isSubtype(expType, new VoidTypeNode() ))
+		if( SimpLanPlusLib.isEquals(expType, new VoidTypeNode() ))
 			throw new TypeErrorException("print argument is void type.");
 		
 		return null;
@@ -43,7 +45,7 @@ public class PrintNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
 		return exp.checkSemantics(env);
 	}
 

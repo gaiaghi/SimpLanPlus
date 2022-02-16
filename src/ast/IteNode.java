@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
@@ -45,7 +47,7 @@ public class IteNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException {
 		Node condType = cond.typeCheck();
-		if ( !(SimpLanPlusLib.isSubtype(condType, new BoolTypeNode() )) ) 
+		if ( !(SimpLanPlusLib.isEquals(condType, new BoolTypeNode() )) ) 
 			throw new TypeErrorException("if condition is not bool type.");
 		
 	    Node thenType = thenStm.typeCheck();
@@ -55,17 +57,10 @@ public class IteNode implements Node {
 	    else
 	    	return thenType;
 	    
-	    if ( !(SimpLanPlusLib.isSubtype(thenType, elseType)) ) 
+	    if ( !(SimpLanPlusLib.isEquals(thenType, elseType)) ) 
 			throw new TypeErrorException("incompatible types in then else branches.");
 	    
-	    //isSubtype restituisce true se thenType=null (ovvero niente return) e elseType=VoidType (ovvero con return;)
-	    //se abbiamo questo caso all'interno  di una funzione allora dobbiamo restituire il tipo Void 
-	    //del ramo else,e non il tipo null del ramo then 
-	    if (inFunction && (thenType == null)) {
-	    	return elseType;
-	    }
-	    
-	    return thenType;
+	    return returnType(thenType, elseType);
 		
 	}
 
@@ -76,7 +71,7 @@ public class IteNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		res.addAll(cond.checkSemantics(env));
 		res.addAll(thenStm.checkSemantics(env));
@@ -142,6 +137,20 @@ public class IteNode implements Node {
 	
 	public boolean getReturns() {
 		return thenRet && elseRet;
+	}
+	
+	
+	private Node returnType(Node thenType, Node elseType) {
+		
+		if( thenType == null && elseType instanceof VoidTypeNode ) {
+			return elseType;
+		}
+		else if( thenType instanceof VoidTypeNode && elseType == null ) {
+			return thenType;
+		}
+		else 
+			return thenType;
+		
 	}
 	
 

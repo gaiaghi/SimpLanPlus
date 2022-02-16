@@ -1,6 +1,7 @@
 package util;
 
 import ast.*;
+import exception.TypeErrorException;
 
 public class SimpLanPlusLib {
 	
@@ -12,8 +13,7 @@ public class SimpLanPlusLib {
 	private static String funCode=""; 
 
 	
-	//valuta se il tipo "a" <= al tipo "b", dove "a" e "b" sono tipi di base: int o bool
-	public static boolean isSubtype (Node a, Node b) {
+	public static boolean isEquals (Node a, Node b) {
 		
 		if( a == null && b == null )
 			return true;
@@ -24,8 +24,7 @@ public class SimpLanPlusLib {
 		if( a == null || b == null )
 			return false;
 		
-		return a.getClass().equals(b.getClass()) ; //||
-    	  // ( (a instanceof BoolTypeNode) && (b instanceof IntTypeNode) ); //
+		return a.getClass().equals(b.getClass()) ; 
 	} 
   
 	
@@ -48,5 +47,20 @@ public class SimpLanPlusLib {
 		return funCode;
 	} 
 
+	
+	public static int counterPointerNumber(Node node) throws TypeErrorException {
+		int countPointer = 0;
+		boolean stop = false;
+		while( !stop ) {
+			if( node instanceof PointerTypeNode )
+			{
+				countPointer ++;
+				node = node.typeCheck();
+			}
+			else
+				stop = true;
+		}
+		return countPointer;
+	}
 
 }

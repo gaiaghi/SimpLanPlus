@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
@@ -24,7 +26,7 @@ public interface Node {
   
   
 	//analisi semantica?? --> variabili già dichiarate/non dichiarate
-	ArrayList<SemanticError> checkSemantics(Environment env);
+	ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException ;
   
   
 	//analisi degli effetti

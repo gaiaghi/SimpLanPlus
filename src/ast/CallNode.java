@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import exception.TypeErrorException;
 import parser.SimpLanPlusParser.ExpContext;
 import util.Environment;
@@ -52,7 +54,7 @@ public class CallNode implements Node {
 	     
 	     //controllo che il tipo dei parametri sia corretto
 	     for (int i=0; i<parlist.size(); i++) 
-	    	 if ( !(SimpLanPlusLib.isSubtype( (parlist.get(i)).typeCheck(), par_formali.get(i)) ) ) 
+	    	 if ( !(SimpLanPlusLib.isEquals( (parlist.get(i)).typeCheck(), par_formali.get(i)) ) ) 
 	    		 throw new TypeErrorException("wrong type for "+(i+1)+"-th parameter in the invocation of " +id);
 	        
 	     return funType.getRet();
@@ -65,7 +67,7 @@ public class CallNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
 		ArrayList<SemanticError> res = new ArrayList<>();
 	
 		//controllo dichiarazione id

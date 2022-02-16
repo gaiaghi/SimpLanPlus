@@ -3,6 +3,7 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import exception.MissingDecException;
 import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
@@ -67,17 +68,7 @@ public class DecFunNode implements Node {
 	public Node typeCheck() throws TypeErrorException{
 		Node bodyType = block.typeCheck();
 		
-		/*
-		//se il blocco non ha nessun RetNode e la funzione è void:
-		if ((bodyType instanceof NullTypeNode) && (type instanceof VoidTypeNode))
-			return null;
-		
-		
-		if ( (bodyType == null) && (type instanceof VoidTypeNode) )
-			return null;
-		*/
-		
-		if( ! SimpLanPlusLib.isSubtype(bodyType, type) )
+		if( ! SimpLanPlusLib.isEquals(bodyType, type) )
 			throw new TypeErrorException("wrong return type for function "+ id.getId());
 		
 		return null; //valore di ritorno non usato
@@ -90,7 +81,7 @@ public class DecFunNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
   
@@ -129,20 +120,6 @@ public class DecFunNode implements Node {
         	
 			//set func type
 			entry.setType( new ArrowTypeNode(parTypes, type) );
-			
-//			//check semantics in the dec list
-//			if(block.getDeclarationsSize() > 0){
-//				//TODO env.offset = -2;
-//				for(Node n : block.getDeclarations())
-//					res.addAll(n.checkSemantics(env));
-//			}
-//	 
-//			//check body
-//			//res.addAll(((Node) block.getStatements()).checkSemantics(env));
-//			for(Node n : block.getStatements())
-//				res.addAll(n.checkSemantics(env));
-	  
-			//close scope
 			
 			block.setIsFunBody(true); 
 			res.addAll(block.checkSemantics(env));

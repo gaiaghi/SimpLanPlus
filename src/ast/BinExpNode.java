@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import exception.TypeErrorException;
 
 import util.Environment;
@@ -65,7 +67,7 @@ public class BinExpNode implements Node {
 				
 			case "==":
 			case "!=":
-				if( !SimpLanPlusLib.isSubtype(left, right) )
+				if( !SimpLanPlusLib.isEquals(left, right) )
 					throw new TypeErrorException("the " +op +"operator require 2 int type expressions or 2 bool type expressions.");
 				return new BoolTypeNode();
 		}
@@ -80,7 +82,7 @@ public class BinExpNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		    

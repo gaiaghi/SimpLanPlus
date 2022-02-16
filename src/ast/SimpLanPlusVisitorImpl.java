@@ -189,13 +189,9 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		 
 		 //puntatore
 		 if (ctx.lhs() != null) {
-			 LhsNode lhs = visitLhs(ctx.lhs());
-			 
-			 //2 righe aggiunte per test
-			 lhs.getId().updateDereferenceNum();
-			 //System.out.println("visitLhs "+lhs.getId().getId() +"   "+lhs.getDereferenceNum());
-			 
-			 return new LhsNode(lhs.getId(), lhs);
+			 LhsNode lhs = visitLhs(ctx.lhs());	
+			 long countPointer = ctx.lhs().getText().chars().filter(ch -> ch == '^').count()+1;
+			 return new LhsNode(lhs.getId(), lhs, countPointer);
 		 }
 		 //id
 		 else {
