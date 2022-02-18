@@ -66,6 +66,7 @@ public class DecVarNode implements Node{
 			else {
 				//exp instanceof NewExpNode
 				int countPointer = SimpLanPlusLib.counterPointerNumber(((NewExpNode) exp).getNode());
+				
 				if( (derNumDec - countPointer) != 1 )
 					throw new TypeErrorException("incorrect new expression "+id.getId());	
 			}

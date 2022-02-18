@@ -40,8 +40,8 @@ public class AssignmentNode implements Node {
 		if( lhsType instanceof PointerTypeNode && !(expType instanceof PointerTypeNode) ) {
 			long dereferenceNumDec = lhs.getId().getDereferenceNum();
 			long dereferenceNumLhs = lhs.getDereferenceNum();
-			if( dereferenceNumLhs == dereferenceNumDec )
-				lhsType = lhsType.typeCheck();
+			if( dereferenceNumLhs == dereferenceNumDec ) 
+				lhsType = ((PointerTypeNode) lhsType).getPointedType();
 		}
 		
 		if( lhsType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
@@ -55,6 +55,9 @@ public class AssignmentNode implements Node {
 				if( (derNumLhsDec - derNumLhs) != (derNumExpDec - derNumExp) )
 					throw new TypeErrorException("not valid assignment between pointer "+
 							lhs.getId().getId() +" and " +((DerExpNode) exp).getLhs().getId().getId());
+				
+				lhsType = ((PointerTypeNode) lhsType).getPointedType();
+				expType = ((PointerTypeNode) expType).getPointedType();
 			}
 			else {
 				//exp instanceof NewExpNode
@@ -64,6 +67,7 @@ public class AssignmentNode implements Node {
 					throw new TypeErrorException("incorrect new expression "+lhs.getId().getId());	
 			}
 		}
+		
 		
 		if (! SimpLanPlusLib.isEquals(expType, lhsType))
 			throw new TypeErrorException("cannot assign "+expType.toPrint("") +

@@ -46,7 +46,13 @@ public class PointerTypeNode implements Node {
 	}
 	
 	public Node getPointedType () {
-		return this.type;
+		if( type instanceof PointerTypeNode )
+			return ((PointerTypeNode) type).getPointedType();
+		else
+			return type;
 	}
+	
+	
+
 
 }

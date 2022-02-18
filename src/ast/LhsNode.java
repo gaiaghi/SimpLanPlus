@@ -6,6 +6,7 @@ import exception.MissingDecException;
 import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 
 public class LhsNode implements Node {
@@ -68,16 +69,28 @@ public class LhsNode implements Node {
 	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
+		long dereferenceNumDec = 0;
+		Node idType = null;
+		try {
+			STEntry entry = env.lookup(id.getId());
+			dereferenceNumDec = entry.getDereferenceNum();
+			idType = entry.getType();
+		}catch(MissingDecException e) {
+			res.add(new SemanticError("Missing declaration: " +id.getId()));
+			/* VA MESSO IL RETURN?
+			return res;
+			*/
+		}
+		
+		
 		if (lhs == null) {
-			id.setDereferenceNum(env.lookup(id.getId()).getDereferenceNum());
+			id.setDereferenceNum(dereferenceNumDec);
 			return id.checkSemantics(env);
 		}
 		else {
-			if( ! (env.lookup(id.getId()).getType() instanceof PointerTypeNode) )
+			if( ! (idType instanceof PointerTypeNode) )
 				return id.checkSemantics(env);
 			else {
-				long dereferenceNumDec = env.lookup(id.getId()).getDereferenceNum();
-				
 				if( this.dereferenceNum > dereferenceNumDec ) {
 					res.add(new SemanticError("too many dereference operations at pointer " +id.getId()));
 					return res;
