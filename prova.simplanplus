@@ -90,27 +90,23 @@
 //{^^bool z; ^int x; x^=2; z^^=x^; }
 
 
-//n22 --> non dovrebbe dare errore
-//Type error: incorrect new expression z
-{^^bool z; ^int x; x^=2; z = new ^^bool;}
+//n22 --> OK
+//{^^bool z; ^int x; x^=2; z = new ^bool;}
 
 
-//n23 --> 
-//Type error: incorrect new expression z
-{^^bool z; ^int x; x^=2; z = new ^^int;}
+//n23 --> OK
+//Type error: cannot assign IntType value for variable z of type BoolType
+//{^^bool z; ^int x; x^=2; z = new ^int;}
 
 
 //n24		--> OK
 //You had: 1 semantic errors:
-	too many dereference operations at pointer x
+//	too many dereference operations at pointer x
 //{^int x; x^^=2;}
 
 
 //n25
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
-
-
-
 
 
 //p01 Non deve dare errore DA GUARDARE/CORREGGERE  ----> ora funziona
@@ -120,6 +116,9 @@
 //p02 deve dare missing declaration - OK
 //{ ^int x = new int; x^ = 1; delete x; y = x^;  }
 
+
+//p04
+{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x) ;} }}
 
 //p06 non deve dare errore --> OK
 //{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(54); }

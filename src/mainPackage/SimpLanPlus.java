@@ -61,6 +61,7 @@ public class SimpLanPlus{
 		try {
 			ast = visitor.visit(parser.block()); 
 		}catch(Exception e) {
+			System.err.println("Codice esempio in input non trovato");
 			System.err.println("Error in visitor.visit(...): " +e.getMessage());
 			System.exit(1);
 		}

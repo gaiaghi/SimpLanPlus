@@ -48,5 +48,7 @@ public class NewExpNode implements Node {
 	public Node getNode() {
 		return type;
 	}
+	
+
 
 }

@@ -55,17 +55,17 @@ public class AssignmentNode implements Node {
 				if( (derNumLhsDec - derNumLhs) != (derNumExpDec - derNumExp) )
 					throw new TypeErrorException("not valid assignment between pointer "+
 							lhs.getId().getId() +" and " +((DerExpNode) exp).getLhs().getId().getId());
-				
-				lhsType = ((PointerTypeNode) lhsType).getPointedType();
-				expType = ((PointerTypeNode) expType).getPointedType();
 			}
 			else {
 				//exp instanceof NewExpNode
 				int countPointer = SimpLanPlusLib.counterPointerNumber(((NewExpNode) exp).getNode());
 				long derNumLhsDec2 = lhs.getId().getDereferenceNum();
 				if( (derNumLhsDec2 - countPointer) != 1 )
-					throw new TypeErrorException("incorrect new expression "+lhs.getId().getId());	
+					throw new TypeErrorException("incorrect new expression "+lhs.getId().getId());
 			}
+			
+			lhsType = ((PointerTypeNode) lhsType).getPointedType();
+			expType = ((PointerTypeNode) expType).getPointedType();
 		}
 		
 		
