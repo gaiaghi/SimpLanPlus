@@ -2,8 +2,6 @@ package ast;
 
 import java.util.ArrayList;
 
-import exception.MissingDecException;
-import exception.MultipleDecException;
 import exception.TypeErrorException;
 
 import util.Environment;
@@ -39,36 +37,60 @@ public class BinExpNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException{
 		
-		Node left = leftExp.typeCheck();
-		Node right = rightExp.typeCheck();
+		Node leftType = leftExp.typeCheck();
+		Node rightType = rightExp.typeCheck();
+		
+		if( leftType instanceof PointerTypeNode ) {
+			if( leftExp instanceof DerExpNode ) {
+				long derNumLeftDec =  ((DerExpNode) leftExp).getLhs().getId().getDereferenceNum();
+				long derNumLeft = ((DerExpNode) leftExp).getLhs().getDereferenceNum();
+				if( derNumLeftDec == derNumLeft )
+					leftType = ((PointerTypeNode) leftType).getPointedType();
+			}
+			//da cancellare
+			else 
+				System.out.println("left exp is not lhs "+op +"    "+leftExp.getClass());
+			
+			//ci potrebbe essere if(leftExp instanceof CallNode )
+		}
+		
+		if( rightType instanceof PointerTypeNode ) {
+			if( rightExp instanceof DerExpNode ) {
+				long derNumRightDec =  ((DerExpNode) rightExp).getLhs().getId().getDereferenceNum();
+				long derNumRight = ((DerExpNode) rightExp).getLhs().getDereferenceNum();
+				if( derNumRightDec == derNumRight )
+					rightType = ((PointerTypeNode) rightType).getPointedType();
+			}
+		}
+		
 		
 		switch( op ) {
 			case "*":
 			case "/":
 			case "+":
 			case "-":
-				if( !(left instanceof IntTypeNode && right instanceof IntTypeNode) )
-					throw new TypeErrorException("the " +op +"operator require 2 int type expressions.");
+				if( !(leftType instanceof IntTypeNode && rightType instanceof IntTypeNode) )
+					throw new TypeErrorException("the " +op +" operator require 2 int type expressions.");
 				return new IntTypeNode();
 			
 			case "&&":
 			case "||":
-				if( !(left instanceof BoolTypeNode && right instanceof BoolTypeNode) )
-					throw new TypeErrorException("the " +op +"operator require 2 bool type expressions.");
+				if( !(leftType instanceof BoolTypeNode && rightType instanceof BoolTypeNode) )
+					throw new TypeErrorException("the " +op +" operator require 2 bool type expressions.");
 				return new BoolTypeNode();
 				
 			case "<":
 			case "<=":
 			case ">":
 			case ">=":
-				if( !(left instanceof IntTypeNode && right instanceof IntTypeNode) )
-					throw new TypeErrorException("the " +op +"operator require 2 int type expressions.");
+				if( !(leftType instanceof IntTypeNode && rightType instanceof IntTypeNode) )
+					throw new TypeErrorException("the " +op +" operator require 2 int type expressions.");
 				return new BoolTypeNode();
 				
 			case "==":
 			case "!=":
-				if( !SimpLanPlusLib.isEquals(left, right) )
-					throw new TypeErrorException("the " +op +"operator require 2 int type expressions or 2 bool type expressions.");
+				if( !SimpLanPlusLib.isEquals(leftType, rightType) )
+					throw new TypeErrorException("the " +op +" operator require 2 int type expressions or 2 bool type expressions.");
 				return new BoolTypeNode();
 		}
 		
@@ -82,12 +104,15 @@ public class BinExpNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		    
 		res.addAll(leftExp.checkSemantics(env));
 		res.addAll(rightExp.checkSemantics(env));
+		
+		if( leftExp instanceof NewExpNode || rightExp instanceof NewExpNode )
+			res.add(new SemanticError("You cannot use new expression in binary operation."));
 		  
 	 	return res;
 	}

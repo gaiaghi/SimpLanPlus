@@ -3,7 +3,6 @@ package ast;
 import java.util.ArrayList;
 
 import exception.MissingDecException;
-import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.STEntry;
@@ -66,7 +65,7 @@ public class LhsNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
 		long dereferenceNumDec = 0;
@@ -76,11 +75,10 @@ public class LhsNode implements Node {
 			dereferenceNumDec = entry.getDereferenceNum();
 			idType = entry.getType();
 		}catch(MissingDecException e) {
-			res.add(new SemanticError("Missing declaration: " +id.getId()));
-			/* VA MESSO IL RETURN?
-			return res;
-			*/
+			res.add(new SemanticError(e.getMessage()));
+			return res;		
 		}
+		
 		
 		
 		if (lhs == null) {

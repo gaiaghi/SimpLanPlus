@@ -93,16 +93,8 @@ public class SimpLanPlus{
 		//checking semantic errors
 		Environment env = new Environment();	
 		ArrayList<SemanticError> err = new ArrayList();
-		try {
-			err = ast.checkSemantics(env);
-		} catch (MissingDecException | MultipleDecException e) {
-			/**
-			 * 
-			 * fai qualcosa
-			 * 
-			 */
-			e.printStackTrace();
-		} 
+		err = ast.checkSemantics(env);
+		
 		if(err.size()>0){
 			System.err.println("You had: " +err.size()+" semantic errors:");
 			for(SemanticError e : err)

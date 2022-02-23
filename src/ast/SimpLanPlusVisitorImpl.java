@@ -151,9 +151,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		
 		IdNode id = new IdNode(ctx.ID().getText(), countPointer);
 		
-		//test
-		//System.out.println("Dec. id: " +ctx.ID().getText() +"  derefNum = " +countPointer);
-		
 		return new DecVarNode(type, id, exp);
 		
 	}

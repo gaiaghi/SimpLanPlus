@@ -2,8 +2,6 @@ package ast;
 
 import java.util.ArrayList;
 
-import exception.MissingDecException;
-import exception.MultipleDecException;
 import exception.TypeErrorException;
 import parser.SimpLanPlusParser.ExpContext;
 import util.Environment;
@@ -67,7 +65,7 @@ public class CallNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 	
 		//controllo dichiarazione id

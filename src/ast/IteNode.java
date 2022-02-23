@@ -2,8 +2,6 @@ package ast;
 
 import java.util.ArrayList;
 
-import exception.MissingDecException;
-import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
@@ -71,7 +69,7 @@ public class IteNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		res.addAll(cond.checkSemantics(env));
 		res.addAll(thenStm.checkSemantics(env));

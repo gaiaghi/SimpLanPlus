@@ -3,7 +3,6 @@ package ast;
 import java.util.ArrayList;
 
 import exception.MissingDecException;
-import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.STEntry;
@@ -70,7 +69,7 @@ public class IdNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		int nestLvl = env.getNestingLevel();
 		

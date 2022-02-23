@@ -3,7 +3,6 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import exception.MissingDecException;
 import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
@@ -88,7 +87,7 @@ public class DecVarNode implements Node{
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
   		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
   	  

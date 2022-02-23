@@ -3,7 +3,6 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import exception.MissingDecException;
 import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
@@ -81,7 +80,7 @@ public class DecFunNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
   
@@ -110,7 +109,7 @@ public class DecFunNode implements Node {
 				ArgNode arg = (ArgNode) a;
 				parTypes.add(arg.getType());
 				try {
-					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++);
+					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++, arg.getId().getDereferenceNum());
 					env.addEntry(arg.getId().getId(), parEntry);
 					arg.getId().setSTEntry(parEntry);
 				}catch(MultipleDecException e) {

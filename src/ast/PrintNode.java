@@ -2,8 +2,6 @@ package ast;
 
 import java.util.ArrayList;
 
-import exception.MissingDecException;
-import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
@@ -45,7 +43,7 @@ public class PrintNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		return exp.checkSemantics(env);
 	}
 

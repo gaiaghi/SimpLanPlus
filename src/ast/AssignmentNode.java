@@ -2,8 +2,6 @@ package ast;
 
 import java.util.ArrayList;
 
-import exception.MissingDecException;
-import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
@@ -72,6 +70,7 @@ public class AssignmentNode implements Node {
 		if (! SimpLanPlusLib.isEquals(expType, lhsType))
 			throw new TypeErrorException("cannot assign "+expType.toPrint("") +
 					" value for variable " + lhs.getId().getId() + " of type " + lhsType.toPrint(""));
+		
 		return null;
 	}
 
@@ -82,7 +81,7 @@ public class AssignmentNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) throws MissingDecException, MultipleDecException {
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		res.addAll(lhs.checkSemantics(env));
 		res.addAll(exp.checkSemantics(env));
