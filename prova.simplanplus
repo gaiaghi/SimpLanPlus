@@ -110,11 +110,11 @@
 
 
 //n26 		---> ok
-{ int f(int x) {^int y = new int; y^ = 1 ; return(y ^);} }
+{ int f(int x) {^int y = new int; y^ = 1 ; return (y^);} }
 
 
 //n27		---> Type error: wrong return type for function f
-//{ int f(int x) {^int y = new int; y^ = 1 ; return(y);} }
+//{ int f(int x) {^int y = new int; y^ = 1 ; return y;} }
 
 
 //p01 Non deve dare errore ----> ok
