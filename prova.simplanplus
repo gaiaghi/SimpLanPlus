@@ -109,7 +109,15 @@
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
 
 
-//p01 Non deve dare errore DA GUARDARE/CORREGGERE  ----> ora funziona
+//n26 		---> ok
+{ int f(int x) {^int y = new int; y^ = 1 ; return(y ^);} }
+
+
+//n27		---> Type error: wrong return type for function f
+//{ int f(int x) {^int y = new int; y^ = 1 ; return(y);} }
+
+
+//p01 Non deve dare errore ----> ok
 //{^^int x ; ^int y = new int; y^ = 1 ; x = new ^int; x^ = y ; print x^^ ;}
 
 

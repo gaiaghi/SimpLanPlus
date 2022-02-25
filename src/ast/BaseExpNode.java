@@ -42,5 +42,9 @@ public class BaseExpNode implements Node {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public Node getExpNode() {
+		return this.exp;
+	}
 
 }

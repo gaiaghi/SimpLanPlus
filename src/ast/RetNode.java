@@ -33,8 +33,22 @@ public class RetNode implements Node {
 	public Node typeCheck() throws TypeErrorException {
 		if( exp == null )
 			return new VoidTypeNode();
-		else 
-			return exp.typeCheck();
+		
+		else {
+			Node expType = exp.typeCheck();
+			
+			if( ((BaseExpNode)exp).getExpNode() instanceof DerExpNode ) {
+				//casto exp a BaseExpNode e recupero il suo campo exp, che verrà a sua volta castato in DerExpNode
+				long derNumDec =  ((DerExpNode) ((BaseExpNode) exp).getExpNode()).getLhs().getId().getDereferenceNum();
+				long derNum = ((DerExpNode) ((BaseExpNode) exp).getExpNode()).getLhs().getDereferenceNum();
+				if( derNumDec == derNum ) {
+					expType = ((PointerTypeNode) expType).getPointedType();
+				}
+			}
+			
+			
+			return expType;
+		}
 	}
 
 	@Override
