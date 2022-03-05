@@ -44,6 +44,18 @@ public class RetNode implements Node {
 					expType = ((PointerTypeNode) expType).getPointedType();
 				}
 			}
+			
+			if( exp instanceof BaseExpNode ) {
+				Node expNode = ((BaseExpNode) exp).getExpNode();
+				
+				if ( expNode instanceof DerExpNode ) {
+					long derNumDec = ((DerExpNode) expNode).getLhs().getId().getDereferenceNum();
+					long derNum = ((DerExpNode) expNode).getLhs().getDereferenceNum();
+					if( derNumDec == derNum )
+						expType = ((PointerTypeNode) expType).getPointedType();	
+				}
+				
+			}
 
 			return expType;
 		}
