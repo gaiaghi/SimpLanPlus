@@ -110,11 +110,23 @@
 
 
 //n26 		---> ok
-{ int f(int x) {^int y = new int; y^ = 1 ; return (y^);} }
+//{ int f(int x) {^int y = new int; y^ = 1 ; return (y^);} }
 
 
 //n27		---> Type error: wrong return type for function f
 //{ int f(int x) {^int y = new int; y^ = 1 ; return y;} }
+
+
+//n28 		---> OK
+//{^int y = new int; ^int x = new int; y^ = 1; x^ = y^; } 
+
+
+//n29 		---> ClassCastException, ma dovrebbe essere corretto
+//{^int y = new int; ^int x = new int; y^ = 1; x^ = (y^); } 
+
+//n30
+//{int f() {^int x = new int; return (x^);} }
+
 
 
 //p01 Non deve dare errore ----> ok
@@ -126,7 +138,7 @@
 
 
 //p04
-{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x) ;} }}
+//{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x) ;} }}
 
 //p06 non deve dare errore --> OK
 //{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(54); }
