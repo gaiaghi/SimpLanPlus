@@ -12,8 +12,13 @@ public class PointerTypeNode implements Node {
 	
 	private Node type;
 	
+	private int derNumDec;
+	private int derNumStm;
+	
 	public PointerTypeNode(Node type) {
 		this.type = type; 
+		derNumDec = -1;
+		derNumStm = -1;
 	}
 
 	@Override
@@ -23,7 +28,7 @@ public class PointerTypeNode implements Node {
 
 	@Override
 	public Node typeCheck() {
-		return type;
+		return this;
 	}
 
 	@Override
@@ -51,6 +56,31 @@ public class PointerTypeNode implements Node {
 	}
 	
 	
-
+	public int getDereferenceNum() {
+        if( type instanceof PointerTypeNode )
+        	return ((PointerTypeNode) type).getDereferenceNum() + 1;
+        else
+        	return 1;
+    }
+	
+	
+	public void setDerNum(int dec, int stm) {
+		derNumDec = dec;
+		derNumStm = stm;
+	}
+	
+	public int getDerNumDec() {
+		return derNumDec;
+	}
+	
+	public int getDerNumStm() {
+		return derNumStm;
+	}
+	
+	
+	public Node getType() {
+		return type;
+	}
+	
 
 }

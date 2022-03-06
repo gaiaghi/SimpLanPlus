@@ -23,7 +23,6 @@ public class DecVarNode implements Node{
 		this.id = id;
 		this.exp = exp;
 		this.type = type; 
-		
 	}
 
 	@Override
@@ -52,30 +51,8 @@ public class DecVarNode implements Node{
 		
 		Node expType = exp.typeCheck();
 		
-		//controllo puntatori
-		if( type instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
-			int derNumDec = SimpLanPlusLib.counterPointerNumber(type);
-			if( !(exp instanceof NewExpNode) ) {
-				long derNumExpDec = ((DerExpNode) exp).getLhs().getId().getDereferenceNum();
-				long derNumExp = ((DerExpNode) exp).getLhs().getDereferenceNum();
-				
-				if( derNumDec != (derNumExpDec - derNumExp) )
-					throw new TypeErrorException("not valid initialization of pointer "+id.getId());
-			}
-			else {
-				//exp instanceof NewExpNode
-				int countPointer = SimpLanPlusLib.counterPointerNumber(((NewExpNode) exp).getNode());
-				
-				if( (derNumDec - countPointer) != 1 )
-					throw new TypeErrorException("incorrect new expression "+id.getId());	
-			}
-		}
-		
-		
 		if (! SimpLanPlusLib.isEquals(expType, type))
 			 throw new TypeErrorException("expression "+exp+" cannot be assigned to variable "+id.getId()+" of type "+type.toPrint(""));
-		
-		
 		
 		return null; //valore di ritorno non utilizzato
 	}
@@ -95,7 +72,7 @@ public class DecVarNode implements Node{
   		//PROF: STentry entry = new STentry(env.nestingLevel,type, env.offset--);
 		//dovo decrementare l'offset dopo aver creato una nuova entry?
   		//controlla offset passato come parametro
-        STEntry entry = new STEntry(env.getNestingLevel(), type, env.getOffset(), id.getDereferenceNum()); 
+        STEntry entry = new STEntry(env.getNestingLevel(), type, env.getOffset()); 
         env.updateOffset(); //decremento offset
         
         try {

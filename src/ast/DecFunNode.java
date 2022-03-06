@@ -109,7 +109,7 @@ public class DecFunNode implements Node {
 				ArgNode arg = (ArgNode) a;
 				parTypes.add(arg.getType());
 				try {
-					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++, arg.getId().getDereferenceNum());
+					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++);
 					env.addEntry(arg.getId().getId(), parEntry);
 					arg.getId().setSTEntry(parEntry);
 				}catch(MultipleDecException e) {

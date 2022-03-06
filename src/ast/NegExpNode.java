@@ -24,7 +24,7 @@ public class NegExpNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException{
 		if( !(exp.typeCheck() instanceof IntTypeNode) )
-			throw new TypeErrorException("this expression " +exp +" is not int type.");
+			throw new TypeErrorException("the argument of 'Neg' is not int type.");
 		
 		return new IntTypeNode();
 	}
@@ -44,6 +44,10 @@ public class NegExpNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public Node getExp() {
+		return exp;
 	}
 
 }

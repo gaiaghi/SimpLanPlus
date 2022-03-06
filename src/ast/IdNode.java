@@ -13,11 +13,10 @@ public class IdNode implements Node {
 	private String id;
 	private STEntry entry;
 	private int nestingLvl; //nesting level corrente
-	private long dereferenceNum;
+	private int derNum;
 	
-	public IdNode(String id, long dereferenceNum) {
+	public IdNode(String id) {
 		this.id = id;
-		this.dereferenceNum = dereferenceNum;
 	}
 	
 	public String getId() {
@@ -37,9 +36,7 @@ public class IdNode implements Node {
 		return this.nestingLvl;
 	}
 	
-	public long getDereferenceNum () {
-		return this.dereferenceNum;
-	}
+	
 	
 	
 	@Override
@@ -57,6 +54,14 @@ public class IdNode implements Node {
 		Node idType = entry.getType();
 		if (idType instanceof ArrowTypeNode) {
 			throw new TypeErrorException("wrong usage of function identifier "+ id);
+		}
+		
+		if( idType instanceof PointerTypeNode ) {
+			PointerTypeNode pointer = (PointerTypeNode) idType;
+			pointer.setDerNum(getDerNumDec(), getDerNumLhs());
+			
+			if( pointer.getDerNumStm() > pointer.getDerNumDec() )
+				throw new TypeErrorException("too many dereference operations at pointer " +id);
 		}
 			  
 		return idType;
@@ -90,8 +95,21 @@ public class IdNode implements Node {
 	}
 	
 	
-	public void setDereferenceNum(long num) {
-		dereferenceNum = num;
+	public int getDerNumDec() {
+		if( entry.getType() instanceof PointerTypeNode )
+			return ((PointerTypeNode) entry.getType()).getDereferenceNum();
+		else 
+			return 0;
+	}
+	
+	
+	public int getDerNumLhs() {
+		return derNum;
+	}
+	
+	
+	public void setIdDerNum(int n) {
+		derNum = n;
 	}
 	
 

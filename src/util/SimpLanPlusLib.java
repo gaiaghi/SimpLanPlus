@@ -62,5 +62,16 @@ public class SimpLanPlusLib {
 		}
 		return countPointer;
 	}
+	
+	public static int dereferenceNumFromExp(Node exp) {
+		while( true ) {
+			if( exp instanceof DerExpNode ) {
+				return ((DerExpNode) exp).getLhs().getDereferenceNum();
+			}
+			else if( exp instanceof BaseExpNode ){
+				((BaseExpNode) exp).getExp();
+			}			
+		}
+	}
 
 }

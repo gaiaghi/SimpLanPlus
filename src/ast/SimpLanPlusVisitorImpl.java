@@ -123,7 +123,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 			type = visit(ctx.type());
 		else
 			type = new VoidTypeNode();
-		IdNode id = new IdNode(ctx.ID().getText(),0);
+		IdNode id = new IdNode(ctx.ID().getText());
 		
 		ArrayList<Node> args = new ArrayList<>();
 		for (SimpLanPlusParser.ArgContext arg : ctx.arg()) {
@@ -141,15 +141,13 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 //		decVar      : type ID ('=' exp)? ';' ;
 		
 		Node type = visit(ctx.type());
-		//conta quante "^" sono presenti nella dichiarazione (che precedono il tipo)
-		long countPointer = ctx.type().getText().chars().filter(ch -> ch == '^').count();
 		Node exp;
 		if( ctx.exp() != null )
 			exp = visit(ctx.exp());
 		else
 			exp = null;
 		
-		IdNode id = new IdNode(ctx.ID().getText(), countPointer);
+		IdNode id = new IdNode(ctx.ID().getText());
 		
 		return new DecVarNode(type, id, exp);
 		
@@ -160,9 +158,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 //		 grammar rule:
 //		 arg         : type ID;
 		Node type = visit(ctx.type());
-		//conta quante "^" sono presenti nella dichiarazione
-		long countPointer = ctx.type().getText().chars().filter(ch -> ch == '^').count();
-		IdNode id = new IdNode(ctx.ID().getText(), countPointer);
+		IdNode id = new IdNode(ctx.ID().getText());
 		 
 		 return new ArgNode(type, id);
 			 
@@ -187,12 +183,14 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 		 //puntatore
 		 if (ctx.lhs() != null) {
 			 LhsNode lhs = visitLhs(ctx.lhs());	
-			 long countPointer = ctx.lhs().getText().chars().filter(ch -> ch == '^').count()+1;
-			 return new LhsNode(lhs.getId(), lhs, countPointer);
+			 int countPointer = (int) (ctx.lhs().getText().chars().filter(ch -> ch == '^').count()+1);
+			 LhsNode node = new LhsNode(lhs.getId(), lhs);
+			 node.setLhsDerNum(countPointer);
+			 return node;
 		 }
 		 //id
 		 else {
-			 IdNode id = new IdNode(ctx.ID().getText(), 0);
+			 IdNode id = new IdNode(ctx.ID().getText());
 			 return new LhsNode(id, null);
 		 }
 		 
@@ -202,7 +200,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 	 public Node visitDeletion(SimpLanPlusParser.DeletionContext ctx) {
 //		 grammar rule:
 //		 deletion    : 'delete' ID;
-		 IdNode id = new IdNode(ctx.ID().getText(),0);
+		 IdNode id = new IdNode(ctx.ID().getText());
 		 return new DeletionNode(id);
 	 }
 	 
@@ -273,7 +271,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 			args.add(visit(exp));
 		
 		//instantiate the invocation
-		CallNode res = new CallNode(new IdNode(ctx.ID().getText(),0), args);
+		CallNode res = new CallNode(new IdNode(ctx.ID().getText()), args);
 		
 		return res;
 	}

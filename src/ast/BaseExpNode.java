@@ -51,5 +51,9 @@ public class BaseExpNode implements Node {
 			return exp;
 	}
 	
+	public Node getExp() {
+		return exp;
+	}
+	
 
 }

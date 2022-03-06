@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
+import util.SimpLanPlusLib;
 
 public class RetNode implements Node {
 
@@ -33,30 +34,17 @@ public class RetNode implements Node {
 	public Node typeCheck() throws TypeErrorException {
 		if( exp == null )
 			return new VoidTypeNode();
-		
 		else {
 			Node expType = exp.typeCheck();	
 			
-			if( exp instanceof DerExpNode ) {
-				long derNumDec = ((DerExpNode) exp).getLhs().getId().getDereferenceNum();
-				long derNum = ((DerExpNode) exp).getLhs().getDereferenceNum();
+			if( expType instanceof PointerTypeNode ) {
+				int derNumDec = ((PointerTypeNode) expType).getDerNumDec();
+				int derNum = ((PointerTypeNode) expType).getDerNumStm();
 				if( derNumDec == derNum ) {
 					expType = ((PointerTypeNode) expType).getPointedType();
 				}
 			}
 			
-			if( exp instanceof BaseExpNode ) {
-				Node expNode = ((BaseExpNode) exp).getExpNode();
-				
-				if ( expNode instanceof DerExpNode ) {
-					long derNumDec = ((DerExpNode) expNode).getLhs().getId().getDereferenceNum();
-					long derNum = ((DerExpNode) expNode).getLhs().getDereferenceNum();
-					if( derNumDec == derNum )
-						expType = ((PointerTypeNode) expType).getPointedType();	
-				}
-				
-			}
-
 			return expType;
 		}
 	}

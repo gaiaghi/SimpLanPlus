@@ -41,26 +41,17 @@ public class BinExpNode implements Node {
 		Node rightType = rightExp.typeCheck();
 		
 		if( leftType instanceof PointerTypeNode ) {
-			if( leftExp instanceof DerExpNode ) {
-				long derNumLeftDec =  ((DerExpNode) leftExp).getLhs().getId().getDereferenceNum();
-				long derNumLeft = ((DerExpNode) leftExp).getLhs().getDereferenceNum();
-				if( derNumLeftDec == derNumLeft )
-					leftType = ((PointerTypeNode) leftType).getPointedType();
-			}
-			//da cancellare
-			else 
-				System.out.println("left exp is not lhs "+op +"    "+leftExp.getClass());
-			
-			//ci potrebbe essere if(leftExp instanceof CallNode )
+			int derNumRightDec =  ((PointerTypeNode) leftType).getDerNumDec();
+			int derNumRight = ((PointerTypeNode) leftType).getDerNumStm();
+			if( derNumRightDec == derNumRight )
+				leftType = ((PointerTypeNode) leftType).getPointedType();
 		}
 		
 		if( rightType instanceof PointerTypeNode ) {
-			if( rightExp instanceof DerExpNode ) {
-				long derNumRightDec =  ((DerExpNode) rightExp).getLhs().getId().getDereferenceNum();
-				long derNumRight = ((DerExpNode) rightExp).getLhs().getDereferenceNum();
+				int derNumRightDec =  ((PointerTypeNode) rightType).getDerNumDec();
+				int derNumRight = ((PointerTypeNode) rightType).getDerNumStm();
 				if( derNumRightDec == derNumRight )
 					rightType = ((PointerTypeNode) rightType).getPointedType();
-			}
 		}
 		
 		

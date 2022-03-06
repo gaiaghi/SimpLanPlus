@@ -1,4 +1,4 @@
-//n1 - questo codice dà errore----> adesso dovrebbe essere corretto
+//n1 - deve dare errore errore----> OK
 //{int x; x=2; int z;}
 
 
@@ -93,7 +93,6 @@
 //n22 --> OK
 //{^^bool z; ^int x; x^=2; z = new ^bool;}
 
-
 //n23 --> OK
 //Type error: cannot assign IntType value for variable z of type BoolType
 //{^^bool z; ^int x; x^=2; z = new ^int;}
@@ -121,12 +120,38 @@
 //{^int y = new int; ^int x = new int; y^ = 1; x^ = y^; } 
 
 
-//n29 		---> ClassCastException, ma dovrebbe essere corretto
+//n29 		---> OK
 //{^int y = new int; ^int x = new int; y^ = 1; x^ = (y^); } 
+
 
 //n30
 //{int f() {^int x = new int; return (x^);} }
 
+
+//n31 no errore ---> OK
+//{int f(int x){return x+1;} int g(int x){return f(x);} int z=2; if(z==f(1)) z=f(1); else z=g(1); }
+
+
+//n32 errore ---> OK
+// Type error: cannot assign BoolType value for variable z of type IntType
+//{int f(int x){return x+1;} bool g(int x){ if(x==1) return true; else return false;} int z=f(1); z=g(2);}
+
+
+//n33 no errore ---> OK
+//{bool g(){ return true; } bool f(){ return false; } if(g()==f()) print 4;}
+
+
+//n34 no errore ---> OK
+//{bool g(){ return true; } bool f(){ return false; } if(!g()==f()) print 4;}
+
+
+//n35 errore ---> OK
+// Type error: the argument of 'Not' is not int type.
+//{bool g(){ return true; } bool f(){ return false; } if(-g()==f()) print 4;}
+
+
+//n36 no errore ---> OK
+{int g(){ return 1; }  ^int x; x^=3; if(g()==x^) print 4;}
 
 
 //p01 Non deve dare errore ----> ok
@@ -134,7 +159,7 @@
 
 
 //p02 deve dare missing declaration - OK
-//{ ^int x = new int; x^ = 1; delete x; y = x^;  }
+//{ ^int x = new int; x^ = 1; delete x; y = x^; }
 
 
 //p04
@@ -142,3 +167,5 @@
 
 //p06 non deve dare errore --> OK
 //{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(54); }
+
+

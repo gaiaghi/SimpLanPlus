@@ -8,7 +8,6 @@ public class STEntry {
 	private final int nestingLvl; 
 	private final int offset; // code generation
 	private Node type;
-	private long dereferenceNum;
 	
 	//Da aggiungere:  effetti, reference a DecFunNode
 	//Effetti: una lista
@@ -16,23 +15,11 @@ public class STEntry {
 	public STEntry (int nestingLvl, int offset) {
 		this.nestingLvl = nestingLvl;
 		this.offset = offset; 
-		this.dereferenceNum = 0;
 	}
 	
 	public STEntry(int nestingLvl, Node type, int offset) {
 		this(nestingLvl, offset);
 		this.type = type;
-		this.dereferenceNum = 0;
-		
-		//poi dovrebbe esserci l'inizializzazione degli effetti degli id
-		
-	}
-	
-	
-	public STEntry(int nestingLvl, Node type, int offset, long dereferenceNum) {
-		this(nestingLvl, offset);
-		this.type = type;
-		this.dereferenceNum = dereferenceNum;
 		
 		//poi dovrebbe esserci l'inizializzazione degli effetti degli id
 		
@@ -86,9 +73,6 @@ public class STEntry {
 //	public boolean equals() {
 //		return true;
 //	}
-	
-	public long getDereferenceNum() {
-		return dereferenceNum;
-	}
+
 	
 }

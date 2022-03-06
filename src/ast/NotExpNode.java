@@ -24,7 +24,7 @@ public class NotExpNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException{
 		if( !(exp.typeCheck() instanceof BoolTypeNode) )
-			throw new TypeErrorException("this expression " +exp +" is not bool type.");
+			throw new TypeErrorException("the argument of 'Not' is not bool type.");
 		
 		return new BoolTypeNode();
 	}
@@ -44,6 +44,10 @@ public class NotExpNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public Node getExp() {
+		return exp;
 	}
 
 }

@@ -34,40 +34,62 @@ public class AssignmentNode implements Node {
 		Node expType = exp.typeCheck();
 		Node lhsType = lhs.typeCheck();
 		
-		
 		if( lhsType instanceof PointerTypeNode && !(expType instanceof PointerTypeNode) ) {
-			long dereferenceNumDec = lhs.getId().getDereferenceNum();
-			long dereferenceNumLhs = lhs.getDereferenceNum();
+			int dereferenceNumDec = ((PointerTypeNode) lhsType).getDerNumDec();
+			int dereferenceNumLhs = ((PointerTypeNode) lhsType).getDerNumStm();
 			if( dereferenceNumLhs == dereferenceNumDec ) 
 				lhsType = ((PointerTypeNode) lhsType).getPointedType();
 		}
-		
-		if( lhsType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
-			if( !(exp instanceof NewExpNode) ) {
-				long derNumLhsDec = lhs.getId().getDereferenceNum();
-				long derNumLhs = lhs.getDereferenceNum();
+		else if( !(lhsType instanceof PointerTypeNode) && expType instanceof PointerTypeNode ) {
+			int dereferenceNumDec = ((PointerTypeNode) expType).getDerNumDec();
+			int dereferenceNumLhs = ((PointerTypeNode) expType).getDerNumStm();
+			if( dereferenceNumLhs == dereferenceNumDec ) 
+				expType = ((PointerTypeNode) expType).getPointedType();
+		}
+		else if( lhsType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
+			//if( !(exp instanceof NewExpNode) ) {
+				int derNumLhsDec = ((PointerTypeNode) lhsType).getDerNumDec();
+				int derNumLhs = ((PointerTypeNode) lhsType).getDerNumStm();
 				
-				long derNumExpDec = ((DerExpNode) exp).getLhs().getId().getDereferenceNum();
-				long derNumExp = ((DerExpNode) exp).getLhs().getDereferenceNum();
+				int derNumExpDec = ((PointerTypeNode) expType).getDerNumDec();
+				int derNumExp = ((PointerTypeNode) expType).getDerNumStm();
 				
 				if( (derNumLhsDec - derNumLhs) != (derNumExpDec - derNumExp) )
-					throw new TypeErrorException("not valid assignment between pointer "+
-							lhs.getId().getId() +" and " +((DerExpNode) exp).getLhs().getId().getId());
-			}
-			else {
+					throw new TypeErrorException("not valid assignment between pointer "/*+
+							lhs.getId().getId() +" and " +((DerExpNode) exp).getLhs().getId().getId()*/);
+			//}
+			/*else {
 				//exp instanceof NewExpNode
-				int countPointer = SimpLanPlusLib.counterPointerNumber(((NewExpNode) exp).getNode());
-				long derNumLhsDec2 = lhs.getId().getDereferenceNum();
+				//int countP = SimpLanPlusLib.counterPointerNumber(((NewExpNode) exp).getNode());
+				
+				Node n = expType;
+				while( n instanceof PointerTypeNode ) {
+					System.out.print("Pointer --> ");
+					n=((PointerTypeNode) n).getType();
+				}
+				System.out.print(n.getClass()+"\n\n");
+				
+				int countPointer = ((PointerTypeNode) expType).getDereferenceNum();
+				int derNumLhsDec2 = ((PointerTypeNode) lhsType).getDerNumDec();
+				
+				n = lhsType;
+				while( n instanceof PointerTypeNode ) {
+					System.out.print("Pointer --> ");
+					n=((PointerTypeNode) n).getType();
+				}
+				System.out.print(n.getClass()+"\n\n");
+				
+				System.out.println("lhs "+derNumLhsDec2 +"    exp "+countPointer );
+				
 				if( (derNumLhsDec2 - countPointer) != 1 )
 					throw new TypeErrorException("incorrect new expression "+lhs.getId().getId());
-			}
+			}*/
 			
 			lhsType = ((PointerTypeNode) lhsType).getPointedType();
 			expType = ((PointerTypeNode) expType).getPointedType();
 		}
 		
-		
-		if (! SimpLanPlusLib.isEquals(expType, lhsType))
+		if (! SimpLanPlusLib.isEquals(lhsType, expType))
 			throw new TypeErrorException("cannot assign "+expType.toPrint("") +
 					" value for variable " + lhs.getId().getId() + " of type " + lhsType.toPrint(""));
 		
