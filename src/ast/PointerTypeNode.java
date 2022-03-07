@@ -14,11 +14,13 @@ public class PointerTypeNode implements Node {
 	
 	private int derNumDec;
 	private int derNumStm;
+	private String errorMsg;
 	
 	public PointerTypeNode(Node type) {
 		this.type = type; 
 		derNumDec = -1;
 		derNumStm = -1;
+		errorMsg = "";
 	}
 
 	@Override
@@ -64,9 +66,10 @@ public class PointerTypeNode implements Node {
     }
 	
 	
-	public void setDerNum(int dec, int stm) {
+	public void setDerNum(int dec, int stm, String s) {
 		derNumDec = dec;
 		derNumStm = stm;
+		errorMsg = s;
 	}
 	
 	public int getDerNumDec() {
@@ -75,6 +78,10 @@ public class PointerTypeNode implements Node {
 	
 	public int getDerNumStm() {
 		return derNumStm;
+	}
+	
+	public String getErrorMsg() {
+		return errorMsg;
 	}
 	
 	

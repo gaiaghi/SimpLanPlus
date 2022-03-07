@@ -47,14 +47,35 @@ public class DecVarNode implements Node{
 	public Node typeCheck() throws TypeErrorException {
 		
 		if (exp == null)
-			return null; //valore di ritorno non utilizzato
+			return null; 
 		
 		Node expType = exp.typeCheck();
 		
-		if (! SimpLanPlusLib.isEquals(expType, type))
-			 throw new TypeErrorException("expression "+exp+" cannot be assigned to variable "+id.getId()+" of type "+type.toPrint(""));
+		Node decType = type;
+		if( decType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
+			int derNumRightDec = ((PointerTypeNode) decType).getDereferenceNum();
+			int derNumExpDec = ((PointerTypeNode) expType).getDerNumDec();
+			
+			if( derNumRightDec != derNumExpDec )
+				 throw new TypeErrorException("expression "+exp+" cannot be assigned "
+				 		+ "to variable "+id.getId()+" of type "+type.toPrint(""));
+			
+			decType = ((PointerTypeNode) decType).getPointedType();
+			expType = ((PointerTypeNode) expType).getPointedType();
+		}
+		else if( expType instanceof PointerTypeNode ) {
+			int derNumExpDec =  ((PointerTypeNode) expType).getDerNumDec();
+			int derNumExp = ((PointerTypeNode) expType).getDerNumStm();
+			if( derNumExpDec == derNumExp )
+				expType = ((PointerTypeNode) expType).getPointedType();
+		}
 		
-		return null; //valore di ritorno non utilizzato
+		if (! SimpLanPlusLib.isEquals(expType, decType))
+			 throw new TypeErrorException("expression "
+		+exp.toString().substring(exp.toString().indexOf(".")+1, exp.toString().indexOf("@"))+" cannot be assigned "
+			 		+ "to variable "+id.getId()+" of type "+type.toPrint(""));
+		
+		return null; 
 	}
 
 	@Override

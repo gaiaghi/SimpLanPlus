@@ -58,7 +58,7 @@ public class IdNode implements Node {
 		
 		if( idType instanceof PointerTypeNode ) {
 			PointerTypeNode pointer = (PointerTypeNode) idType;
-			pointer.setDerNum(getDerNumDec(), getDerNumLhs());
+			pointer.setDerNum(getDerNumDec(), getDerNumLhs(), id);
 			
 			if( pointer.getDerNumStm() > pointer.getDerNumDec() )
 				throw new TypeErrorException("too many dereference operations at pointer " +id);

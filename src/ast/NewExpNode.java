@@ -24,7 +24,7 @@ public class NewExpNode implements Node {
 	@Override
 	public Node typeCheck() {
 		PointerTypeNode node = new PointerTypeNode(type);
-		node.setDerNum(node.getDereferenceNum(), 0);
+		node.setDerNum(node.getDereferenceNum(), 0, "new expression");
 		return node;
 	}
 

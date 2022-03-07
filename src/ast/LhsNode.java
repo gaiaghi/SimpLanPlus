@@ -29,9 +29,23 @@ public class LhsNode implements Node {
 	public String toPrint(String indent) {
 		String str = indent +"Id: " +this.id.getId();
 		
-		for(int i=0; i < this.getDereferenceNum(); i++)
+		
+		for(int i=0; i < this.getDereferenceNum()-1; i++)
 			str = str + "^";
 		str = str + "\n" +this.id.getSTEntry().toPrint(indent +"  ");
+		
+		/*
+		Node type = id.getSTEntry().getType();
+		if( type instanceof PointerTypeNode ) {
+			PointerTypeNode pointer = (PointerTypeNode) type;
+			
+			System.err.println("LHS print " +id.getId() +"   "+pointer.getDerNumStm());
+			
+			for(int i=0; i < pointer.getDerNumStm(); i++)
+				str = str + "^";
+			str = str + "\n" +this.id.getSTEntry().toPrint(indent +"  ");
+		}
+		*/
 		
 		return str;
 	}			

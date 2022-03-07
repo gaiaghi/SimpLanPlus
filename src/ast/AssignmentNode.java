@@ -47,46 +47,20 @@ public class AssignmentNode implements Node {
 				expType = ((PointerTypeNode) expType).getPointedType();
 		}
 		else if( lhsType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
-			//if( !(exp instanceof NewExpNode) ) {
-				int derNumLhsDec = ((PointerTypeNode) lhsType).getDerNumDec();
-				int derNumLhs = ((PointerTypeNode) lhsType).getDerNumStm();
-				
-				int derNumExpDec = ((PointerTypeNode) expType).getDerNumDec();
-				int derNumExp = ((PointerTypeNode) expType).getDerNumStm();
-				
-				if( (derNumLhsDec - derNumLhs) != (derNumExpDec - derNumExp) )
-					throw new TypeErrorException("not valid assignment between pointer "/*+
-							lhs.getId().getId() +" and " +((DerExpNode) exp).getLhs().getId().getId()*/);
-			//}
-			/*else {
-				//exp instanceof NewExpNode
-				//int countP = SimpLanPlusLib.counterPointerNumber(((NewExpNode) exp).getNode());
-				
-				Node n = expType;
-				while( n instanceof PointerTypeNode ) {
-					System.out.print("Pointer --> ");
-					n=((PointerTypeNode) n).getType();
-				}
-				System.out.print(n.getClass()+"\n\n");
-				
-				int countPointer = ((PointerTypeNode) expType).getDereferenceNum();
-				int derNumLhsDec2 = ((PointerTypeNode) lhsType).getDerNumDec();
-				
-				n = lhsType;
-				while( n instanceof PointerTypeNode ) {
-					System.out.print("Pointer --> ");
-					n=((PointerTypeNode) n).getType();
-				}
-				System.out.print(n.getClass()+"\n\n");
-				
-				System.out.println("lhs "+derNumLhsDec2 +"    exp "+countPointer );
-				
-				if( (derNumLhsDec2 - countPointer) != 1 )
-					throw new TypeErrorException("incorrect new expression "+lhs.getId().getId());
-			}*/
+			PointerTypeNode pointerLhs = (PointerTypeNode) lhsType;
+			int derNumLhsDec = pointerLhs.getDerNumDec();
+			int derNumLhs = pointerLhs.getDerNumStm();
 			
-			lhsType = ((PointerTypeNode) lhsType).getPointedType();
-			expType = ((PointerTypeNode) expType).getPointedType();
+			PointerTypeNode pointerExp = (PointerTypeNode) expType;
+			int derNumExpDec = pointerExp.getDerNumDec();
+			int derNumExp = pointerExp.getDerNumStm();
+			
+			if( (derNumLhsDec - derNumLhs) != (derNumExpDec - derNumExp) )
+				throw new TypeErrorException("not valid assignment between pointer "+
+						pointerLhs.getErrorMsg() +" and " +pointerExp.getErrorMsg());
+			
+			lhsType = pointerLhs.getPointedType();
+			expType = pointerExp.getPointedType();
 		}
 		
 		if (! SimpLanPlusLib.isEquals(lhsType, expType))
