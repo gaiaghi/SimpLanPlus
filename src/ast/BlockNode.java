@@ -56,7 +56,7 @@ public class BlockNode implements Node {
 		for (Node stm: statements){
 			Node stmType = stm.typeCheck();		//controllo su tutti gli statement 
 			
-			if( stmType != null ) {
+			if( stmType != null && !(stm instanceof CallLNode)) {
 				types.add(stmType);
 			}
 			

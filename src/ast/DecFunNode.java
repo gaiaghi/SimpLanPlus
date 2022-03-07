@@ -66,6 +66,8 @@ public class DecFunNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException{
 		Node bodyType = block.typeCheck();
+		if (type instanceof PointerTypeNode)
+			throw new TypeErrorException("function "+id.getId()+" cannot be of type pointer.");
 		
 		if( ! SimpLanPlusLib.isEquals(bodyType, type) )
 			throw new TypeErrorException("wrong return type for function "+ id.getId());
