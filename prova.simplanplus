@@ -1,165 +1,191 @@
-//n1 - deve dare errore errore----> OK
+//n1
+//syntax errors
 //{int x; x=2; int z;}
 
 
-//n2 - questo codice dà errore----> OK
+//n2
+//syntax errors
 //{int f(int x) {print x+1; {if(x>10)return x-1;} return x+1; } int y=10; y=f(y); if(y==9) print y; else y+8;  }
-//{ int y=10; if(y==9) print y; else y+8;  }
 
 
-//n3 --> OK
+//n3
 //1 semantic errors: the return stm is not the last statement in the block. Unreachable code.
 //{int f(int x) {return(2); print(4); } }
 
 
-//n4 - Errore: caso return nella IF prima di un return --> OK
+//n4
+//Type error: block with multiple return statements having mismatching types.
 //{int f(int x) { print(4); if(x==1) print x; else return; return(2);} }
 
-//n5 - You had: 2 semantic errors:  --> OK
-//	the return stm is not the last statement in the block. Unreachable code.
-//	there cannot be multiple returns in the same block.
+//n5
+// You had: 2 semantic errors: the return stm is not the last statement in the block. Unreachable code. there cannot be multiple returns in the same block.
 //{int f(int x) { {return; print 5; } print(4); if(x==1) print x; else print 3; return(2);} }
 
 
-//n6 - You had: 1 semantic errors:  --> OK
-//	there cannot be return in the block. It is not a function.
+//n6
+//You had: 1 semantic errors: there cannot be return in the block. It is not a function.
 //{int x=1; return; print 4;}
 
 
-//n7 - Type error: incompatible types in then else branches.
+//n7
+//Type error: incompatible types in then else branches.
 //{int f(int x) {print x+1; {x=1;if(x==1) return 2; else print 2;} return x+1; } f(1);}
 
 
-//n8 - Type checking: OK!
+//n8
+//OK
 //{int f(int x) {print x+1; {x=1;if(x==1) return x;} return x+1; } f(1);}
 
 
-//n9 - Type error: block with multiple return statements having mismatching types.
+//n9 
+//Type error: block with multiple return statements having mismatching types.
 //{int f(int x) {print x+1; {x=1; if(x==1) return ;} return x+1; } f(1);}
 
 
-//n10 - Type checking: OK!
+//n10
+//OK
 //{void f(int x) {print x+1; {x=1; if(x==1) return ;} x=1; } f(1);}
 
 //n11
+//OK
 //{void f(int x) {print x+1;} f(1);}
 
 
-//n12 - You had: 1 semantic errors:
-//	there cannot be return in the block. It is not a function.
+//n12
+//You had: 1 semantic errors: there cannot be return in the block. It is not a function.
 //{int x; return;}
 
 //n13
+//Type error: not valid assignment between pointer w and x
 //{^^int z; ^^^int w; ^int x = new int; void f(int x) {print x+1; return;} x^=2; z^=x; w^=x; f(6); print(x^+3);}
 
 
 //n14
+//OK
 //{void f(int x) {int y; return ;} int z=1; int y; if(z==1) {int y;} else {int y;}  }
 
 
-//n14
+//n14b
+//You had: 1 semantic errors: Var id f already declared
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
 
+
 //n15
+//You had: 2 semantic errors:	Var id x already declared 	Missing declaration: k
 //{int x=4; bool x = 8; print(k+x);}
 
-
-//n16 - Errore  ---> ora funziona
+//n16
+//syntax errors
 //{int x=4aaat;}
 
 
-//n17 - Errore  ---> ora funziona
+//n17
+//syntax errors
 //d{int x=4;}
 
 
-//n18 - Non dà errore. Esegue come se il # non ci fosse.
-//CORRETTO, adesso segnala invalid character: #
+//n18 
+//lexical errors
 //#{int x=4;}
 
 
-//n19 deve dare unreachable code OK
+//n19
+//You had: 1 semantic errors:	the return stm is not the last statement in the block. Unreachable code.
 //{ int f() { { return 1; } if (true) return 1;}}
 
 
-//n20 --> OK
+//n20
+//
 //{^^int z; z^^=2;}
 
 
-//n21 --> OK
+//n21
 //Type error: cannot assign IntType value for variable z of type BoolType
 //{^^bool z; ^int x; x^=2; z^^=x^; }
 
 
-//n22 --> OK
-//{^^bool z; ^int x; x^=2; z = new ^bool;}
+//n22
+//OK
+//{^^bool z; ^int x = new int; x^=2; z = new ^bool;}
 
-//n23 --> OK
+//n23
 //Type error: cannot assign IntType value for variable z of type BoolType
 //{^^bool z; ^int x; x^=2; z = new ^int;}
 
 
-//n24		--> OK
-//You had: 1 semantic errors:
-//	too many dereference operations at pointer x
+//n24
+//You had: 1 semantic errors: too many dereference operations at pointer x
 //{^int x; x^^=2;}
 
 
 //n25
+//You had: 1 semantic errors: Var id f already declared
 //{ int f(int x){ int f=3; print(f*x); } int y=2; f(y);}
 
 
-//n26 		---> ok
+//n26
+//OK
 //{ int f(int x) {^int y = new int; y^ = 1 ; return (y^);} }
 
 
-//n27		---> Type error: wrong return type for function f
+//n27		
+//Type error: wrong return type for function f
 //{ int f(int x) {^int y = new int; y^ = 1 ; return y;} }
 
 
-//n28 		---> OK
+//n28
+//OK
 //{^int y = new int; ^int x = new int; y^ = 1; x^ = y^; } 
 
 
-//n29 		---> OK
+//n29
+//OK
 //{^int y = new int; ^int x = new int; y^ = 1; x^ = (y^); } 
 
 
 //n30
+//effetti?
 //{int f() {^int x = new int; return (x^);} }
 
 
-//n31 no errore ---> OK
+//n31
+//OK
 //{int f(int x){return x+1;} int g(int x){return f(x);} int z=2; if(z==f(1)) z=f(1); else z=g(1); }
 
 
-//n32 errore ---> OK
+//n32
 // Type error: cannot assign BoolType value for variable z of type IntType
 //{int f(int x){return x+1;} bool g(int x){ if(x==1) return true; else return false;} int z=f(1); z=g(2);}
 
 
-//n33 no errore ---> OK
-//{bool g(){ return true; } bool f(){ return false; } if(g()==f()) print 4;}
+//n33
+//OK
+{bool g(){ return true; } bool f(){ return false; } if(g()==f()) print 4;}
 
 
-//n34 no errore ---> OK
+//n34
+//OK
 //{bool g(){ return true; } bool f(){ return false; } if(!g()==f()) print 4;}
 
 
-//n35 errore ---> OK
-// Type error: the argument of 'Not' is not int type.
+//n35
+//Type error: the argument of 'Neg' is not int type.
 //{bool g(){ return true; } bool f(){ return false; } if(-g()==f()) print 4;}
 
 
-//n36 no errore ---> OK
+//n36
+// effetti sulla x?
 //{int g(){ return 1; }  ^int x; x^=3; if(g()==x^) print 4;}
 
 
 
-//n37 deve dare errore  ----> ok
+//n37
+//Type error: too many dereference operations at pointer y
 //{void h(^int x, ^int y){ if (y^^==0) delete x ; else { x^ = x^ - 1; h(y,x) ;} }}
 
 
-//n38 non deve dare errore ----> ok
+//n38
+//OK
 //{  bool g(){return true;} int f(int x) {^int y = new int; g(); y^ = 1 ; return y^;} }
 
 
@@ -167,26 +193,40 @@
 //Type error: wrong return type for function f
 //{int f(){}}
 
-//n41 ----> ok
+//n41
+//OK
 //{void f(){}}
 
 //n42 
-//
-{ ^int f (){return new int;}}
+//Type error: function f cannot be of type pointer.
+//{ ^int f (){return new int;}}
+
+//n43
+//Type error: wrong usage of expression NewExpNode with variable x
+//{^int x = new bool;}
+
+//n44
+//Type error: wrong usage of expression DerExpNode with variable b
+//{int f(int x) {^int y = new int;  ^bool b= y;}}
+
+//45
+//Type error: not valid assignment between pointer  and new expression
+//{^^bool x = new bool;}
+
+//p01
+//OK
+//{^^int x ; ^int y = new int; y^ = 1 ; x = new ^int; x^ = y ; print x^^ ;}
 
 
-//p01 Non deve dare errore ----> ok
-{^^int x ; ^int y = new int; y^ = 1 ; x = new ^int; x^ = y ; print x^^ ;}
-
-
-//p02 deve dare missing declaration - OK
+//p02
+//You had: 1 semantic errors: Missing declaration: y
 //{ ^int x = new int; x^ = 1; delete x; y = x^; }
 
-
 //p04
+//
 //{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x) ;} }}
 
-//p06 non deve dare errore --> OK
+//p06
+//OK
 //{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(54); }
-
 

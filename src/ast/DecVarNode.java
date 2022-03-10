@@ -57,8 +57,10 @@ public class DecVarNode implements Node{
 			int derNumExpDec = ((PointerTypeNode) expType).getDerNumDec();
 			
 			if( derNumRightDec != derNumExpDec )
-				 throw new TypeErrorException("expression "+exp+" cannot be assigned "
-				 		+ "to variable "+id.getId()+" of type "+type.toPrint(""));
+
+				throw new TypeErrorException("not valid assignment between pointer "+
+						((PointerTypeNode)decType).getErrorMsg() +" and " +((PointerTypeNode)expType).getErrorMsg());
+			
 			
 			decType = ((PointerTypeNode) decType).getPointedType();
 			expType = ((PointerTypeNode) expType).getPointedType();
@@ -71,9 +73,8 @@ public class DecVarNode implements Node{
 		}
 		
 		if (! SimpLanPlusLib.isEquals(expType, decType))
-			 throw new TypeErrorException("expression "
-		+exp.toString().substring(exp.toString().indexOf(".")+1, exp.toString().indexOf("@"))+" cannot be assigned "
-			 		+ "to variable "+id.getId()+" of type "+type.toPrint(""));
+			 throw new TypeErrorException("wrong usage of expression "
+		+exp.toString().substring(exp.toString().indexOf(".")+1, exp.toString().indexOf("@"))+" with variable "+id.getId());
 		
 		return null; 
 	}
