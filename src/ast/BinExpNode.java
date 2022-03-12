@@ -40,19 +40,22 @@ public class BinExpNode implements Node {
 		Node leftType = leftExp.typeCheck();
 		Node rightType = rightExp.typeCheck();
 		
-		if( leftType instanceof PointerTypeNode ) {
-			int derNumRightDec =  ((PointerTypeNode) leftType).getDerNumDec();
-			int derNumRight = ((PointerTypeNode) leftType).getDerNumStm();
-			if( derNumRightDec == derNumRight )
-				leftType = ((PointerTypeNode) leftType).getPointedType();
-		}
+//		if( leftType instanceof PointerTypeNode ) {
+//			int derNumRightDec =  ((PointerTypeNode) leftType).getDerNumDec();
+//			int derNumRight = ((PointerTypeNode) leftType).getDerNumStm();
+//			if( derNumRightDec == derNumRight )
+//				leftType = ((PointerTypeNode) leftType).getPointedType();
+//		}
 		
-		if( rightType instanceof PointerTypeNode ) {
-				int derNumRightDec =  ((PointerTypeNode) rightType).getDerNumDec();
-				int derNumRight = ((PointerTypeNode) rightType).getDerNumStm();
-				if( derNumRightDec == derNumRight )
-					rightType = ((PointerTypeNode) rightType).getPointedType();
-		}
+//		if( rightType instanceof PointerTypeNode ) {
+//				int derNumRightDec =  ((PointerTypeNode) rightType).getDerNumDec();
+//				int derNumRight = ((PointerTypeNode) rightType).getDerNumStm();
+//				if( derNumRightDec == derNumRight )
+//					rightType = ((PointerTypeNode) rightType).getPointedType();
+//		}
+		
+		leftType = util.SimpLanPlusLib.getNodeIfPointer(leftType);
+		rightType = util.SimpLanPlusLib.getNodeIfPointer(rightType);
 		
 		
 		switch( op ) {

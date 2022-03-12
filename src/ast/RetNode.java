@@ -37,13 +37,14 @@ public class RetNode implements Node {
 		else {
 			Node expType = exp.typeCheck();	
 			
-			if( expType instanceof PointerTypeNode ) {
-				int derNumDec = ((PointerTypeNode) expType).getDerNumDec();
-				int derNum = ((PointerTypeNode) expType).getDerNumStm();
-				if( derNumDec == derNum ) {
-					expType = ((PointerTypeNode) expType).getPointedType();
-				}
-			}
+//			if( expType instanceof PointerTypeNode ) {
+//				int derNumDec = ((PointerTypeNode) expType).getDerNumDec();
+//				int derNum = ((PointerTypeNode) expType).getDerNumStm();
+//				if( derNumDec == derNum ) {
+//					expType = ((PointerTypeNode) expType).getPointedType();
+//				}
+//			}
+			expType = util.SimpLanPlusLib.getNodeIfPointer(expType);
 			
 			return expType;
 		}

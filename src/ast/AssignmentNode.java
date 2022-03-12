@@ -34,19 +34,24 @@ public class AssignmentNode implements Node {
 		Node expType = exp.typeCheck();
 		Node lhsType = lhs.typeCheck();
 		
-		if( lhsType instanceof PointerTypeNode && !(expType instanceof PointerTypeNode) ) {
-			int dereferenceNumDec = ((PointerTypeNode) lhsType).getDerNumDec();
-			int dereferenceNumLhs = ((PointerTypeNode) lhsType).getDerNumStm();
-			if( dereferenceNumLhs == dereferenceNumDec ) 
-				lhsType = ((PointerTypeNode) lhsType).getPointedType();
-		}
-		else if( !(lhsType instanceof PointerTypeNode) && expType instanceof PointerTypeNode ) {
-			int dereferenceNumDec = ((PointerTypeNode) expType).getDerNumDec();
-			int dereferenceNumLhs = ((PointerTypeNode) expType).getDerNumStm();
-			if( dereferenceNumLhs == dereferenceNumDec ) 
-				expType = ((PointerTypeNode) expType).getPointedType();
-		}
-		else if( lhsType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
+//		if( lhsType instanceof PointerTypeNode && !(expType instanceof PointerTypeNode) ) {
+//			int dereferenceNumDec = ((PointerTypeNode) lhsType).getDerNumDec();
+//			int dereferenceNumLhs = ((PointerTypeNode) lhsType).getDerNumStm();
+//			if( dereferenceNumLhs == dereferenceNumDec ) 
+//				lhsType = ((PointerTypeNode) lhsType).getPointedType();
+//		}
+//		else if( !(lhsType instanceof PointerTypeNode) && expType instanceof PointerTypeNode ) {
+//			int dereferenceNumDec = ((PointerTypeNode) expType).getDerNumDec();
+//			int dereferenceNumLhs = ((PointerTypeNode) expType).getDerNumStm();
+//			if( dereferenceNumLhs == dereferenceNumDec ) 
+//				expType = ((PointerTypeNode) expType).getPointedType();
+//		}
+		
+		lhsType =  util.SimpLanPlusLib.getNodeIfPointer(lhsType);		
+		expType =  util.SimpLanPlusLib.getNodeIfPointer(expType);
+		
+//		else 
+		if( lhsType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
 			PointerTypeNode pointerLhs = (PointerTypeNode) lhsType;
 			int derNumLhsDec = pointerLhs.getDerNumDec();
 			int derNumLhs = pointerLhs.getDerNumStm();
@@ -55,13 +60,14 @@ public class AssignmentNode implements Node {
 			int derNumExpDec = pointerExp.getDerNumDec();
 			int derNumExp = pointerExp.getDerNumStm();
 			
-			if( (derNumLhsDec - derNumLhs) != (derNumExpDec - derNumExp) )
+			if( (derNumLhsDec - derNumLhs) != (derNumExpDec - derNumExp) ) 
 				throw new TypeErrorException("not valid assignment between pointer "+
 						pointerLhs.getErrorMsg() +" and " +pointerExp.getErrorMsg());
 			
 			lhsType = pointerLhs.getPointedType();
 			expType = pointerExp.getPointedType();
 		}
+		
 		
 		if (! SimpLanPlusLib.isEquals(lhsType, expType))
 			throw new TypeErrorException("cannot assign "+expType.toPrint("") +

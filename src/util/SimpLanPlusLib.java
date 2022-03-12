@@ -63,15 +63,19 @@ public class SimpLanPlusLib {
 		return countPointer;
 	}
 	
-	public static int dereferenceNumFromExp(Node exp) {
-		while( true ) {
-			if( exp instanceof DerExpNode ) {
-				return ((DerExpNode) exp).getLhs().getDereferenceNum();
+	
+
+	public static Node getNodeIfPointer(Node node) {
+		
+		if( node instanceof PointerTypeNode ) {	
+			PointerTypeNode pointer = (PointerTypeNode) node;
+			if( pointer.getDerNumDec() == pointer.getDerNumStm() ) {
+				node = pointer.getPointedType();
 			}
-			else if( exp instanceof BaseExpNode ){
-				((BaseExpNode) exp).getExp();
-			}			
 		}
+		
+		return node;
 	}
+	
 
 }

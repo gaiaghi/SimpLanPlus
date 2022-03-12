@@ -55,7 +55,7 @@ public class DecVarNode implements Node{
 		if( decType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
 			int derNumRightDec = ((PointerTypeNode) decType).getDereferenceNum();
 			int derNumExpDec = ((PointerTypeNode) expType).getDerNumDec();
-			
+
 			if( derNumRightDec != derNumExpDec )
 
 				throw new TypeErrorException("not valid assignment between pointer "+
@@ -65,12 +65,17 @@ public class DecVarNode implements Node{
 			decType = ((PointerTypeNode) decType).getPointedType();
 			expType = ((PointerTypeNode) expType).getPointedType();
 		}
-		else if( expType instanceof PointerTypeNode ) {
-			int derNumExpDec =  ((PointerTypeNode) expType).getDerNumDec();
-			int derNumExp = ((PointerTypeNode) expType).getDerNumStm();
-			if( derNumExpDec == derNumExp )
-				expType = ((PointerTypeNode) expType).getPointedType();
-		}
+//		else if( expType instanceof PointerTypeNode ) {
+//			System.out.println("ci entro con + "+exp.toPrint(""));
+//			int derNumExpDec =  ((PointerTypeNode) expType).getDerNumDec();
+//			int derNumExp = ((PointerTypeNode) expType).getDerNumStm();
+//			if( derNumExpDec == derNumExp )
+//				expType = ((PointerTypeNode) expType).getPointedType();
+//		}
+		else 
+			expType = util.SimpLanPlusLib.getNodeIfPointer(expType);
+
+
 		
 		if (! SimpLanPlusLib.isEquals(expType, decType))
 			 throw new TypeErrorException("wrong usage of expression "

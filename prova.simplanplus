@@ -95,7 +95,7 @@
 
 
 //n20
-//
+// effetti?
 //{^^int z; z^^=2;}
 
 
@@ -114,7 +114,7 @@
 
 
 //n24
-//You had: 1 semantic errors: too many dereference operations at pointer x
+//Type error: too many dereference operations at pointer x
 //{^int x; x^^=2;}
 
 
@@ -160,7 +160,7 @@
 
 //n33
 //OK
-{bool g(){ return true; } bool f(){ return false; } if(g()==f()) print 4;}
+//{bool g(){ return true; } bool f(){ return false; } if(g()==f()) print 4;}
 
 
 //n34
@@ -212,6 +212,11 @@
 //45
 //Type error: not valid assignment between pointer  and new expression
 //{^^bool x = new bool;}
+
+//46
+//OK
+
+//{^^int n = new ^int; n^= new int; n^^=3; print(n^^-7);}
 
 //p01
 //OK
