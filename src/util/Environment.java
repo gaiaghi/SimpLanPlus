@@ -89,4 +89,22 @@ public class Environment {
 		//modifica offset per codgen?
 	}
 	
+	
+//	---Per l'analisi degli effetti:
+	
+	//max(env1, env2)
+	public Environment maxEnv (Environment env1, Environment env2 ) {
+		//TODO
+		return null;
+	}
+	
+	public Environment parEnv (Environment env1, Environment env2 ) {
+		//TODO
+		return null;
+	}
+	
+	public Environment updateEnv (Environment env1, Environment env2 ) {
+		//TODO
+		return null;
+	}
 }

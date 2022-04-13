@@ -34,7 +34,7 @@
 
 //n8
 //OK
-{int f(int x) {print x+1; {x=1;if(x==1) return x;} return x+1; } f(1);}
+//{int f(int x) {print x+1; {x=1;if(x==1) return x;} return x+1; } f(1);}
 
 
 //n9 

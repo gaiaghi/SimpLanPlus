@@ -1,5 +1,7 @@
 package util;
 
+import java.util.List;
+
 import ast.ArrowTypeNode;
 import ast.Node;
 
@@ -8,9 +10,11 @@ public class STEntry {
 	private final int nestingLvl; 
 	private final int offset; // code generation
 	private Node type;
+	private List<Effect> varEffects; //lista effetti per le variabili
+	private List< List<Effect> > parEffects; //lista effetti per le funzioni
+	//oppure: 	HashMap<String, Effect> e  List<HashMap<String,Effect>> ?
+
 	
-	//Da aggiungere:  effetti, reference a DecFunNode
-	//Effetti: una lista
 	
 	public STEntry (int nestingLvl, int offset) {
 		this.nestingLvl = nestingLvl;
