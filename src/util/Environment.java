@@ -94,11 +94,44 @@ public class Environment {
 	
 	//max(env1, env2)
 	public Environment maxEnv (Environment env1, Environment env2 ) {
-		//TODO
-		return null;
+		
+		Environment envMax = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
+		int envLength = env1.symbolTable.size(); 
+		
+		//per ogni scope dell'albiente
+		for (int i = 0; i > envLength; i++) {
+			HashMap<String, STEntry> scopeMax = new HashMap<>();
+			
+			var scope1 = env1.symbolTable.get(i);
+			var scope2 = env2.symbolTable.get(i);
+			
+			//per ogni variabile nello scope
+			for (String varId : scope1.keySet() ) {
+				STEntry entry1 = scope1.get(varId);
+				STEntry entry2 = scope2.get(varId);
+				
+				if (entry2 == null) //se nel secondo ambiente non è presente la variabile
+					scopeMax.put(varId, entry1);
+				else { //se la variabile è presente sia nel primo che nel secondo ambiente
+					STEntry entryMax = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
+					
+					for (int j=0; j<entry1.getVarEffectList().size(); j++) //per ogni effetto della variabile
+						entryMax.setVarEffect(j, Effect.max(entry1.getVarEffect(j), entry2.getVarEffect(j) )); //aggiungo l'effetto massimo tra i due
+					
+					scopeMax.put(varId, entryMax);
+				}
+				
+			}
+			envMax.symbolTable.add(scopeMax);
+		}
+		
+		return envMax;
 	}
 	
+	
 	public Environment parEnv (Environment env1, Environment env2 ) {
+		
+		Environment envPar = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		//TODO
 		return null;
 	}

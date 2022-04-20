@@ -29,4 +29,12 @@ public interface Node {
   
 	//analisi degli effetti
 	ArrayList<SemanticError> checkEffects(Environment env);
+	
+	
+	default int getDereferenceNum(){
+	      return 0;
+	      //int/bool = 0
+	      //pointer to int/bool = 1
+	      //pointer to pointers = >1
+	    }
 }  

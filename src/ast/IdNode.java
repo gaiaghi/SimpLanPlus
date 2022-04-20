@@ -112,5 +112,9 @@ public class IdNode implements Node {
 		derNum = n;
 	}
 	
+	public int getDereferenceNum () {
+		return this.getDerNumDec();
+	}
+	
 
 }
