@@ -25,109 +25,69 @@ import util.SemanticError;
 import parser.SPPErrorListener;
 
 
-public class SimpLanPlus{
-	public static void main(String[] args) {
-
-		//parInput = 0 -> leggi da "prova.simplanplus"
-		//parInput = 1 -> leggi da "prova2.simplanplus"
-		int parInput = 1;
+public class SimpLanPlus_test{
+	public static void main(String[] args) {	
 		
 		ArrayList<String> nomeEsempi = new ArrayList<String>();
 		ArrayList<String> testoEsempi = new ArrayList<String>();
 		ArrayList<String> soluzioneEsempi = new ArrayList<String>();
 		ArrayList<String> risultatoEsempi = new ArrayList<String>();
 		
-		String fileName = "prova.simplanplus";
+		//String fileName = "prova.simplanplus";
 		
 		
-		if( parInput == 1 ) {
-			try  
+		try  
+		{  
+			File file = new File("prova.simplanplus");      
+			FileReader fr = new FileReader(file);   
+			BufferedReader br = new BufferedReader(fr);   
+			StringBuffer sb = new StringBuffer();     
+			String line;  
+			while( (line=br.readLine()) != null )  
 			{  
-				File file = new File("prova2.simplanplus");      
-				FileReader fr = new FileReader(file);   
-				BufferedReader br = new BufferedReader(fr);   
-				StringBuffer sb = new StringBuffer();     
-				String line;  
-				while( (line=br.readLine()) != null )  
-				{  
-					if( line.contains("//") ) {
-						line = line.substring(2);
+				if( line.contains("//") ) {
+					line = line.substring(2);
+					
+					if( line.charAt(0) == '#' ) {
+						line = line.substring(1);
+						String[] str = line.split("#");
+						nomeEsempi.add(str[0]);
+						soluzioneEsempi.add(str[1]);
 						
-						if( line.charAt(0) == '#' ) {
-							line = line.substring(1);
-							String[] str = line.split("#");
-							nomeEsempi.add(str[0]);
-							soluzioneEsempi.add(str[1]);
-							
-							line=br.readLine();
-							if( line.contains("//") )
-								line = line.substring(2);
-							
-							testoEsempi.add(line);
-						}
-					
+						line=br.readLine();
+						if( line.contains("//") )
+							line = line.substring(2);
+						
+						testoEsempi.add(line);
 					}
-				}  
-				fr.close();    
 				
-				for(int i=0; i<testoEsempi.size(); i++) {
-					
-					if( nomeEsempi.get(i).compareTo("n2")==0 )
-						continue;
-					
-					System.out.println("["+nomeEsempi.get(i) + "-->" 
-							+soluzioneEsempi.get(i) +"]  " 
-							+testoEsempi.get(i));
 				}
 			}  
-			catch(IOException e)  
-			{  
-				e.printStackTrace();  
-			}  
-		}
-		
-		
-		/*QUESTO é IL CODICE ORIGINALE
-		CharStream inputCode = null;
-		
-		//open code file
-		try {
-			inputCode = CharStreams.fromFileName(fileName);
-		} 
-		catch (IOException e) {
-			System.err.println("The file " + fileName + " was not found");
-			System.exit(1);
-		}
-		*/
-		CharStream inputCode = null;
-		String stringa="";
-		
-		try {
-			File file2 = new File("prova.simplanplus");      
-			FileReader fr2 = new FileReader(file2);   
-			BufferedReader br2 = new BufferedReader(fr2);   
-			StringBuffer sb2 = new StringBuffer();     
-			String line2; 
-			while( (line2=br2.readLine()) != null )  
-			{  
-				stringa = stringa.concat(line2+"\n");
+			fr.close();    
+			
+			for(int i=0; i<testoEsempi.size(); i++) {
+				
+				if( nomeEsempi.get(i).compareTo("n2")==0 )
+					continue;
+				
+				System.out.println("["+nomeEsempi.get(i) + "-->" 
+						+soluzioneEsempi.get(i) +"]  " 
+						+testoEsempi.get(i));
 			}
-			fr2.close();
 		}  
 		catch(IOException e)  
 		{  
 			e.printStackTrace();  
-		} 
-		if( parInput == 0 ) {
-			nomeEsempi.add("nome");
-			soluzioneEsempi.add("?");
-			testoEsempi.add(stringa);
-		}
+		}  
+		
+		
+		CharStream inputCode = null;
+		
 		
 		for(int esempio = 0; esempio < testoEsempi.size(); esempio++) {
 		
 			
-		System.out.println("Esempio " +nomeEsempi.get(esempio) +" in esecuzione:\n"
+		System.out.println("\n\n\n\nEsempio " +nomeEsempi.get(esempio) +" in esecuzione:\n"
 				+testoEsempi.get(esempio) +"\n\n");
 		inputCode = CharStreams.fromString(testoEsempi.get(esempio));
 			
@@ -149,10 +109,7 @@ public class SimpLanPlus{
 			//System.exit(1);
 			
 			risultatoEsempi.add("ERR");
-			if(parInput==0)
-				System.exit(1);
-			else
-				continue;
+			continue;
 		}
 		
 		
@@ -167,10 +124,7 @@ public class SimpLanPlus{
 			//System.exit(1);
 			
 			risultatoEsempi.add("ERR");
-			if(parInput==0)
-				System.exit(1);
-			else
-				continue;
+			continue;
 		}
 		
 		//checking lexical errors
@@ -183,10 +137,7 @@ public class SimpLanPlus{
             //System.exit(1);
 			
 			risultatoEsempi.add("ERR");
-			if(parInput==0)
-				System.exit(1);
-			else
-				continue;
+			continue;
         } 
 
 		
@@ -200,10 +151,7 @@ public class SimpLanPlus{
 			//System.exit(1);
 			
 			risultatoEsempi.add("ERR");
-			if(parInput==0)
-				System.exit(1);
-			else
-				continue;
+			continue;
 		}
 		
 		
@@ -220,10 +168,7 @@ public class SimpLanPlus{
 			//System.exit(1);
 			
 			risultatoEsempi.add("ERR");
-			if(parInput==0)
-				System.exit(1);
-			else
-				continue;
+			continue;
 		}
 		
 		
@@ -240,10 +185,7 @@ public class SimpLanPlus{
 			//System.exit(1);
 			
 			risultatoEsempi.add("ERR");
-			if(parInput==0)
-				System.exit(1);
-			else
-				continue;
+			continue;
 		}
 		
 		
