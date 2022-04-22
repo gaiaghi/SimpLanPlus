@@ -91,9 +91,45 @@ public class Environment {
 	
 	
 //	---Per l'analisi degli effetti:
+	//seq(env1, env2)
+		public static Environment seqEnv (Environment env1, Environment env2 ) {
+			
+			Environment envSeq = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
+			int envLength = env1.symbolTable.size(); 
+			
+			//per ogni scope dell'albiente
+			for (int i = 0; i > envLength; i++) {
+				HashMap<String, STEntry> scopeSeq = new HashMap<>();
+				
+				var scope1 = env1.symbolTable.get(i);
+				var scope2 = env2.symbolTable.get(i);
+				
+				//per ogni variabile nello scope
+				for (String varId : scope1.keySet() ) {
+					STEntry entry1 = scope1.get(varId);
+					STEntry entry2 = scope2.get(varId);
+					
+					if (entry2 == null) //se nel secondo ambiente non è presente la variabile
+						scopeSeq.put(varId, entry1);
+					else { //se la variabile è presente sia nel primo che nel secondo ambiente
+						STEntry entrySeq = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
+						
+						for (int j=0; j<entry1.getVarEffectList().size(); j++) //per ogni effetto della variabile
+							entrySeq.setVarEffect(j, Effect.seq(entry1.getVarEffect(j), entry2.getVarEffect(j) )); //aggiungo l'effetto seq tra i due
+						
+						scopeSeq.put(varId, entrySeq);
+					}
+					
+				}
+				envSeq.addScope(scopeSeq);
+			}
+			
+			return envSeq;
+		}
+	
 	
 	//max(env1, env2)
-	public Environment maxEnv (Environment env1, Environment env2 ) {
+	public static Environment maxEnv (Environment env1, Environment env2 ) {
 		
 		Environment envMax = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		int envLength = env1.symbolTable.size(); 
@@ -122,7 +158,7 @@ public class Environment {
 				}
 				
 			}
-			envMax.symbolTable.add(scopeMax);
+			envMax.addScope(scopeMax);
 		}
 		
 		return envMax;

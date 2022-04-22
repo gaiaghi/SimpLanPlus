@@ -38,7 +38,7 @@ public class STEntry {
 			}
 		}
 		else {
-			for (int i = 0; i<=type.getDereferenceNum(); i++)
+			for (int i = 0; i <= type.getDereferenceNum(); i++)
 				this.varEffects.add(new Effect(Effect.INITIALIZED));
 		}
 		
