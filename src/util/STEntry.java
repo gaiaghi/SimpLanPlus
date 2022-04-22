@@ -45,10 +45,22 @@ public class STEntry {
 	}
 
 
-	//to clone. Quando serve?
-//	public STEntry(STEntry s) {
-//		
-//	}
+	//to clone.
+	public STEntry(STEntry entry) {
+		this(entry.nestingLvl, entry.offset);
+		this.type = entry.type;
+		
+		for (Effect e: entry.varEffects)
+			this.varEffects.add(new Effect(e));
+		
+		for (List<Effect> parEffList: entry.parEffects) {
+			List<Effect> copyEffects = new ArrayList<>();
+			for (Effect e: parEffList)
+				copyEffects.add(e);
+			this.parEffects.add(copyEffects);
+		}
+		
+	}
 	
 	
 	public void setType(Node type) {

@@ -3,6 +3,7 @@ package util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import exception.MissingDecException;
 import exception.MultipleDecException;
@@ -57,6 +58,10 @@ public class Environment {
 			throw new MultipleDecException("Multiple declaration: "+id);
 	}
 	
+
+	public void safeAddEntry(String id, STEntry entry) {
+		getCurrentScope().put(id, entry);
+	}
 	
 	public STEntry lookup (String id) throws MissingDecException {
 		for (int i = nestingLvl; i>=0; i--) {
@@ -165,12 +170,46 @@ public class Environment {
 	}
 	
 	
-	public Environment parEnv (Environment env1, Environment env2 ) {
+	public static Environment parEnv (Environment env1, Environment env2 ) {
 		
 		Environment envPar = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
-		//TODO
-		return null;
+		envPar.addScope();
+		
+		HashMap<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size());
+		HashMap<String, STEntry> scope2 = env2.symbolTable.get(env2.symbolTable.size());
+		
+		//env1(x) if x not in env2
+		for (var varEntry1: scope1.entrySet()) {
+			if(! scope2.containsKey(varEntry1.getKey())) {
+				STEntry entry = new STEntry(varEntry1.getValue());
+				envPar.safeAddEntry(varEntry1.getKey(), entry);
+			}
+		}
+
+		//env2(x) if x not in env1
+		for (var varEntry2: scope2.entrySet()) {
+			if(! scope1.containsKey(varEntry2.getKey())) {
+				STEntry entry = new STEntry(varEntry2.getValue());
+				envPar.safeAddEntry(varEntry2.getKey(), entry);
+			}
+		}
+		
+		for (var varEntry1: scope1.entrySet()) {
+			for (var varEntry2: scope2.entrySet()) {
+				if (varEntry1.getKey() == varEntry2.getKey()) {
+					STEntry entry = new STEntry(varEntry1.getValue());
+					
+					for (int i=0; i < varEntry2.getValue().getVarEffectList().size(); i++) 
+						entry.setVarEffect(i, Effect.par(varEntry1.getValue().getVarEffect(i), varEntry1.getValue().getVarEffect(i)));
+
+					envPar.safeAddEntry(varEntry2.getKey(), entry);
+				}
+			}
+		} 
+		
+		return envPar;
 	}
+	
 	
 	public Environment updateEnv (Environment env1, Environment env2 ) {
 		//TODO
