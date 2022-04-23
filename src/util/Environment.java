@@ -114,9 +114,9 @@ public class Environment {
 					STEntry entry1 = scope1.get(varId);
 					STEntry entry2 = scope2.get(varId);
 					
-					if (entry2 == null) //se nel secondo ambiente non è presente la variabile
+					if (entry2 == null) //se nel secondo ambiente non Ã¨ presente la variabile
 						scopeSeq.put(varId, entry1);
-					else { //se la variabile è presente sia nel primo che nel secondo ambiente
+					else { //se la variabile Ã¨ presente sia nel primo che nel secondo ambiente
 						STEntry entrySeq = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
 						
 						for (int j=0; j<entry1.getVarEffectList().size(); j++) //per ogni effetto della variabile
@@ -151,9 +151,9 @@ public class Environment {
 				STEntry entry1 = scope1.get(varId);
 				STEntry entry2 = scope2.get(varId);
 				
-				if (entry2 == null) //se nel secondo ambiente non è presente la variabile
+				if (entry2 == null) //se nel secondo ambiente non Ã¨ presente la variabile
 					scopeMax.put(varId, entry1);
-				else { //se la variabile è presente sia nel primo che nel secondo ambiente
+				else { //se la variabile Ã¨ presente sia nel primo che nel secondo ambiente
 					STEntry entryMax = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
 					
 					for (int j=0; j<entry1.getVarEffectList().size(); j++) //per ogni effetto della variabile
@@ -175,8 +175,8 @@ public class Environment {
 		Environment envPar = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		envPar.addScope();
 		
-		HashMap<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size());
-		HashMap<String, STEntry> scope2 = env2.symbolTable.get(env2.symbolTable.size());
+		HashMap<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size() -1);
+		HashMap<String, STEntry> scope2 = env2.symbolTable.get(env2.symbolTable.size() -1);
 		
 		//env1(x) if x not in env2
 		for (var varEntry1: scope1.entrySet()) {
