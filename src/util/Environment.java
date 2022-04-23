@@ -27,12 +27,19 @@ public class Environment {
 		this( new ArrayList<>(), -1, 0);
 	}
 	
-	//to clone. quando ci serve?
-//	public Environment(Environment e) {
-//		
-//	}
-	
-	
+	//to clone
+	public Environment(Environment env) {
+		this(new ArrayList<>(), env.nestingLvl, env.offset);
+		
+		for (HashMap<String, STEntry> scope: env.symbolTable) {
+			HashMap<String, STEntry> scopeCopy = new HashMap<>();
+			for (String id: scope.keySet())
+				scopeCopy.put(id, new STEntry(scope.get(id)));
+			//qui di seguito non si deve usare addScope perchè nestingLvl non deve essere incrementato.
+			this.symbolTable.add(scopeCopy);   
+		}
+	}
+
 	//ritorna il nesting level corrente
 	public int getNestingLevel() {
 		return this.nestingLvl;
@@ -93,6 +100,15 @@ public class Environment {
 		this.nestingLvl--;
 		//modifica offset per codgen?
 	}
+
+
+	public void removeFirstEntry (String id) {
+		for (int i = this.symbolTable.size()-1; i>=0; i--)
+			if (this.symbolTable.get(i).containsKey(id)) {
+				this.symbolTable.get(i).remove(id);
+				return;
+			}
+	}
 	
 	
 //	---Per l'analisi degli effetti:
@@ -151,9 +167,9 @@ public class Environment {
 				STEntry entry1 = scope1.get(varId);
 				STEntry entry2 = scope2.get(varId);
 				
-				if (entry2 == null) //se nel secondo ambiente non Ã¨ presente la variabile
+				if (entry2 == null) //se nel secondo ambiente non e' presente la variabile
 					scopeMax.put(varId, entry1);
-				else { //se la variabile Ã¨ presente sia nel primo che nel secondo ambiente
+				else { //se la variabile e' presente sia nel primo che nel secondo ambiente
 					STEntry entryMax = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
 					
 					for (int j=0; j<entry1.getVarEffectList().size(); j++) //per ogni effetto della variabile
@@ -163,7 +179,7 @@ public class Environment {
 				}
 				
 			}
-			envMax.addScope(scopeMax);
+			envMax.symbolTable.add(scopeMax); //non si deve chiamare addScope perchè nestingLvl non deve essere incrementato (è una copia di env1)
 		}
 		
 		return envMax;
@@ -211,8 +227,57 @@ public class Environment {
 	}
 	
 	
-	public Environment updateEnv (Environment env1, Environment env2 ) {
-		//TODO
-		return null;
+	/* env1 = env1a-> env (multi-scope)
+	 * env2 (single scope contenente gli effetti dei parametri attuali passati per puntatore)
+	 * 
+	 * update(env1a->env1b, env2)=
+	 * a--- update(env1b->env1b[u->a], env'')					se env2 = env''[u->a] && u \in env1b
+	 * b--- update(update(env1a, [u->a])->env1b, env'')			se env2 = env''[u->a] && u \notin env1b
+	 * c--- env1a->env1b										se env2 = 0
+	 * */
+	public static Environment updateEnv (Environment env1, Environment env2 ) {
+		
+		if (env1.symbolTable.size() == 0 || env2.symbolTable.size() == 0)
+			return new Environment(env1);
+		
+		Environment updatedEnv;
+		
+		HashMap<String, STEntry> topScope = env1.symbolTable.get(env1.symbolTable.size()-1);
+		HashMap<String, STEntry> env2Scope = env2.symbolTable.get(env2.symbolTable.size()-1);
+		
+		//c
+		if (env2Scope.keySet().isEmpty())
+			return new Environment(env1);
+		
+		Entry<String, STEntry> u = env2Scope.entrySet().stream().findFirst().get();
+		env2.removeFirstEntry(u.getKey()); // env''
+				
+		//a
+		if (topScope.containsKey(u.getKey())) {
+			topScope.put(u.getKey(), u.getValue());
+			updatedEnv = updateEnv(env1, env2);
+		}
+		
+		//b
+		else {
+			//creazione Environment contenente u
+			Environment envU = new Environment();
+			envU.addScope();
+			envU.safeAddEntry(u.getKey(), u.getValue());
+			STEntry entryU = envU.symbolTable.get(0).get(u.getKey());
+			
+			//copia degli effetti
+			for (int i = 0; i< u.getValue().getVarEffectList().size(); i++)
+				entryU.setVarEffect(i, u.getValue().getVarEffect(i));
+			
+			env1.removeScope(); //env1a
+			
+			Environment envTemp = updateEnv(env1, envU);
+			envTemp.addScope(topScope); 
+			updatedEnv = updateEnv(envTemp, env2);	
+		}
+		
+		return updatedEnv;
 	}
+	
 }
