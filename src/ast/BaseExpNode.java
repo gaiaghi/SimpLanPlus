@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exception.TypeErrorException;
 import util.Environment;
@@ -39,9 +40,19 @@ public class BaseExpNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(exp.checkEffects(env));
+
+        //qui bisogna fare la SEQ tra env e tutte le variabili che 
+        //compaiono nell'espressione con effetto RW
+
+        return errors;
 	}
+	
+	public List<LhsNode> getIDsOfVariables() {
+        return exp.getIDsOfVariables();
+    }
 
 	
 	public Node getExpNode() {

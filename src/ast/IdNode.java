@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import exception.MissingDecException;
 import exception.TypeErrorException;
+import util.Effect;
 import util.Environment;
 import util.STEntry;
 import util.SemanticError;
@@ -116,5 +117,8 @@ public class IdNode implements Node {
 		return this.getDerNumDec();
 	}
 	
+	public Effect getEffect(int derNum) {
+		return entry.getVarEffect(derNum);
+	}
 
 }

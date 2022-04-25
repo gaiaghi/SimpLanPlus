@@ -1,10 +1,12 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
+import util.Effect;
 
 public class DerExpNode implements Node {
 
@@ -40,9 +42,27 @@ public class DerExpNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(lhs.checkEffects(env));
+
+        if (lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
+            errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
+        }
+        
+        //qui bisogna fare la SEQ tra env e tutte le variabili che 
+        //campaiono nell'espressione con effetto RW
+
+        return errors;
 	}
+	
+	public List<LhsNode> getIDsOfVariables() {
+		ArrayList<LhsNode> vars = new ArrayList<>();
+
+        vars.add(lhs);
+
+        return vars;
+    }
 	
 	public LhsNode getLhs() {
 		return lhs;

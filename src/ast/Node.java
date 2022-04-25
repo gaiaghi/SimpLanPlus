@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exception.TypeErrorException;
 import util.Environment;
@@ -32,9 +33,13 @@ public interface Node {
 	
 	
 	default int getDereferenceNum(){
-	      return 0;
-	      //int/bool = 0
-	      //pointer to int/bool = 1
-	      //pointer to pointers = >1
-	    }
+		return 0;
+		//int/bool = 0
+		//pointer to int/bool = 1
+		//pointer to pointers = >1
+	}
+	
+	default List<LhsNode> getIDsOfVariables() {
+        return new ArrayList<LhsNode>();
+    }
 }  

@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exception.TypeErrorException;
 
@@ -113,8 +114,24 @@ public class BinExpNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(leftExp.checkEffects(env));
+        errors.addAll(rightExp.checkEffects(env));
+
+        //qui bisogna fare la SEQ tra env e tutte le variabili che 
+        //compaiono nell'espressione con effetto RW
+
+        return errors;
 	}
+	
+	public List<LhsNode> getIDsOfVariables() {
+		ArrayList<LhsNode> vars = new ArrayList<>();
+		
+		vars.addAll(leftExp.getIDsOfVariables());
+		vars.addAll(rightExp.getIDsOfVariables());
+		
+		return vars;
+    }
 
 }

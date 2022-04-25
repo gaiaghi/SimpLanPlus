@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exception.TypeErrorException;
 import parser.SimpLanPlusParser.ExpContext;
@@ -87,5 +88,14 @@ public class CallNode implements Node {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public List<LhsNode> getIDsOfVariables() {
+		ArrayList<LhsNode> vars = new ArrayList<LhsNode>();
+		
+		for(Node par : parlist)
+			vars.addAll(par.getIDsOfVariables());
+		
+		return vars;
+    }
 
 }
