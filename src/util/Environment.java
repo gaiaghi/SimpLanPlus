@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import ast.LhsNode;
 import exception.MissingDecException;
 import exception.MultipleDecException;
 
@@ -72,7 +73,7 @@ public class Environment {
 	
 	public STEntry lookup (String id) throws MissingDecException {
 		for (int i = nestingLvl; i>=0; i--) {
-			HashMap scope = symbolTable.get(i);
+			HashMap<String, STEntry> scope = symbolTable.get(i);
 			if (scope.containsKey(id))
 				return symbolTable.get(i).get(id);
 		}
@@ -278,6 +279,29 @@ public class Environment {
 		}
 		
 		return updatedEnv;
+	}
+	
+	
+	/*
+	 * Input: lista di identificatori presenti in un nodo espressione.
+	 * Output: lista di errori.
+	 * 
+	 * Per ogni identificatore: controlla Seq(env, id->RW)
+	 * */
+	public static ArrayList<SemanticError> checkExpressionEffects(List<LhsNode> vars){
+		ArrayList<SemanticError> errors = new ArrayList<>();
+		
+		for(LhsNode id : vars) {
+			STEntry entry = id.getId().getSTEntry();
+			int derNum = id.getDereferenceNum();
+			Effect effect = entry.getVarEffect(derNum);
+			Effect result = Effect.seq(effect, Effect.READ_WRITE);
+			entry.setVarEffect(derNum, result);
+			if( result == Effect.ERROR )
+				errors.add(new SemanticError("Cannot use "+ id.getId().getId() +" after its deletion"));
+		}
+		
+		return errors;
 	}
 	
 }
