@@ -119,8 +119,7 @@ public class BinExpNode implements Node {
         errors.addAll(leftExp.checkEffects(env));
         errors.addAll(rightExp.checkEffects(env));
 
-        //qui bisogna fare la SEQ tra env e tutte le variabili che 
-        //compaiono nell'espressione con effetto RW
+        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables()));
 
         return errors;
 	}

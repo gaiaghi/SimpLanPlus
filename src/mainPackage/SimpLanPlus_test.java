@@ -33,7 +33,6 @@ public class SimpLanPlus_test{
 		ArrayList<String> soluzioneEsempi = new ArrayList<String>();
 		ArrayList<String> risultatoEsempi = new ArrayList<String>();
 		
-		//String fileName = "prova.simplanplus";
 		
 		
 		try  

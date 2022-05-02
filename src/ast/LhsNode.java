@@ -94,7 +94,7 @@ public class LhsNode implements Node {
         if( lhs != null )
         	return lhs.getDereferenceNum() + 1;
         else
-        	return 1;
+        	return 0;
     }
 	
 	public void setLhsDerNum(int n) {

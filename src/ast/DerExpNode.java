@@ -50,8 +50,7 @@ public class DerExpNode implements Node {
             errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
         }
         
-        //qui bisogna fare la SEQ tra env e tutte le variabili che 
-        //campaiono nell'espressione con effetto RW
+        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables()));
 
         return errors;
 	}
