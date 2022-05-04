@@ -81,8 +81,26 @@ public class IteNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(cond.checkEffects(env));
+        
+        if (elseStm != null) {
+        	Environment thenEnv = new Environment(env);
+        	Environment elseEnv = new Environment(env);
+        	/* calcolo l'ambiente relativo al branch then */
+        	errors.addAll(thenStm.checkEffects(thenEnv));
+        	/* calcolo l'ambiente relativo al branch else*/
+        	errors.addAll(elseStm.checkEffects(elseEnv));
+        	
+        	Environment maxEnv = Environment.maxEnv(thenEnv, elseEnv);
+        	env = new Environment(maxEnv); //è corretto???? CONTROLLA
+        }
+        else {
+        	errors.addAll(thenStm.checkEffects(env));
+        }
+        
+		return errors;
 	}
 	
 	public void setInFunction(boolean b){

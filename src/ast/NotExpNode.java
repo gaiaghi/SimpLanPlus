@@ -47,7 +47,7 @@ public class NotExpNode implements Node {
 
         errors.addAll(exp.checkEffects(env));
 
-        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables()));
+        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
 
         return errors;
 	}

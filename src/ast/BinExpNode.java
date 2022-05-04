@@ -119,7 +119,7 @@ public class BinExpNode implements Node {
         errors.addAll(leftExp.checkEffects(env));
         errors.addAll(rightExp.checkEffects(env));
 
-        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables()));
+        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
 
         return errors;
 	}

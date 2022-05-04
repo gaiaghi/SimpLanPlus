@@ -44,8 +44,7 @@ public class RetLNode implements Node{
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		return ret.checkEffects(env);
 	}
 	
 	public void setInFunction(boolean b) {

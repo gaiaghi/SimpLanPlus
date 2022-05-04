@@ -45,7 +45,7 @@ public class CallExpNode implements Node {
 
         errors.addAll(call.checkEffects(env));
 
-        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables()));
+        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
 
         return errors;
 	}

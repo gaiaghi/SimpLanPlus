@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import exception.TypeErrorException;
-import parser.SimpLanPlusParser.ExpContext;
 import util.Environment;
 import util.SemanticError;
 import util.SimpLanPlusLib;

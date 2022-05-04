@@ -50,7 +50,7 @@ public class DerExpNode implements Node {
             errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
         }
         
-        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables()));
+        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
 
         return errors;
 	}

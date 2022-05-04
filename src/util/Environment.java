@@ -288,20 +288,29 @@ public class Environment {
 	 * 
 	 * Per ogni identificatore: controlla Seq(env, id->RW)
 	 * */
-	public static ArrayList<SemanticError> checkExpressionEffects(List<LhsNode> vars){
+	public static ArrayList<SemanticError> checkExpressionEffects(List<LhsNode> vars, Environment env){
 		ArrayList<SemanticError> errors = new ArrayList<>();
 		
 		for(LhsNode id : vars) {
-			STEntry entry = id.getId().getSTEntry();
-			int derNum = id.getDereferenceNum();
-			Effect effect = entry.getVarEffect(derNum);
-			Effect result = Effect.seq(effect, Effect.READ_WRITE);
-			entry.setVarEffect(derNum, result);
-			if( result == Effect.ERROR )
-				errors.add(new SemanticError("Cannot use "+ id.getId().getId() +" after its deletion"));
+			
+			try {
+				STEntry entry = env.lookup(id.getId().getId());
+				int derNum = id.getDereferenceNum();
+				Effect effect = entry.getVarEffect(derNum);
+				Effect result = Effect.seq(effect, Effect.READ_WRITE);
+				entry.setVarEffect(derNum, result);
+				if( result == Effect.ERROR )
+					errors.add(new SemanticError("Cannot use "+ id.getId().getId() +" after its deletion"));
+			}
+			catch(MissingDecException e) {
+				errors.add(new SemanticError("Missing declaration: "+id.getId().getId()));
+			}
+			
 		}
 		
 		return errors;
 	}
+	
+	
 	
 }
