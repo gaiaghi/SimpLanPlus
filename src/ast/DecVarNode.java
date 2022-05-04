@@ -34,7 +34,7 @@ public class DecVarNode implements Node{
 			expString = "";
 		
 		return indent +"Var: " +id.getId()
-		+"\n" +type.toPrint(indent +"  ") 
+		+"\n" +type.toPrint(indent +"  ")
 		+ expString;
 	}
 	

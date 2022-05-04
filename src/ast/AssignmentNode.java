@@ -3,7 +3,9 @@ package ast;
 import java.util.ArrayList;
 
 import exception.TypeErrorException;
+import util.Effect;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 
@@ -93,8 +95,21 @@ public class AssignmentNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> res = new ArrayList<>();
+		
+		res.addAll(lhs.checkEffects(env));
+		res.addAll(exp.checkEffects(env));
+		
+		STEntry lhsEntry = lhs.getId().getSTEntry();
+		
+	
+		// if variable statuts = ERROR
+		
+		if ( lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.ERROR)) { //-1 perche' getDereferenceNum parte da 1
+		//TODO	
+		}
+	
+		return res;
 	}
 	
 	

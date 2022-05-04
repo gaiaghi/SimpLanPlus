@@ -156,8 +156,21 @@ public class BlockNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> errors = new ArrayList<>();
+		
+		if(! isFunBody)
+			env.addScope();
+		
+		for (Node dec: declarations)
+			errors.addAll(dec.checkEffects(env));
+		
+		for (Node stm: statements)
+			errors.addAll(stm.checkEffects(env));
+		
+		if(! isFunBody)
+			env.removeScope();
+		
+		return errors;
 	}
 
 	

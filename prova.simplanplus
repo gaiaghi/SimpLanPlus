@@ -59,7 +59,7 @@
 //n11
 //OK
 //#n11#OK
-//{void f(int x) {print x+1;} f(1);}
+{void f(int x) {print x+1;} f(1);}
 
 
 //n12
@@ -117,7 +117,7 @@
 //n20
 // effetti?
 //#n20#OK
-{^^int z; int x; x=3; z^^=2;}
+//{^^int z; int x; x=3; z^^=2;}
 
 
 //n21

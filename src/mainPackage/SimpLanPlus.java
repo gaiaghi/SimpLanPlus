@@ -115,8 +115,19 @@ public class SimpLanPlus{
 			System.err.println("Type error: " +e.getMessage());
 			System.exit(1);
 		}
+	
 		
 		
+		//checking effect errors
+//		ArrayList<SemanticError> effectsErrors = ast.checkEffects(env);
+//		if(effectsErrors.size()>0){
+//            System.err.println("There are " +effectsErrors.size()+ " errors from the effects analysis:");
+//            
+//            for(SemanticError e : effectsErrors)
+//				System.err.println("\t" + e);
+//			System.exit(1);
+//        }
+
 		
 		System.out.println("Visualizing AST...");
 		System.out.println(ast.toPrint(""));

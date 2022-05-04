@@ -29,11 +29,13 @@ public class DecFunNode implements Node {
 	@Override
 	public String toPrint(String indent) {
 		String argList = "";
+		String status = "";
 		if( args.size() > 0 )
 		{
 			//argList = "\n";
 			for (int i = 0; i<  this.args.size(); i++)
 				argList = argList +"\n" +this.args.get(i).toPrint(indent +"  ");
+			status = "\n  " + indent +"STEntry: Arg Status = " + this.id.getSTEntry().getParEffectList();
 		}
 		
 		String dec = "";
@@ -55,7 +57,7 @@ public class DecFunNode implements Node {
 		}
 		
 		return indent +"Fun: " +id.getId() +"\n" 
-			+type.toPrint(indent +"  ") +argList +dec +body;
+			+type.toPrint(indent +"  ") +argList +status +dec +body;
 	}
 	
 	@Override

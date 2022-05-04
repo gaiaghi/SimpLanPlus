@@ -65,6 +65,15 @@ public class STEntry {
 	
 	public void setType(Node type) {
 		this.type = type;
+		
+		if (type instanceof ArrowTypeNode ) // init effetti degli argomenti
+			for (Node par: ((ArrowTypeNode)type).getParList()) {
+				List<Effect> effects = new ArrayList<>();    	
+				for (int i=0; i<= par.getDereferenceNum(); i++)  
+					effects.add(new Effect(Effect.INITIALIZED));
+				
+				this.parEffects.add(effects);
+			}
 	}
 	
 	public Node getType() {
@@ -98,14 +107,17 @@ public class STEntry {
 	public String toPrint(String indent) {
 		//da aggiungere stato degli effetti
 		
+		String status = "";
 		String str = indent + "STEntry: Nesting Level = " +this.nestingLvl +"\n";
-		if(type instanceof ArrowTypeNode) 
+		if(type instanceof ArrowTypeNode)
 			str = str +indent +"STEntry: Type = \n" +this.type.toPrint(indent +"  ");
-		else
+		else {
 			str = str +indent +"STEntry: Type = " +this.type.toPrint("");
-		
-		str = str +"\n" +indent +"STEntry: Offset = " +this.offset
-				  +"\n" +indent +"STEntry: Status = "+ this.varEffects;
+			status = "\n" +indent +"STEntry: Status = "+ this.varEffects; 
+		}
+			
+		str = str +"\n" +indent +"STEntry: Offset = " +this.offset + status;
+				  
 		
 		return str;
 	}

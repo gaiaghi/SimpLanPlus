@@ -30,7 +30,7 @@ public class LhsNode implements Node {
 		String str = indent +"Id: " +this.id.getId();
 		
 		
-		for(int i=0; i < this.getDereferenceNum()-1; i++)
+		for(int i=0; i < this.getDereferenceNum(); i++)
 			str = str + "^";
 		str = str + "\n" +this.id.getSTEntry().toPrint(indent +"  ");
 		
@@ -90,7 +90,7 @@ public class LhsNode implements Node {
 	}
 	
 	
-	public int getDereferenceNum() {
+	public int getDereferenceNum() { //num di utilizzo
         if( lhs != null )
         	return lhs.getDereferenceNum() + 1;
         else
