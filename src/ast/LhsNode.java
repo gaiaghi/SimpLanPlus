@@ -2,10 +2,9 @@ package ast;
 
 import java.util.ArrayList;
 
-import exception.MissingDecException;
 import exception.TypeErrorException;
+import util.Effect;
 import util.Environment;
-import util.STEntry;
 import util.SemanticError;
 
 public class LhsNode implements Node {
@@ -85,8 +84,18 @@ public class LhsNode implements Node {
 	
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
+		
+		if( lhs == null )
+			errors.addAll(id.checkEffects(env));
+		else {
+			errors.addAll(lhs.checkEffects(env));
+			
+			if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) 
+	            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW."));
+		}
+		
+		return errors;
 	}
 	
 	

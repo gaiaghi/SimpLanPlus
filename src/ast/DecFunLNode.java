@@ -42,8 +42,7 @@ public class DecFunLNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		return decFun.checkEffects(env);
 	}
 
 }

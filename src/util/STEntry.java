@@ -19,7 +19,6 @@ public class STEntry {
 	public STEntry (int nestingLvl, int offset) {
 		this.nestingLvl = nestingLvl;
 		this.offset = offset; 
-		
 		this.varEffects = new ArrayList<>();
 		this.parEffects = new ArrayList<>();
 	}
@@ -103,6 +102,15 @@ public class STEntry {
 		this.varEffects.set(level, e);
 	}
 	
+	public void setParEffect(int index, int level, Effect e) {
+		this.parEffects.get(index).set(level, e);
+	}
+	
+	public void setParEffectList(List<List<Effect>> l) {
+		this.parEffects = l;
+	}
+	
+	
 	//sempre per la stampa dell'ast (anche in simplan)
 	public String toPrint(String indent) {
 		//da aggiungere stato degli effetti
@@ -125,6 +133,11 @@ public class STEntry {
 	//stampa del singolo entry
 	public String toString(){
 		return toPrint("");
+	}
+	
+	
+	public int getSizeParEffects(){
+		return parEffects.size();
 	}
 
 	//da aggiungere?

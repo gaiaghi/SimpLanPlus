@@ -2,9 +2,12 @@ package ast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import exception.MissingDecException;
 import exception.MultipleDecException;
 import exception.TypeErrorException;
+import util.Effect;
 import util.Environment;
 import util.STEntry;
 import util.SemanticError;
@@ -136,11 +139,113 @@ public class DecFunNode implements Node {
         return res;		
 	}
 
-		
+	
+	/*
+	 * Sigma_0 = [x1 -> init, y1 -> init]
+	 * {Sigma_FUN, Sigma_0[f -> Sigma_0 ->Sigma_1]} |- s {Sigma_FUN, Sigma_1[f -> Sigma_0 ->Sigma_1]}
+	 * ------------------------------------------------------------------------------------------------
+	 * Sigma |- f( var T1 x1, T1' y1) s : Sigma[f -> Sigma_0 ->Sigma_1]
+	 * 
+	 * */
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
+		
+		/* Aggiungo all'ambiente la entry relativa alla funzione, 
+		 * ho bisogno di questa entry perchè sono ammesse le chiamate 
+		 * ricorsive 
+		 **/
+		try {
+			env.addEntry(id.getId(), id.getSTEntry());
+		} catch (MultipleDecException e) {
+			errors.add(new SemanticError("Fun id "+id.getId() +" already declared"));
+			return errors;
+		}
+		
+		
+		/* creo l'ambiente {Sigma_FUN, Sigma_0[f -> Sigma_0 ->Sigma_1]}.
+		 * - faccio una copia dell'ambiente corrente, e
+		 * - creo un nuovo scope per i parametri della funzione.
+		 * 
+		 * creo la lista degli effetti dei parametri sigma_0
+		 **/
+		Environment env_0 = new Environment(env);
+		env_0.addScope();
+		//Environment env_0 = new Environment();
+		//env_0.addEntry(id.getId(), id.getSTEntry());
+		/*QUI sopra! ci vuole un copia dell'ambiente o un ambiente nuovo (con solo la entry della funzione)? 
+		 * nella regola c'è scritto che non dovrei avere accesso alle variabili globali
+		 * */
+		List<List<Effect>> sigma_0 = new ArrayList<List<Effect>>(args.size());
+		for( Node a : args ) {
+			// nuova copia della entra del paramentro
+			IdNode arg = ((ArgNode) a).getId(); 
+			STEntry newArgEntry = new STEntry(arg.getSTEntry());
+			
+			// inserisco la entry del parametro nell'ambiente
+			try {
+				env_0.addEntry(arg.getId(), newArgEntry);
+			} catch (MultipleDecException e) {
+				errors.add(new SemanticError("Arg id "+arg.getId() +" already declared"));
+				return errors;
+			}
+			
+			List<Effect> argEffects = new ArrayList<Effect>();
+			for(int i=0; i<newArgEntry.getSizeParEffects(); i++) {
+				argEffects.add(new Effect(Effect.INITIALIZED));
+			}
+			sigma_0.add(argEffects);
+		}
+		
+		/*
+		 * Aggiungo la entry della funzione nel nuovo scope
+		 * */
+		STEntry newFunEntry = new STEntry(id.getSTEntry());
+		try {
+			env_0.addEntry(id.getId(), newFunEntry);
+		} catch (MultipleDecException e) {
+			errors.add(new SemanticError("Fun id "+id.getId() +" already declared"));
+			return errors;
+		}
+		
+		
+		/*
+		 * Calcolo del punto fisso
+		 * */
+		List<List<Effect>> sigma_1 = new ArrayList<List<Effect>>(args.size());
+		boolean stop = false;
+		while( !stop ) {
+			// setto gli effetti dei parametri della funzione
+			newFunEntry.setParEffectList(sigma_0);
+			
+			// valuto gli effetti nel corpo della funzione
+			errors.addAll(block.checkEffects(env_0));
+			
+			// ricavo gli effetti ottenuti dopo la valutazione del corpo della funzione
+			sigma_1 = newFunEntry.getParEffectList();
+			
+			// controllo terminazione punto fisso (sigma_0 == sigma_1)
+			if( sigma_0.equals(sigma_1) )
+				stop = true;
+			else
+				sigma_0 = sigma_1;
+		}
+		
+		
+		// chiudi lo scope dopo il calcolo del punto fisso
+		env_0.removeScope();
+		
+		
+		// setto gli effetti della funzione nell'ambiente originale
+		try {
+			env.lookup(id.getId()).setParEffectList(sigma_1);
+		} catch (MissingDecException e) {
+			errors.add(new SemanticError("Missing declaration: "+id.getId()));
+			return errors;
+		}
+		
+		return errors;
 	}
 	
 

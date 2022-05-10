@@ -75,7 +75,8 @@ public class Environment {
 		for (int i = nestingLvl; i>=0; i--) {
 			HashMap<String, STEntry> scope = symbolTable.get(i);
 			if (scope.containsKey(id))
-				return symbolTable.get(i).get(id);
+				return scope.get(id);
+				//return symbolTable.get(i).get(id);
 		}
 		
 		throw new MissingDecException("Missing declaration: "+id);
