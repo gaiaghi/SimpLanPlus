@@ -50,7 +50,7 @@ public class DeletionNode implements Node{
 		ArrayList<SemanticError> res = new ArrayList<>();
 
 		// si mettono a delete tutti gli oggetti della catena di puntatori
-		for (int i = 1; i < id.getDerNumDec(); i++) 
+		for (int i = 1; i <= id.getDerNumDec(); i++) 
 			Effect.seq(id.getSTEntry().getVarEffect(i), Effect.DELETED);
 		
 		if (id.getSTEntry().getVarEffect(0) == Effect.ERROR)
