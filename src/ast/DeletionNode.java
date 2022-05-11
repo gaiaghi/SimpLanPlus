@@ -3,6 +3,7 @@ package ast;
 import java.util.ArrayList;
 
 import exception.TypeErrorException;
+import util.Effect;
 import util.Environment;
 import util.SemanticError;
 
@@ -45,8 +46,17 @@ public class DeletionNode implements Node{
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<SemanticError> res = new ArrayList<>();
+
+		// si mettono a delete tutti gli oggetti della catena di puntatori
+		for (int i = 1; i < id.getDerNumDec(); i++) 
+			Effect.seq(id.getSTEntry().getVarEffect(i), Effect.DELETED);
+		
+		if (id.getSTEntry().getVarEffect(0) == Effect.ERROR)
+			res.add(new SemanticError("Variable "+ id.getId() +" was already deleted."));
+		
+		return res;
 	}
 
 }

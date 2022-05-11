@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import exception.MultipleDecException;
 import exception.TypeErrorException;
+import util.Effect;
 import util.Environment;
 import util.STEntry;
 import util.SemanticError;
@@ -117,8 +118,15 @@ public class DecVarNode implements Node{
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SemanticError> res = new ArrayList<>();
+		
+		if (exp != null) {
+			res.addAll(exp.checkEffects(env));
+			id.getSTEntry().setVarEffect(0, new Effect(Effect.READ_WRITE));
+		}
+		//niente addEntry perchè lo abbiamo fatto in checkSemantics?
+		
+		return res;
 	}
 	
 

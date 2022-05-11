@@ -102,13 +102,30 @@ public class AssignmentNode implements Node {
 		
 		STEntry lhsEntry = lhs.getId().getSTEntry();
 		
-	
-		// if variable statuts = ERROR
+		//env seq[lhs = RW]
+		Effect newEffect = Effect.seq(lhsEntry.getVarEffect(lhs.getDereferenceNum()), Effect.READ_WRITE);
+		lhsEntry.setVarEffect(lhs.getDereferenceNum(), newEffect);
 		
-		if ( lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.ERROR)) { //-1 perche' getDereferenceNum parte da 1
-		//TODO	
+		// if variable statuts = ERROR
+		if ( lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.ERROR)) {
+			res.add(new SemanticError("Variable "+lhs.getId().getId()+" cannot be used after deletion."));
 		}
-	
+		//assegnamento di puntatori: copio gli effetti di exp in lhs
+		else if (exp instanceof DerExpNode) {
+			int lhsDer = lhs.getDereferenceNum();
+			int maxDer = lhs.getId().getSTEntry().getVarEffectList().size();
+
+			DerExpNode derNode = ((DerExpNode) exp);
+			int expDerNum = derNode.getLhs().getDereferenceNum();
+			
+			for (int i = lhsDer, j = expDerNum; i< maxDer; i++, j++) {
+				//recupero l'effetto da exp e lo copio in lhs
+				Effect expEffect = derNode.getLhs().getId().getSTEntry().getVarEffect(j); 
+				lhs.getId().getSTEntry().setVarEffect(i, expEffect);
+			}
+		}
+		
+		
 		return res;
 	}
 	

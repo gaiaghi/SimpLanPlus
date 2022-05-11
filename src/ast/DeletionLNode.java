@@ -45,8 +45,7 @@ public class DeletionLNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-		// TODO Auto-generated method stub
-		return null;
+		return deletion.checkEffects(env);
 	}
 
 }
