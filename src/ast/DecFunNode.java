@@ -179,7 +179,7 @@ public class DecFunNode implements Node {
 		 * */
 		List<List<Effect>> sigma_0 = new ArrayList<List<Effect>>(args.size());
 		for( Node a : args ) {
-			// nuova copia della entra del paramentro
+			// nuova copia della entry del paramentro
 			IdNode arg = ((ArgNode) a).getId(); 
 			STEntry newArgEntry = new STEntry(arg.getSTEntry());
 			
@@ -192,9 +192,10 @@ public class DecFunNode implements Node {
 			}
 			
 			List<Effect> argEffects = new ArrayList<Effect>();
-			for(int i=0; i<newArgEntry.getSizeParEffects(); i++) {
-				argEffects.add(new Effect(Effect.INITIALIZED));
+			for(int i=0; i<newArgEntry.getSizeVarEffects(); i++) {
+				argEffects.add(new Effect(Effect.INITIALIZED));		//Effect.INITIALIZED oppure Effect.RW??
 			}
+			newArgEntry.setVarEffectList(argEffects);
 			sigma_0.add(argEffects);
 		}
 		

@@ -59,4 +59,32 @@ public class ArrowTypeNode implements Node {
 		return new ArrayList<SemanticError>();
 	}
 
+	
+	public ArrayList<Integer> getIndexesPointerPar(){
+		
+		ArrayList<Integer> indexes = new ArrayList<Integer>();
+		
+		for( int i = 0; i < parlist.size(); i ++ ) {
+			Node par = parlist.get(i);
+			if( par instanceof PointerTypeNode )
+				indexes.add(i);
+		}
+		
+		return indexes;
+	}
+	
+	
+	public ArrayList<Integer> getIndexesNotPointerPar(){
+		
+		ArrayList<Integer> indexes = new ArrayList<Integer>();
+		
+		for( int i = 0; i < parlist.size(); i ++ ) {
+			Node par = parlist.get(i);
+			if( ! (par instanceof PointerTypeNode) )
+				indexes.add(i);
+		}
+		
+		return indexes;
+	}
+	
 }

@@ -106,6 +106,10 @@ public class STEntry {
 		this.parEffects.get(index).set(level, e);
 	}
 	
+	public void setVarEffectList(List<Effect> l) {
+		this.varEffects = l;
+	}
+	
 	public void setParEffectList(List<List<Effect>> l) {
 		this.parEffects = l;
 	}
@@ -136,8 +140,23 @@ public class STEntry {
 	}
 	
 	
-	public int getSizeParEffects(){
-		return parEffects.size();
+	public int getSizeVarEffects(){
+		return varEffects.size();
+	}
+	
+	
+	public ArrayList<SemanticError> checkEffectError(String id){
+		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
+		
+		if( varEffects.size() > 0 ) {
+			for( int i = 0; i < varEffects.size(); i ++ ) {
+				if( varEffects.get(i).equals(Effect.ERROR) )
+					errors.add(new SemanticError("Error effect " +id));
+			}
+		}
+		
+		
+		return errors;
 	}
 
 	//da aggiungere?
