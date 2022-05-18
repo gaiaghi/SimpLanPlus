@@ -190,7 +190,8 @@ public class Environment {
 	
 	public static Environment parEnv (Environment env1, Environment env2 ) {
 		
-		Environment envPar = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
+		//Environment envPar = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
+		Environment envPar = new Environment();
 		envPar.addScope();
 		
 		HashMap<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size() -1);
@@ -304,7 +305,7 @@ public class Environment {
 					errors.add(new SemanticError("Cannot use "+ id.getId().getId() +" after its deletion"));
 			}
 			catch(MissingDecException e) {
-				errors.add(new SemanticError("Missing declaration: "+id.getId().getId()));
+				errors.add(new SemanticError("Environment Missing declaration: "+id.getId().getId()));
 			}
 			
 		}

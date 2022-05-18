@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -18,6 +19,7 @@ import exception.TypeErrorException;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 import parser.SPPErrorListener;
 
@@ -103,7 +105,6 @@ public class SimpLanPlus{
 		}
 		
 		
-		
 		//type-checking bottom-up 
 		try {
 			Node type = ast.typeCheck(); 
@@ -119,14 +120,14 @@ public class SimpLanPlus{
 		
 		
 		//checking effect errors
-//		ArrayList<SemanticError> effectsErrors = ast.checkEffects(env);
-//		if(effectsErrors.size()>0){
-//            System.err.println("There are " +effectsErrors.size()+ " errors from the effects analysis:");
-//            
-//            for(SemanticError e : effectsErrors)
-//				System.err.println("\t" + e);
-//			System.exit(1);
-//        }
+		ArrayList<SemanticError> effectsErrors = ast.checkEffects(env);
+		if(effectsErrors.size()>0){
+            System.err.println("There are " +effectsErrors.size()+ " errors from the effects analysis:");
+            
+           for(SemanticError e : effectsErrors)
+			System.err.println("\t" + e);
+			System.exit(1);
+        }
 
 		
 		System.out.println("Visualizing AST...");

@@ -1,9 +1,11 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import exception.TypeErrorException;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 
@@ -163,6 +165,12 @@ public class BlockNode implements Node {
 		
 		for (Node dec: declarations)
 			errors.addAll(dec.checkEffects(env));
+		
+		/*System.out.println("BlockNode: "+errors);
+		System.out.println("BlockNode env:");
+		for( Entry<String,STEntry> entryVar : env.getCurrentScope().entrySet() ) {
+			System.out.println("	"+entryVar.getKey() );
+		}*/
 		
 		for (Node stm: statements)
 			errors.addAll(stm.checkEffects(env));

@@ -116,6 +116,8 @@ public class BinExpNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 
+		
+		
         errors.addAll(leftExp.checkEffects(env));
         errors.addAll(rightExp.checkEffects(env));
 

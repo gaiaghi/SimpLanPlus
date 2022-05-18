@@ -80,6 +80,10 @@ public class CallNode implements Node {
 			//controllo parametri
 			for(Node par : parlist)
 				res.addAll(par.checkSemantics(env));
+			
+			
+			entry = id.getSTEntry();
+			
 		}
 		
 		return res;
@@ -144,7 +148,7 @@ public class CallNode implements Node {
 		// (4) sulle variabili che compaiono in e_i si fa la SEQ con RW
 		Environment sigma_2 = new Environment(env);
 		
-		TreeSet<LhsNode> vars = new TreeSet<>();
+		ArrayList<LhsNode> vars = new ArrayList<>();
 		for( int i : y_indexes ) {
 			vars.addAll(parlist.get(i).getIDsOfVariables());
 		}// ci possono essere delle variabili duplicate in vars? SI, potresti usare TreeSet
@@ -155,7 +159,7 @@ public class CallNode implements Node {
 			try {
 				idEntry = sigma_2.lookup(idvar);
 			} catch (MissingDecException e) {
-				errors.add(new SemanticError("Missing declaration: "+idvar));
+				errors.add(new SemanticError("CallNode 1: Missing declaration: "+idvar));
 				return errors;
 			}
 			
@@ -167,10 +171,10 @@ public class CallNode implements Node {
 			for( int i = 0; i < varEffect.size(); i ++ ) {
 				resultSeq.add( Effect.seq(varEffect.get(i), Effect.READ_WRITE) );
 				// se resultSeq.get(i)=ERROR	devo dare errore? penso di si
-				if( resultSeq.get(i).equals(Effect.ERROR) ) {
-					errors.add(new SemanticError("Effect error on CallNode (4)"));
-					return errors;
-				}
+				//if( resultSeq.get(i).equals(Effect.ERROR) ) {
+				//	errors.add(new SemanticError("Effect error on CallNode (4)"));
+				//	return errors;
+				//}
 			}
 			newEntry.setVarEffectList(resultSeq);
 			sigma_2.safeAddEntry(idvar, newEntry);
@@ -202,7 +206,7 @@ public class CallNode implements Node {
 					newEntry = new STEntry(env.lookup(varX.getId().getId()));
 					 effettoParAttuale = newEntry.getVarEffectList();
 				} catch (MissingDecException e) {
-					errors.add(new SemanticError("Missing declaration: "+varX.getId().getId()));
+					errors.add(new SemanticError("CallNode 1: Missing declaration: "+varX.getId().getId()));
 					return errors;
 				}
 				
@@ -210,10 +214,10 @@ public class CallNode implements Node {
 				for( int j = 0; j < effettoParAttuale.size(); j ++ ) {
 					resultSeq.add( Effect.seq(effettoParAttuale.get(j), effettoParFormale.get(j)) );
 					// se resultSeq.get(i)=ERROR	devo dare errore? penso di si
-					if( resultSeq.get(i).equals(Effect.ERROR) ) {
-						errors.add(new SemanticError("Effect error on CallNode (5)"));
-						return errors;
-					}
+					//if( resultSeq.get(i).equals(Effect.ERROR) ) {
+					//	errors.add(new SemanticError("Effect error on CallNode (5)"));
+					//	return errors;
+					//}
 				}
 				newEntry.setVarEffectList(resultSeq);
 				tmp_env.safeAddEntry(varX.getId().getId(), newEntry);	// ci potrebbero essere dublicati di varX.getId().getId()?

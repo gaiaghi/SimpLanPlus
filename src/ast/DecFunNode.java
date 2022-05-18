@@ -170,7 +170,7 @@ public class DecFunNode implements Node {
 		 * 
 		 * creo la lista degli effetti dei parametri sigma_0
 		 **/
-		Environment env_0 = new Environment(env);
+		Environment env_0 = new Environment(env); //copio il vecchio ambiente per avere accesso alle variabili globali
 		env_0.addScope();
 		//Environment env_0 = new Environment();
 		//env_0.addEntry(id.getId(), id.getSTEntry());
@@ -193,7 +193,7 @@ public class DecFunNode implements Node {
 			
 			List<Effect> argEffects = new ArrayList<Effect>();
 			for(int i=0; i<newArgEntry.getSizeVarEffects(); i++) {
-				argEffects.add(new Effect(Effect.INITIALIZED));		//Effect.INITIALIZED oppure Effect.RW??
+				argEffects.add(new Effect(Effect.READ_WRITE));		//Effect.INITIALIZED oppure Effect.RW??
 			}
 			newArgEntry.setVarEffectList(argEffects);
 			sigma_0.add(argEffects);
@@ -219,7 +219,6 @@ public class DecFunNode implements Node {
 		while( !stop ) {
 			// setto gli effetti dei parametri della funzione
 			newFunEntry.setParEffectList(sigma_0);
-			
 			// valuto gli effetti nel corpo della funzione
 			errors.addAll(block.checkEffects(env_0));
 			
@@ -242,7 +241,7 @@ public class DecFunNode implements Node {
 		try {
 			env.lookup(id.getId()).setParEffectList(sigma_1);
 		} catch (MissingDecException e) {
-			errors.add(new SemanticError("Missing declaration: "+id.getId()));
+			errors.add(new SemanticError("DecFunNode: Missing declaration: "+id.getId()));
 			return errors;
 		}
 		

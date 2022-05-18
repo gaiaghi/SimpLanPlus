@@ -42,7 +42,7 @@
 //n8
 //OK
 //#n8#OK
-//{int f(int x) {print x+1; {x=1;if(x==1) return x;} return x+1; } f(1);}
+//{int f(int x) {print x+1; {x=1; if(x==1) return x;} return 1; } f(1);}
 
 
 //n9 
@@ -59,7 +59,7 @@
 //n11
 //OK
 //#n11#OK
-{void f(int x) {print x+1;} f(1);}
+//{void f(int x) {print x+1;} f(1);}
 
 
 //n12
@@ -115,8 +115,7 @@
 
 
 //n20
-// effetti?
-//#n20#OK
+//#n20#ERR
 //{^^int z; int x; x=3; z^^=2;}
 
 
@@ -262,6 +261,12 @@
 //OK
 //#n46#OK
 //{^^int n = new ^int; n^= new int; n^^=3; print(n^^-7);}
+
+
+//47
+//ERR????
+//#n47#ERR
+//{int f(int a){ return a;} int x; f(x); print x;}
 
 //p01
 //OK

@@ -3,8 +3,10 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
+import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 import util.Effect;
 
@@ -45,12 +47,20 @@ public class DerExpNode implements Node {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(lhs.checkEffects(env));
-
-        if (lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
-            errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
-        }
         
-        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
+        
+        
+        try {
+			STEntry entry = env.lookup(lhs.getId().getId());
+			
+			if (entry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
+	            errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
+	        }
+		} catch (MissingDecException e) {
+			System.out.println("catch2");
+		}
+         
+        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));     
 
         return errors;
 	}

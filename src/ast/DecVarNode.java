@@ -3,6 +3,7 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import exception.MissingDecException;
 import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Effect;
@@ -120,11 +121,24 @@ public class DecVarNode implements Node{
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
+		STEntry entry = id.getSTEntry();
+		
 		if (exp != null) {
 			res.addAll(exp.checkEffects(env));
-			id.getSTEntry().setVarEffect(0, new Effect(Effect.READ_WRITE));
+			entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
+			/*try {
+				entry = env.lookup(id.getId());
+				entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
+			} catch (MissingDecException e) {
+				System.out.println("catch 3");
+			}*/
 		}
-		//niente addEntry perchè lo abbiamo fatto in checkSemantics?
+		
+		try {
+			env.addEntry(id.getId(), entry);
+		} catch (MultipleDecException e) {
+			System.out.println("catch 4");
+		}
 		
 		return res;
 	}
