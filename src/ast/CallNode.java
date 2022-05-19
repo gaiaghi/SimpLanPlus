@@ -120,6 +120,11 @@ public class CallNode implements Node {
 		
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
+		// non è detto che serva
+		//controllo parametri
+		for(Node par : parlist)
+			errors.addAll(par.checkEffects(env));
+		
 		// (1) recupero il tipo della funzione f dalla entry
 		ArrowTypeNode funType = (ArrowTypeNode) entry.getType();
 		

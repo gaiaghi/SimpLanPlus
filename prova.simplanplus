@@ -252,21 +252,35 @@
 //#n44#ERR
 //{int f(int x) {^int y = new int;  ^bool b= y;}}
 
-//45
+//n45
 //Type error: not valid assignment between pointer  and new expression
 //#n45#ERR
 //{^^bool x = new bool;}
 
-//46
+//n46
 //OK
 //#n46#OK
 //{^^int n = new ^int; n^= new int; n^^=3; print(n^^-7);}
 
 
-//47
+//n47
 //ERR????
 //#n47#ERR
 //{int f(int a){ return a;} int x; f(x); print x;}
+
+//n48
+// dovrebbe dare errore perchè Effect(z)=init, ma non è così.
+// aggiungendo in CallNode.checkEffects un for che fa la checkEffects di tutti i parametri, funziona.
+//#n48#ERR
+//{void f(int x){ print x;} int y=2; int z; f(y+z); }
+
+//n49
+// la prima "print" dovrebbe dare errore, ma non è così.
+// l'effetto di x è sempre RW
+// in AssignmentNode la entry viene presa dall'ambiente da lhsNode. 
+// prendendo la entry dall'ambiente funziona
+//#n49#ERR
+{int x; void fun(){x=1;} print x; fun(); print x;}
 
 //p01
 //OK

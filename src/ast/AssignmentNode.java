@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
+import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Effect;
 import util.Environment;
@@ -100,7 +102,15 @@ public class AssignmentNode implements Node {
 		res.addAll(lhs.checkEffects(env));
 		res.addAll(exp.checkEffects(env));
 		
-		STEntry lhsEntry = lhs.getId().getSTEntry();
+		//STEntry lhsEntry = lhs.getId().getSTEntry();
+		
+		STEntry lhsEntry = null;
+		try {
+			lhsEntry = env.lookup(lhs.getId().getId());
+		} catch (MissingDecException e1) {
+			System.out.println("AssignmentNode: MissingDecException "+lhs.getId().getId());
+		}
+		
 		
 		//env seq[lhs = RW]
 		Effect newEffect = Effect.seq(lhsEntry.getVarEffect(lhs.getDereferenceNum()), Effect.READ_WRITE);
