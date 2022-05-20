@@ -147,19 +147,13 @@ public class STEntry {
 	
 	public ArrayList<SemanticError> checkEffectError(String id){
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
-		System.out.println("checkEffectError");
 		
 		if( varEffects.size() > 0 ) {
-
-			System.out.println("checkEffectError - for");
 			for( int i = 0; i < varEffects.size(); i ++ ) {
-
-				System.out.println("checkEffectError - if - "+id+" "+varEffects.get(i));
 				if( varEffects.get(i).equals(Effect.ERROR) )
 					errors.add(new SemanticError("Error effect " +id));
 			}
 		}
-		
 		
 		return errors;
 	}

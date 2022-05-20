@@ -218,7 +218,6 @@ public class CallNode implements Node {
 				List<Effect> resultSeq = new ArrayList<Effect>();
 				for( int j = 0; j < effettoParAttuale.size(); j ++ ) {
 					resultSeq.add( Effect.seq(effettoParAttuale.get(j), effettoParFormale.get(j)) );
-					System.out.println("attuale: "+effettoParAttuale.get(j)+" formale: "+effettoParFormale.get(j)+" ["+i+","+j+"]");
 					
 					// se resultSeq.get(i)=ERROR	devo dare errore? penso di si
 					//if( resultSeq.get(i).equals(Effect.ERROR) ) {
@@ -239,19 +238,29 @@ public class CallNode implements Node {
 		if( envList.size() > 0 ) {
 			sigma_3 = envList.get(0);
 			for( int i = 1; i < envList.size(); i ++) {
-				System.out.println("FOR");
 				sigma_3 = Environment.parEnv(sigma_3, envList.get(i));
 				//manca il controllo degli errori Effect.ERROR in sigma_3
 			}
 		}
 		
-		for( Entry<String,STEntry> entryVar : sigma_3.getCurrentScope().entrySet() ) {
-			System.out.println("	llll"+entryVar.getKey() +" "+entryVar.getValue().toPrint(""));
-		}
+		
+		//TEST
+		if(sigma_3.getNestingLevel() > -1)
+			System.out.println("sigma_3 size "+sigma_3.getCurrentScope().size());
 		
 		
 		// (6) update(Sigma_2, Sigma_3)
 		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);
+		
+		//TEST
+		if(updEnv.getNestingLevel() > -1)
+			System.out.println("updEnv size "+updEnv.getCurrentScope().size());
+		
+		//updEnv contiene le dichiarazioni di f e x, è giusto
+		for( Entry<String,STEntry> entryVar : updEnv.getCurrentScope().entrySet() ) {
+			System.out.println("	"+entryVar.getKey() +"   " +entryVar.getValue().toPrint(""));
+		}
+		
 		// controllo se ci sono errori nell'ambiente ottenuta dalla update
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 

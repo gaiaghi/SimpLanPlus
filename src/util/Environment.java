@@ -189,13 +189,12 @@ public class Environment {
 	
 	
 	public static Environment parEnv (Environment env1, Environment env2 ) {
-		System.out.println("PAR");
 		//Environment envPar = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		Environment envPar = new Environment();
 		envPar.addScope();
 		
 		HashMap<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size() -1);
-		HashMap<String, STEntry> scope2 = env2.symbolTable.get(env2.symbolTable.size() -1);
+		HashMap<String, STEntry> scope2 = env2.symbolTable.get(env2.symbolTable.size() -1);	
 		
 		//env1(x) if x not in env2
 		for (var varEntry1: scope1.entrySet()) {
@@ -215,20 +214,17 @@ public class Environment {
 		
 		for (var varEntry1: scope1.entrySet()) {
 			for (var varEntry2: scope2.entrySet()) {
-				if (varEntry1.getKey() == varEntry2.getKey()) {
+				if ( varEntry1.getKey().compareTo(varEntry2.getKey()) == 0 ) {
 					STEntry entry = new STEntry(varEntry1.getValue());
 					
 					for (int i=0; i < varEntry2.getValue().getVarEffectList().size(); i++) 
 						entry.setVarEffect(i, Effect.par(varEntry1.getValue().getVarEffect(i), varEntry1.getValue().getVarEffect(i)));
-
+					
 					envPar.safeAddEntry(varEntry2.getKey(), entry);
 				}
 			}
 		} 
 
-		for( Entry<String,STEntry> entryVar : envPar.getCurrentScope().entrySet() ) {
-			System.out.println("[PAR] "+entryVar.getKey() +" "+entryVar.getValue().toPrint(""));
-		}
 		
 		return envPar;
 	}
@@ -340,7 +336,6 @@ public class Environment {
 	
 		for( HashMap<String, STEntry> scope : symbolTable ) {
 			for( Entry<String,STEntry> entryVar : scope.entrySet() ) {
-				System.out.println("checkError - "+entryVar.getKey());
 				errors.addAll(entryVar.getValue().checkEffectError(entryVar.getKey()));
 			}
 		}
