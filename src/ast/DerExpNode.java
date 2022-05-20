@@ -47,18 +47,10 @@ public class DerExpNode implements Node {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(lhs.checkEffects(env));
-        
-        
-        
-        try {
-			STEntry entry = env.lookup(lhs.getId().getId());
-			
-			if (entry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
-	            errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
-	        }
-		} catch (MissingDecException e) {
-			System.out.println("catch2");
-		}
+        	
+        if (lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
+            errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
+        }
          
         errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));     
 

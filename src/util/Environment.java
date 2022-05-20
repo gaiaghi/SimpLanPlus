@@ -189,7 +189,7 @@ public class Environment {
 	
 	
 	public static Environment parEnv (Environment env1, Environment env2 ) {
-		
+		System.out.println("PAR");
 		//Environment envPar = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		Environment envPar = new Environment();
 		envPar.addScope();
@@ -225,6 +225,10 @@ public class Environment {
 				}
 			}
 		} 
+
+		for( Entry<String,STEntry> entryVar : envPar.getCurrentScope().entrySet() ) {
+			System.out.println("[PAR] "+entryVar.getKey() +" "+entryVar.getValue().toPrint(""));
+		}
 		
 		return envPar;
 	}
@@ -336,6 +340,7 @@ public class Environment {
 	
 		for( HashMap<String, STEntry> scope : symbolTable ) {
 			for( Entry<String,STEntry> entryVar : scope.entrySet() ) {
+				System.out.println("checkError - "+entryVar.getKey());
 				errors.addAll(entryVar.getValue().checkEffectError(entryVar.getKey()));
 			}
 		}

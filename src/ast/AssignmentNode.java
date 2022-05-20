@@ -99,11 +99,11 @@ public class AssignmentNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
-		res.addAll(lhs.checkEffects(env));
+
 		res.addAll(exp.checkEffects(env));
+
 		
-		//STEntry lhsEntry = lhs.getId().getSTEntry();
-		
+		//STEntry lhsEntry = lhs.getId().getSTEntry();		
 		STEntry lhsEntry = null;
 		try {
 			lhsEntry = env.lookup(lhs.getId().getId());
@@ -111,10 +111,17 @@ public class AssignmentNode implements Node {
 			System.out.println("AssignmentNode: MissingDecException "+lhs.getId().getId());
 		}
 		
-		
 		//env seq[lhs = RW]
 		Effect newEffect = Effect.seq(lhsEntry.getVarEffect(lhs.getDereferenceNum()), Effect.READ_WRITE);
 		lhsEntry.setVarEffect(lhs.getDereferenceNum(), newEffect);
+
+		if(lhs.isPointer()) {
+			if ( ! lhsEntry.getVarEffect(0).equals(Effect.READ_WRITE) ) {
+	            res.add(new SemanticError(lhs.getId().getId() + " has not status RW."));
+			}
+		}
+		
+		res.addAll(lhs.checkEffects(env));
 		
 		// if variable statuts = ERROR
 		if ( lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.ERROR)) {
@@ -134,7 +141,6 @@ public class AssignmentNode implements Node {
 				lhs.getId().getSTEntry().setVarEffect(i, expEffect);
 			}
 		}
-		
 		
 		return res;
 	}

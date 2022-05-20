@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Effect;
 import util.Environment;
@@ -86,13 +87,15 @@ public class LhsNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
+		
 		if( lhs == null )
 			errors.addAll(id.checkEffects(env));
 		else {
 			errors.addAll(lhs.checkEffects(env));
 			
-			if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) 
+			if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) {
 	            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW."));
+			}
 		}
 		
 		return errors;
@@ -108,6 +111,10 @@ public class LhsNode implements Node {
 	
 	public void setLhsDerNum(int n) {
 		id.setIdDerNum(n);
+	}
+	
+	public boolean isPointer() {
+		return id.getSTEntry().getType() instanceof PointerTypeNode;
 	}
 
 }

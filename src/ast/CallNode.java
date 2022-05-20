@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import exception.MissingDecException;
@@ -31,11 +32,9 @@ public class CallNode implements Node {
 	public String toPrint(String indent) {
 		String str = "Call: " +id.getId() 
 					+"\n" +id.getSTEntry().toPrint(indent +"  ");
-		if(parlist.size() > 0)
-			str = str + "\n";
 		
 		for(int i=0; i<parlist.size(); i++)
-			str = str + parlist.get(i).toPrint(indent +"  ");
+			str = str+"\n" + parlist.get(i).toPrint(indent +"  ");
 		
 		return indent +str;
 	}
@@ -203,30 +202,34 @@ public class CallNode implements Node {
 			// recupero l'effetto Sigma(u_i)
 			// dato che questo parametro attuale è di tipo PointerTypeNode,
 			// dovrebbe esserci solo una variabile, quindi un LhsNode, (ma non penso, somma di 2 puntatori è possibile??)
-			List<LhsNode> varsInX = parlist.get(i).getIDsOfVariables();
-			for( LhsNode varX : varsInX ) {
+//			List<LhsNode> varsInX = parlist.get(i).getIDsOfVariables();
+//			for( LhsNode varX : varsInX ) {
 				List<Effect> effettoParAttuale;
 				STEntry newEntry;
 				try {
-					newEntry = new STEntry(env.lookup(varX.getId().getId()));
+//					newEntry = new STEntry(env.lookup(((LhsNode) parlist.get(i)).getId().getId()));
+					newEntry = env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
 					 effettoParAttuale = newEntry.getVarEffectList();
 				} catch (MissingDecException e) {
-					errors.add(new SemanticError("CallNode 1: Missing declaration: "+varX.getId().getId()));
+					errors.add(new SemanticError("CallNode 1: Missing declaration: "+((DerExpNode) parlist.get(i)).getLhs().getId().getId()));
 					return errors;
 				}
 				
 				List<Effect> resultSeq = new ArrayList<Effect>();
 				for( int j = 0; j < effettoParAttuale.size(); j ++ ) {
 					resultSeq.add( Effect.seq(effettoParAttuale.get(j), effettoParFormale.get(j)) );
+					System.out.println("attuale: "+effettoParAttuale.get(j)+" formale: "+effettoParFormale.get(j)+" ["+i+","+j+"]");
+					
 					// se resultSeq.get(i)=ERROR	devo dare errore? penso di si
 					//if( resultSeq.get(i).equals(Effect.ERROR) ) {
 					//	errors.add(new SemanticError("Effect error on CallNode (5)"));
 					//	return errors;
 					//}
 				}
+				
 				newEntry.setVarEffectList(resultSeq);
-				tmp_env.safeAddEntry(varX.getId().getId(), newEntry);	// ci potrebbero essere dublicati di varX.getId().getId()?
-			}
+				tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	// ci potrebbero essere dublicati di varX.getId().getId()?
+//			}
 			
 			envList.add(tmp_env);
 		}
@@ -235,10 +238,15 @@ public class CallNode implements Node {
 		Environment sigma_3 = new Environment();
 		if( envList.size() > 0 ) {
 			sigma_3 = envList.get(0);
-			for( int i = 0; i < envList.size(); i ++) {
+			for( int i = 1; i < envList.size(); i ++) {
+				System.out.println("FOR");
 				sigma_3 = Environment.parEnv(sigma_3, envList.get(i));
 				//manca il controllo degli errori Effect.ERROR in sigma_3
 			}
+		}
+		
+		for( Entry<String,STEntry> entryVar : sigma_3.getCurrentScope().entrySet() ) {
+			System.out.println("	llll"+entryVar.getKey() +" "+entryVar.getValue().toPrint(""));
 		}
 		
 		

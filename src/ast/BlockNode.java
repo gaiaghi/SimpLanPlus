@@ -165,12 +165,12 @@ public class BlockNode implements Node {
 		
 		for (Node dec: declarations)
 			errors.addAll(dec.checkEffects(env));
+//		System.out.println("BlockNode: "+errors);
 		
-		/*System.out.println("BlockNode: "+errors);
-		System.out.println("BlockNode env:");
-		for( Entry<String,STEntry> entryVar : env.getCurrentScope().entrySet() ) {
-			System.out.println("	"+entryVar.getKey() );
-		}*/
+//		System.out.println("BlockNode env:");
+//		for( Entry<String,STEntry> entryVar : env.getCurrentScope().entrySet() ) {
+//			System.out.println("	"+entryVar.getKey() );
+//		}
 		
 		for (Node stm: statements)
 			errors.addAll(stm.checkEffects(env));

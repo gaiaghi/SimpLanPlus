@@ -91,7 +91,16 @@ public class IdNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
-	    return new ArrayList<SemanticError>(); 
+		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
+		
+		try {
+			entry = env.lookup(id);
+		} catch (MissingDecException e) {
+			errors.add(new SemanticError("CallNode 1: Missing declaration: "+id));
+			return errors;
+		}
+		
+	    return errors;
 	}
 	
 	

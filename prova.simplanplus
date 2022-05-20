@@ -128,7 +128,7 @@
 //n22
 //OK
 //#n22#OK
-//{^^bool z; ^int x = new int; x^=2; z = new ^bool;}
+//{^^bool z; ^int x= new int; x^=2; z = new ^bool;}
 
 //n23
 //Type error: cannot assign IntType value for variable z of type BoolType
@@ -210,7 +210,7 @@
 
 //n36
 // effetti sulla x?
-//#n36#OK
+//#n36#ERR
 //{int g(){ return 1; }  ^int x; x^=3; if(g()==x^) print 4;}
 
 
@@ -280,7 +280,7 @@
 // in AssignmentNode la entry viene presa dall'ambiente da lhsNode. 
 // prendendo la entry dall'ambiente funziona
 //#n49#ERR
-{int x; void fun(){x=1;} print x; fun(); print x;}
+//{int x; void fun(){x=1;} print x; fun(); print x;}
 
 //p01
 //OK
@@ -293,12 +293,32 @@
 //#p02#ERR
 //{ ^int x = new int; x^ = 1; delete x; y = x^; }
 
+
+//p03
+//dovrebbe dare errore per l'uso di x dopo delete 
+//#p03#ERR
+{void f(^int x, ^int y){delete x; delete y;} ^int x = new int; f(x,x);}
+
 //p04     (per ora OK) 
 //#p04#OK
 //{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x) ;} }}
+
+//p05
+//errore per la possibile doppia delete???
+//#p05#ERR
+//{void g(^int x, int y){if (y==0) delete x; else {x^= x^-1; g(x,y); delete x;} }  ^int a = new int; int b =0; a^=2; g(a,b);}
 
 //p06
 //OK
 //#p06#OK
 //{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(54); }
 
+
+//p07
+//#p07#OK
+//{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y = new int; y^ = x^ * n; } } ^int u = new int; u^ = 1; f(u,6); }
+
+//p08
+//??????? f(5,4) ok, mentre f(4,5) "reached max memory limit"
+//#p08#OK
+{void f(int m, int n){if (m>n) {print(m+n);} else {int x = 1; f(m+1, n+1);} } f(5,4);}

@@ -48,10 +48,12 @@ public class DeletionNode implements Node{
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		
 		ArrayList<SemanticError> res = new ArrayList<>();
-
+		
+		res.addAll(id.checkEffects(env));
+		
 		// si mettono a delete tutti gli oggetti della catena di puntatori
-		for (int i = 1; i <= id.getDerNumDec(); i++) 
-			Effect.seq(id.getSTEntry().getVarEffect(i), Effect.DELETED);
+		for (int i = 0; i <= id.getDerNumDec(); i++) 
+			id.getSTEntry().setVarEffect(i, Effect.seq(id.getSTEntry().getVarEffect(i), Effect.DELETED));
 		
 		if (id.getSTEntry().getVarEffect(0) == Effect.ERROR)
 			res.add(new SemanticError("Variable "+ id.getId() +" was already deleted."));

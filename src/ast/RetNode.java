@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
@@ -71,6 +72,7 @@ public class RetNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
+		
 		if( exp != null )
 			return exp.checkEffects(env);
 		else
