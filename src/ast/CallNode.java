@@ -243,24 +243,9 @@ public class CallNode implements Node {
 			}
 		}
 		
-		
-		//TEST
-		if(sigma_3.getNestingLevel() > -1)
-			System.out.println("sigma_3 size "+sigma_3.getCurrentScope().size());
-		
-		
+
 		// (6) update(Sigma_2, Sigma_3)
-		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);
-		
-		//TEST
-		if(updEnv.getNestingLevel() > -1)
-			System.out.println("updEnv size "+updEnv.getCurrentScope().size());
-		
-		//updEnv contiene le dichiarazioni di f e x, è giusto
-		for( Entry<String,STEntry> entryVar : updEnv.getCurrentScope().entrySet() ) {
-			System.out.println("	"+entryVar.getKey() +"   " +entryVar.getValue().toPrint(""));
-		}
-		
+		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);		
 		// controllo se ci sono errori nell'ambiente ottenuta dalla update
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 

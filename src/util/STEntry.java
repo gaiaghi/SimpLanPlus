@@ -149,10 +149,14 @@ public class STEntry {
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
 		if( varEffects.size() > 0 ) {
-			for( int i = 0; i < varEffects.size(); i ++ ) {
-				if( varEffects.get(i).equals(Effect.ERROR) )
-					errors.add(new SemanticError("Error effect " +id));
+			boolean error = false;
+			for( int i = 0; i < varEffects.size() && !error; i ++ ) {
+				if( varEffects.get(i).equals(Effect.ERROR) ) {
+					error = true;
+				}
 			}
+			if( error )
+				errors.add(new SemanticError(id +" has error effect. Status: " +varEffects));
 		}
 		
 		return errors;
