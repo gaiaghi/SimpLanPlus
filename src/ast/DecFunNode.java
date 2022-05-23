@@ -223,7 +223,20 @@ public class DecFunNode implements Node {
 			errors.addAll(block.checkEffects(env_0));
 			
 			// ricavo gli effetti ottenuti dopo la valutazione del corpo della funzione
-			sigma_1 = newFunEntry.getParEffectList();
+			//sigma_1 = newFunEntry.getParEffectList();
+			String argId = null;
+			try {
+				sigma_1.clear();
+				for( Node a : args ) {
+					// nuova copia della entry del paramentro
+					argId = ((ArgNode) a).getId().getId(); 
+					sigma_1.add( env_0.lookup(argId).getVarEffectList() );
+				}
+				
+			} catch (MissingDecException e) {
+				errors.add(new SemanticError("DecFunNode: Missing declaration: "+argId));
+				return errors;
+			}
 			
 			// controllo terminazione punto fisso (sigma_0 == sigma_1)
 			if( sigma_0.equals(sigma_1) )

@@ -94,7 +94,8 @@ public class IteNode implements Node {
         	errors.addAll(elseStm.checkEffects(elseEnv));
         	
         	Environment maxEnv = Environment.maxEnv(thenEnv, elseEnv);
-        	env = new Environment(maxEnv); //è corretto???? CONTROLLA
+        	//env = new Environment(maxEnv); //è corretto???? CONTROLLA
+        	env.copyFrom(maxEnv);
         }
         else {
         	errors.addAll(thenStm.checkEffects(env));

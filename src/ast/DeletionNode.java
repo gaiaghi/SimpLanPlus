@@ -2,9 +2,11 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Effect;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 
 public class DeletionNode implements Node{
@@ -50,13 +52,14 @@ public class DeletionNode implements Node{
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
 		res.addAll(id.checkEffects(env));
-		
+			
 		// si mettono a delete tutti gli oggetti della catena di puntatori
 		for (int i = 0; i <= id.getDerNumDec(); i++) 
 			id.getSTEntry().setVarEffect(i, Effect.seq(id.getSTEntry().getVarEffect(i), Effect.DELETED));
 		
 		if (id.getSTEntry().getVarEffect(0) == Effect.ERROR)
 			res.add(new SemanticError("Variable "+ id.getId() +" was already deleted."));
+		
 		
 		return res;
 	}

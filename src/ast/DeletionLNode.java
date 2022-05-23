@@ -18,7 +18,7 @@ public class DeletionLNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent + deletion.toPrint(indent);
+		return deletion.toPrint(indent);
 	}
 	
 	

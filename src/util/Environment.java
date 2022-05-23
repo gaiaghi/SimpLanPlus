@@ -158,7 +158,7 @@ public class Environment {
 		int envLength = env1.symbolTable.size(); 
 		
 		//per ogni scope dell'albiente
-		for (int i = 0; i > envLength; i++) {
+		for (int i = 0; i < envLength; i++) {
 			HashMap<String, STEntry> scopeMax = new HashMap<>();
 			
 			var scope1 = env1.symbolTable.get(i);
@@ -343,6 +343,16 @@ public class Environment {
 		return errors;
 	}
 	
+	
+	//SOLO PER DEBUG
+	public void printEnv(String str) {
+		System.out.println("\n\nAmbiente "+str +":");
+		for( HashMap<String, STEntry> scope : symbolTable ) {
+			for( Entry<String,STEntry> entryVar : scope.entrySet() ) {
+				System.out.println(entryVar.getKey() + " " +entryVar.getValue().getVarEffectList());
+			}
+		}
+	}
 	
 	
 }
