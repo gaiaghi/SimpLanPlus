@@ -54,8 +54,15 @@ public class Effect {
 		return max(seq(e1, e2), seq(e2, e1));
 	}		
 	
-	public boolean equals(Effect e) {
-		return this.value == e.value;
+	@Override
+	public boolean equals(Object e) {
+		if (this == e)
+			return true;
+		if (e == null || getClass() != e.getClass())
+			return false;
+		
+		Effect ef = (Effect) e;
+		return this.value == ef.value;
 	}
 	
 	@Override

@@ -242,7 +242,7 @@ public class DecFunNode implements Node {
 			if( sigma_0.equals(sigma_1) )
 				stop = true;
 			else
-				sigma_0 = sigma_1;
+				sigma_0 = new ArrayList<List<Effect>>(sigma_1);
 		}
 		
 		

@@ -121,7 +121,7 @@ public class Environment {
 		int envLength = env1.symbolTable.size(); 
 		
 		//per ogni scope dell'albiente
-		for (int i = 0; i > envLength; i++) {
+		for (int i = 0; i < envLength; i++) {
 			HashMap<String, STEntry> scopeSeq = new HashMap<>();
 			
 			var scope1 = env1.symbolTable.get(i);
