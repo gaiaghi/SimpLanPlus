@@ -88,10 +88,10 @@ public class STEntry {
 	}
 	
 	public List<Effect> getVarEffectList(){
-		return varEffects;
+		return new ArrayList<>(varEffects);
 	}
 	public List<List<Effect>> getParEffectList(){
-		return parEffects;
+		return new ArrayList<>(parEffects);
 	}
 	
 	public Effect getVarEffect(int index) {
@@ -107,11 +107,11 @@ public class STEntry {
 	}
 	
 	public void setVarEffectList(List<Effect> l) {
-		this.varEffects = l;
+		this.varEffects = new ArrayList<>(l);
 	}
 	
 	public void setParEffectList(List<List<Effect>> l) {
-		this.parEffects = l;
+		this.parEffects = new ArrayList<>(l);
 	}
 	
 	

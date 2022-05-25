@@ -99,9 +99,7 @@ public class AssignmentNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
-
 		res.addAll(exp.checkEffects(env));
-
 		
 		//STEntry lhsEntry = lhs.getId().getSTEntry();		
 		STEntry lhsEntry = null;
@@ -117,7 +115,8 @@ public class AssignmentNode implements Node {
 
 		if(lhs.isPointer()) {
 			if ( ! lhsEntry.getVarEffect(0).equals(Effect.READ_WRITE) ) {
-	            res.add(new SemanticError(lhs.getId().getId() + " has not status RW."));
+	            res.add(new SemanticError(lhs.getId().getId() + " has not status RW. AssignmentNode"));
+	            System.out.println(lhs.getId().getId() + " has not status RW.  AssignmentNode");
 			}
 		}
 		

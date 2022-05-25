@@ -119,6 +119,8 @@ public class CallNode implements Node {
 		
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
+		//TODO 
+		//è necessario questo for?
 		// non è detto che serva
 		//controllo parametri
 		for(Node par : parlist)
@@ -134,7 +136,14 @@ public class CallNode implements Node {
 		ArrayList<Integer> x_indexes = funType.getIndexesPointerPar();
 		
 		// (2) recupero gli effetti della funzione f dalla entry
-		List< List<Effect> > parEffectList = entry.getParEffectList();
+		STEntry funEntry = null;
+		try {
+			funEntry = env.lookup(id.getId());
+		} catch (MissingDecException e1) {
+			errors.add(new SemanticError("CallNode 3: Missing declaration: "+id.getId()));
+			return errors;
+		}
+		List< List<Effect> > parEffectList = funEntry.getParEffectList();
 		
 		// (3) i parametri formali y non devono avere effetto <= d
 		for( int i : y_indexes ) {
@@ -174,21 +183,15 @@ public class CallNode implements Node {
 			List<Effect> resultSeq = new ArrayList<Effect>();
 			for( int i = 0; i < varEffect.size(); i ++ ) {
 				resultSeq.add( Effect.seq(varEffect.get(i), Effect.READ_WRITE) );
-				// se resultSeq.get(i)=ERROR	devo dare errore? penso di si
-				//if( resultSeq.get(i).equals(Effect.ERROR) ) {
-				//	errors.add(new SemanticError("Effect error on CallNode (4)"));
-				//	return errors;
-				//}
 			}
 			newEntry.setVarEffectList(resultSeq);
 			sigma_2.safeAddEntry(idvar, newEntry);
 		}
 		
+	
 		// (5) faccio la PAR delle SEQ tra l'effetto del parametro attuale u_i 
 		// 	e del parametro formale x_i corrispondente. Sono puntatori.
 		//  Sigma_3 = PAR_(1<=i<=m) [ u_i -> SEQ(Sigma(u_i), Sigma_1(x_i)) ]
-		
-		
 		ArrayList<Environment> envList = new ArrayList<Environment>();
 		
 		for( int i : x_indexes ) {
@@ -200,35 +203,24 @@ public class CallNode implements Node {
 			List<Effect> effettoParFormale = parEffectList.get(i);
 			
 			// recupero l'effetto Sigma(u_i)
-			// dato che questo parametro attuale è di tipo PointerTypeNode,
-			// dovrebbe esserci solo una variabile, quindi un LhsNode, (ma non penso, somma di 2 puntatori è possibile??)
-//			List<LhsNode> varsInX = parlist.get(i).getIDsOfVariables();
-//			for( LhsNode varX : varsInX ) {
-				List<Effect> effettoParAttuale;
-				STEntry newEntry;
-				try {
-//					newEntry = new STEntry(env.lookup(((LhsNode) parlist.get(i)).getId().getId()));
-					newEntry = env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
-					 effettoParAttuale = newEntry.getVarEffectList();
-				} catch (MissingDecException e) {
-					errors.add(new SemanticError("CallNode 1: Missing declaration: "+((DerExpNode) parlist.get(i)).getLhs().getId().getId()));
-					return errors;
-				}
-				
-				List<Effect> resultSeq = new ArrayList<Effect>();
-				for( int j = 0; j < effettoParAttuale.size(); j ++ ) {
-					resultSeq.add( Effect.seq(effettoParAttuale.get(j), effettoParFormale.get(j)) );
-					
-					// se resultSeq.get(i)=ERROR	devo dare errore? penso di si
-					//if( resultSeq.get(i).equals(Effect.ERROR) ) {
-					//	errors.add(new SemanticError("Effect error on CallNode (5)"));
-					//	return errors;
-					//}
-				}
-				
-				newEntry.setVarEffectList(resultSeq);
-				tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	// ci potrebbero essere dublicati di varX.getId().getId()?
-//			}
+			// dato che questo parametro attuale è di tipo PointerTypeNode
+			List<Effect> effettoParAttuale;
+			STEntry newEntry;
+			try {
+				newEntry = env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
+				 effettoParAttuale = newEntry.getVarEffectList();
+			} catch (MissingDecException e) {
+				errors.add(new SemanticError("CallNode 2: Missing declaration: "+((DerExpNode) parlist.get(i)).getLhs().getId().getId()));
+				return errors;
+			}
+			
+			List<Effect> resultSeq = new ArrayList<Effect>();
+			for( int j = 0; j < effettoParAttuale.size(); j ++ ) {
+				resultSeq.add( Effect.seq(effettoParAttuale.get(j), effettoParFormale.get(j)) );
+			}
+			
+			newEntry.setVarEffectList(resultSeq);
+			tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	
 			
 			envList.add(tmp_env);
 		}
@@ -239,7 +231,6 @@ public class CallNode implements Node {
 			sigma_3 = envList.get(0);
 			for( int i = 1; i < envList.size(); i ++) {
 				sigma_3 = Environment.parEnv(sigma_3, envList.get(i));
-				//manca il controllo degli errori Effect.ERROR in sigma_3
 			}
 		}
 		

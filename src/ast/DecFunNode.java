@@ -173,7 +173,7 @@ public class DecFunNode implements Node {
 		Environment env_0 = new Environment(env); //copio il vecchio ambiente per avere accesso alle variabili globali
 		env_0.addScope();
 		//Environment env_0 = new Environment();
-		//env_0.addEntry(id.getId(), id.getSTEntry());
+		//env_0.addScope();
 		/*QUI sopra! ci vuole un copia dell'ambiente o un ambiente nuovo (con solo la entry della funzione)? 
 		 * nella regola c'è scritto che non dovrei avere accesso alle variabili globali
 		 * */
@@ -203,7 +203,8 @@ public class DecFunNode implements Node {
 		 * Aggiungo la entry della funzione nel nuovo scope
 		 * */
 		STEntry newFunEntry = new STEntry(id.getSTEntry());
-		try {
+		try {		
+			newFunEntry.setParEffectList(sigma_0);
 			env_0.addEntry(id.getId(), newFunEntry);
 		} catch (MultipleDecException e) {
 			errors.add(new SemanticError("Fun id "+id.getId() +" already declared"));
@@ -214,36 +215,85 @@ public class DecFunNode implements Node {
 		/*
 		 * Calcolo del punto fisso
 		 * */
-		List<List<Effect>> sigma_1 = new ArrayList<List<Effect>>(args.size());
+		// Effetti dei parametri dopo una valutazione del corpo della funzione
+		List<List<Effect>> sigma_1 = new ArrayList<List<Effect>>(sigma_0);
+		// Lista che serve a mantenere una copia di sigma_1.
+		// prec_sigma_1 usata per fare il controllo di terminazione del punto fisso.
+		List<List<Effect>> prec_sigma_1 = new ArrayList<List<Effect>>(sigma_0);
+		
 		boolean stop = false;
 		while( !stop ) {
-			// setto gli effetti dei parametri della funzione
-			newFunEntry.setParEffectList(sigma_0);
+						
+			//TEST
+			/*System.out.println("\nINIZIO ciclo punto fisso -------------------------------------");
+			System.out.println("	Sigma_1 prec: "+prec_sigma_1);
+			System.out.println("	Sigma_1: "+sigma_1);
+			try {
+				System.out.println("	Tipo di f: "+env_0.lookup(id.getId()).getParEffectList());
+			} catch (MissingDecException e1) {
+				errors.add(new SemanticError("DecFunNode: Missing declaration: "+id.getId()));
+				return errors;
+			}
+			*/
+			
 			// valuto gli effetti nel corpo della funzione
 			errors.addAll(block.checkEffects(env_0));
 			
+			
 			// ricavo gli effetti ottenuti dopo la valutazione del corpo della funzione
-			//sigma_1 = newFunEntry.getParEffectList();
 			String argId = null;
 			try {
 				sigma_1.clear();
 				for( Node a : args ) {
-					// nuova copia della entry del paramentro
-					argId = ((ArgNode) a).getId().getId(); 
+					argId = ((ArgNode) a).getId().getId();
 					sigma_1.add( env_0.lookup(argId).getVarEffectList() );
 				}
+				// setto i nuovi effetti dei parametri della funzione
+				env_0.lookup(id.getId()).setParEffectList(sigma_1);
 				
 			} catch (MissingDecException e) {
 				errors.add(new SemanticError("DecFunNode: Missing declaration: "+argId));
 				return errors;
 			}
 			
-			// controllo terminazione punto fisso (sigma_0 == sigma_1)
-			if( sigma_0.equals(sigma_1) )
+			
+			
+			// controllo terminazione punto fisso (prec_sigma_1 == sigma_1)
+			if( prec_sigma_1.equals(sigma_1) )
 				stop = true;
-			else
-				sigma_0 = new ArrayList<List<Effect>>(sigma_1);
+			else {
+				prec_sigma_1 = new ArrayList<List<Effect>>(sigma_1);
+				
+				for( Node a : args ) {
+					IdNode arg = ((ArgNode) a).getId(); 
+					STEntry argEntry = null;
+					try {
+						argEntry = env_0.lookup(arg.getId());
+					} catch (MissingDecException e) {
+						errors.add(new SemanticError("DecFunNode: Missing declaration: "+arg.getId()));
+						return errors;
+					}
+					
+					for(int i=0; i<argEntry.getSizeVarEffects(); i++) {
+						argEntry.setVarEffect(i, new Effect(Effect.READ_WRITE));
+					}
+				}
+			}
+			
+			//TEST
+			/*System.err.println("............. valutazione corpo funzione ............. ");
+			System.out.println("	prec_Sigma_1: "+prec_sigma_1);
+			System.out.println("	Sigma_1: "+sigma_1);
+			try {
+				System.out.println("	Tipo di f: "+env_0.lookup(id.getId()).getParEffectList());
+			} catch (MissingDecException e1) {
+				errors.add(new SemanticError("DecFunNode: Missing declaration: "+id.getId()));
+				return errors;
+			}
+			System.out.println("FINE ciclo punto fisso -------------------------------------\n");
+			*/
 		}
+		
 		
 		
 		// chiudi lo scope dopo il calcolo del punto fisso
