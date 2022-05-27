@@ -92,6 +92,10 @@ public class DecVarNode implements Node{
 		return null;
 	}
 
+	
+	
+	
+	
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
   		
@@ -133,6 +137,7 @@ public class DecVarNode implements Node{
 				System.out.println("catch 3");
 			}*/
 		}
+		
 		
 		try {
 			env.addEntry(id.getId(), entry);

@@ -105,6 +105,7 @@ public class BlockNode implements Node {
 			for(Node n : declarations)
 				res.addAll(n.checkSemantics(env));
 		}
+
 		
 		//check semantics in statement
 		if(statements.size() > 0){
@@ -177,6 +178,8 @@ public class BlockNode implements Node {
 		
 		if(! isFunBody)
 			env.removeScope();
+		
+		//env.printEnv("fine blocco");
 		
 		return errors;
 	}

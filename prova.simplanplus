@@ -274,13 +274,17 @@
 //#n48#ERR
 //{void f(int x){ print x;} int y=2; int z; f(y+z); }
 
+
 //n49
-// la prima "print" dovrebbe dare errore, ma non è così.
-// l'effetto di x è sempre RW
-// in AssignmentNode la entry viene presa dall'ambiente da lhsNode. 
-// prendendo la entry dall'ambiente funziona
-//#n49#ERR
-//{int x; void fun(){x=1;} print x; fun(); print x;}
+// mutua ricorsione
+//#n50#ERR
+//{ void f(int x){ g(x); } void g(int x){ f(x); } }
+
+//n50
+//#n51#ERR
+//{ int y=2; void f(){ print y+x; } int x=3;  }
+
+ 
 
 //p01
 //OK
@@ -304,21 +308,20 @@
 //{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x); } }}
 
 //p05
-//errore per la possibile doppia delete???
 //#p05#ERR
-{void g(^int x, int y){if (y==0) delete x; else {x^= x^-1; g(x,y); delete x;} }  ^int a = new int; int b=0; a^=2; g(a,b);}
+//{void g(^int x, int y){if (y==0) delete x; else {x^= x^-1; g(x,y); delete x;} }  ^int a = new int; int b=0; a^=2; g(a,b);}
 
 
 
 //p06
 //OK
-//#p06#OK
+//#p06#ERR
 //{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(54); }
 
 
 //p07
 //#p07#OK
-//{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y = new int; y^ = x^ * n; } } ^int u = new int; u^ = 1; f(u,6); }
+{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y = new int; y^ = x^ * n; } } ^int u = new int; u^ = 1; f(u,6); }
 
 
 

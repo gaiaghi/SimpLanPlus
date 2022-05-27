@@ -128,7 +128,33 @@ public class DecFunNode implements Node {
 			entry.setType( new ArrowTypeNode(parTypes, type) );
 			
 			block.setIsFunBody(true); 
-			res.addAll(block.checkSemantics(env));
+			
+			
+			// creo un nuovo ambiente in cui valutare il corpo della funzione.
+			// il nuovo ambiente contiene solo le dichiarazioni di funzione precedenti.
+			// nel corpo della funzione non si può accedere alle variabili globali.
+			Environment env_0 = null;
+			try {
+				env_0 = env.envFunc();
+				env_0.addScope();
+				for( Node a : args ) {
+					// nuova copia della entry del paramentro
+					IdNode arg = ((ArgNode) a).getId(); 
+					STEntry newArgEntry = new STEntry(arg.getSTEntry());
+					
+					// inserisco la entry del parametro nell'ambiente
+					try {
+						env_0.addEntry(arg.getId(), newArgEntry);
+					} catch (MultipleDecException e) {
+						res.add(new SemanticError("Arg id "+arg.getId() +" already declared"));
+						return res;
+					}
+				}
+			} catch (MultipleDecException e1) {
+				res.add(new SemanticError("There is a function already declared"));
+				return res;
+			} 
+			res.addAll(block.checkSemantics(env_0));
 			
 			env.removeScope();
 			
@@ -151,6 +177,7 @@ public class DecFunNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
+		ArrayList<SemanticError> errorsPuntoFisso = new ArrayList<SemanticError>();
 		
 		/* Aggiungo all'ambiente la entry relativa alla funzione, 
 		 * ho bisogno di questa entry perchè sono ammesse le chiamate 
@@ -170,13 +197,15 @@ public class DecFunNode implements Node {
 		 * 
 		 * creo la lista degli effetti dei parametri sigma_0
 		 **/
-		Environment env_0 = new Environment(env); //copio il vecchio ambiente per avere accesso alle variabili globali
-		env_0.addScope();
-		//Environment env_0 = new Environment();
-		//env_0.addScope();
-		/*QUI sopra! ci vuole un copia dell'ambiente o un ambiente nuovo (con solo la entry della funzione)? 
-		 * nella regola c'è scritto che non dovrei avere accesso alle variabili globali
-		 * */
+		Environment env_0 = null;
+		try {
+			env_0 = env.envFunc();
+			env_0.addScope();
+		} catch (MultipleDecException e1) {
+			errors.add(new SemanticError("There is a function already declared"));
+			return errors;
+		} 
+		
 		List<List<Effect>> sigma_0 = new ArrayList<List<Effect>>(args.size());
 		for( Node a : args ) {
 			// nuova copia della entry del paramentro
@@ -236,9 +265,13 @@ public class DecFunNode implements Node {
 			}
 			*/
 			
-			// valuto gli effetti nel corpo della funzione
-			errors.addAll(block.checkEffects(env_0));
 			
+			// valuto gli effetti nel corpo della funzione
+			//errors.addAll(block.checkEffects(env_0));
+			errorsPuntoFisso.clear();
+			errorsPuntoFisso.addAll(block.checkEffects(env_0));
+			//System.err.println(errorsPuntoFisso);
+			//errors.addAll(errorsPuntoFisso);
 			
 			// ricavo gli effetti ottenuti dopo la valutazione del corpo della funzione
 			String argId = null;
@@ -294,7 +327,7 @@ public class DecFunNode implements Node {
 			*/
 		}
 		
-		
+		errors.addAll(errorsPuntoFisso);
 		
 		// chiudi lo scope dopo il calcolo del punto fisso
 		env_0.removeScope();

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import ast.ArrowTypeNode;
 import ast.LhsNode;
 import exception.MissingDecException;
 import exception.MultipleDecException;
@@ -301,11 +302,16 @@ public class Environment {
 				Effect effect = entry.getVarEffect(derNum);
 				Effect result = Effect.seq(effect, Effect.READ_WRITE);
 				entry.setVarEffect(derNum, result);
-				if( result == Effect.ERROR )
-					errors.add(new SemanticError("Cannot use "+ id.getId().getId() +" after its deletion"));
+				
+				if( result.equals(Effect.ERROR) ) {
+					errors.add(new SemanticError("Cannot use "+ id.getId().getId() +" after its deletion.  Env.checkExpressionEffects"));
+					
+					for( int i = 0; i < entry.getSizeVarEffects(); i ++ )
+						entry.setVarEffect(i, result);
+				}
 			}
 			catch(MissingDecException e) {
-				errors.add(new SemanticError("Environment Missing declaration: "+id.getId().getId()));
+				errors.add(new SemanticError("Env.checkExpressionEffects. Missing declaration: "+id.getId().getId()));
 			}
 			
 		}
@@ -348,10 +354,25 @@ public class Environment {
 	public void printEnv(String str) {
 		System.out.println("\n\nAmbiente "+str +":");
 		for( HashMap<String, STEntry> scope : symbolTable ) {
+			System.out.println("");
 			for( Entry<String,STEntry> entryVar : scope.entrySet() ) {
 				System.out.println(entryVar.getKey() + " " +entryVar.getValue().getVarEffectList());
 			}
 		}
+	}
+	
+	
+	public Environment envFunc() throws MultipleDecException {
+		Environment newEnv = new Environment();
+		for( HashMap<String, STEntry> scope : symbolTable ) {
+			newEnv.addScope();
+			for( Entry<String,STEntry> entryVar : scope.entrySet() ) {
+				if( entryVar.getValue().getType() instanceof ArrowTypeNode ) {
+					newEnv.addEntry(entryVar.getKey(), new STEntry(entryVar.getValue()) );
+				}
+			}
+		}
+		return newEnv;
 	}
 	
 	

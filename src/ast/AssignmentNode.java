@@ -107,6 +107,8 @@ public class AssignmentNode implements Node {
 			lhsEntry = env.lookup(lhs.getId().getId());
 		} catch (MissingDecException e1) {
 			System.out.println("AssignmentNode: MissingDecException "+lhs.getId().getId());
+			res.add(new SemanticError("AssignmentNode: MissingDecException "+lhs.getId().getId()));
+			return res;
 		}
 		
 		//env seq[lhs = RW]

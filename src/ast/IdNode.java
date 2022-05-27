@@ -96,7 +96,7 @@ public class IdNode implements Node {
 		try {
 			entry = env.lookup(id);
 		} catch (MissingDecException e) {
-			errors.add(new SemanticError("CallNode 1: Missing declaration: "+id));
+			errors.add(new SemanticError("IdNode 1: Missing declaration: "+id));
 			return errors;
 		}
 		

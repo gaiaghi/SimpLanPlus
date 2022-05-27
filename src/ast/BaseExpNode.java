@@ -44,7 +44,7 @@ public class BaseExpNode implements Node {
 
         errors.addAll(exp.checkEffects(env));
 
-        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
+        //errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
 
         return errors;
 	}
