@@ -90,7 +90,7 @@ public class DecFunNode implements Node {
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-  
+		
 		//TODO env.offset = -2;
   		//PROF: STentry entry = new STentry(env.nestingLevel, env.offset--);
 		//dovo decrementare l'offset dopo aver creato una nuova entry?
@@ -103,7 +103,6 @@ public class DecFunNode implements Node {
         	id.setSTEntry(entry);
         	
         	env.addScope();
-        	
         	//aggiungo la dichiarazione della fun anche nel nuovo
         	//scope per evitare che vengano dichiarate altre funzioni
         	//o variabili con lo stesso nome
@@ -116,11 +115,12 @@ public class DecFunNode implements Node {
 				ArgNode arg = (ArgNode) a;
 				parTypes.add(arg.getType());
 				try {
-					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++);
+					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++); //TODO
 					env.addEntry(arg.getId().getId(), parEntry);
 					arg.getId().setSTEntry(parEntry);
 				}catch(MultipleDecException e) {
 					res.add(new SemanticError("Parameter id "+arg.getId().getId()+" already declared"));
+					return res;
 				}		
 			}
         	
@@ -136,7 +136,6 @@ public class DecFunNode implements Node {
 			Environment env_0 = null;
 			try {
 				env_0 = env.envFunc();
-				env_0.addScope();
 				for( Node a : args ) {
 					// nuova copia della entry del paramentro
 					IdNode arg = ((ArgNode) a).getId(); 
@@ -209,7 +208,7 @@ public class DecFunNode implements Node {
 		List<List<Effect>> sigma_0 = new ArrayList<List<Effect>>(args.size());
 		for( Node a : args ) {
 			// nuova copia della entry del paramentro
-			IdNode arg = ((ArgNode) a).getId(); 
+			IdNode arg = ((ArgNode) a).getId();
 			STEntry newArgEntry = new STEntry(arg.getSTEntry());
 			
 			// inserisco la entry del parametro nell'ambiente

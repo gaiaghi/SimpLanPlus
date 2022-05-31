@@ -1,6 +1,8 @@
 package mainPackage;
 
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import ast.Node;
+import ast.SVMVisitorImpl;
 import ast.SimpLanPlusVisitorImpl;
 import exception.MissingDecException;
 import exception.MultipleDecException;
@@ -22,6 +25,8 @@ import util.Environment;
 import util.STEntry;
 import util.SemanticError;
 import parser.SPPErrorListener;
+import svm.SVMLexer;
+import svm.SVMParser;
 
 
 public class SimpLanPlus{
@@ -133,6 +138,40 @@ public class SimpLanPlus{
 		System.out.println("Visualizing AST...");
 		System.out.println(ast.toPrint(""));
 		
+		/*
+		// CODE GENERATION  prova.SimpLan.asm
+		String code=ast.codeGeneration(); 
+		BufferedWriter out;
+		try {
+			out = new BufferedWriter(new FileWriter(fileName+".asm"));
+			out.write(code);
+			out.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
+		 
+		System.out.println("Code generated! Assembling and running generated code.");
+
+		//FileInputStream isASM = new FileInputStream(fileName+".asm");
+		CharStream isASM = null;
+		try {
+			isASM = CharStreams.fromFileName(fileName+".asm");
+		} 
+		catch (IOException e) {
+			System.err.println("The file " + fileName + " was not found");
+			System.exit(1);
+		}
+		SVMLexer lexerASM = new SVMLexer(isASM);
+		CommonTokenStream tokensASM = new CommonTokenStream(lexerASM);
+		SVMParser parserASM = new SVMParser(tokensASM);
+		
+		//SVMVisitorImpl visitorSVM = new SVMVisitorImpl();
+		//visitorSVM.visit(parserASM.assembly()); 
+
+		System.out.println("You had: "+lexerASM.errorCount()+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.");
+		if (lexerASM.errorCount()>0 || parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);
+		*/
 		
 	}
 	

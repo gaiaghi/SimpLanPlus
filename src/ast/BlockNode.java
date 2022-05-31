@@ -96,8 +96,9 @@ public class BlockNode implements Node {
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
 		//se è il blocco che definisce il corpo della funzione non devo creare un nuovo scope
-		if(! isFunBody)
+		if(! isFunBody) 
 			env.addScope();
+		
 		
 		//check semantics in declaration
 		if(declarations.size() > 0){

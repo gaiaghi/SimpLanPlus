@@ -77,12 +77,12 @@ public class IdNode implements Node {
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
-		int nestLvl = env.getNestingLevel();
 		
 		try { //declared id
 			this.entry = env.lookup(this.id);
 			this.nestingLvl = env.getNestingLevel();
-		} catch (MissingDecException e) { // id not declared
+		} catch (MissingDecException e) { 
+			// id not declared
 			res.add(new SemanticError(e.getMessage()));
 		}
 		

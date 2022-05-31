@@ -82,7 +82,6 @@ public class IteNode implements Node {
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<>();
-
         errors.addAll(cond.checkEffects(env));
         
         if (elseStm != null) {

@@ -321,7 +321,7 @@
 
 //p07
 //#p07#OK
-{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y = new int; y^ = x^ * n; } } ^int u = new int; u^ = 1; f(u,6); }
+//{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y = new int; y^ = x^ * n; } } ^int u = new int; u^ = 1; f(u,6); }
 
 
 
