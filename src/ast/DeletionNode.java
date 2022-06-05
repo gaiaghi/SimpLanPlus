@@ -37,8 +37,9 @@ public class DeletionNode implements Node{
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = id.codeGeneration();
+		code = code + "del $a0\n";
+		return code;
 	}
 
 	@Override

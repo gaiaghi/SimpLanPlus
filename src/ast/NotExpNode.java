@@ -32,8 +32,9 @@ public class NotExpNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = exp.codeGeneration();
+		code = code + "not $a0 $a0\n";
+		return code;
 	}
 
 	@Override

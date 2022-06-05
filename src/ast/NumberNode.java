@@ -27,8 +27,7 @@ public class NumberNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		return "li $a0 " +val +"\n";
 	}
 
 	@Override

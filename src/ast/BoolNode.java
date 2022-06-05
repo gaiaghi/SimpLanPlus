@@ -27,8 +27,11 @@ public class BoolNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		int boolValue = 0;
+		if( val )
+			boolValue = 1; 
+		
+		return "li $a0 " +boolValue +"\n";
 	}
 
 	@Override

@@ -32,8 +32,9 @@ public class NegExpNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = exp.codeGeneration();
+		code = code + "multi $a0 $a0 -1\n"; 
+		return  code;
 	}
 
 	@Override

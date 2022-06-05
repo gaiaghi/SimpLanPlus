@@ -2,11 +2,9 @@ package ast;
 
 import java.util.ArrayList;
 
-import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Environment;
 import util.SemanticError;
-import util.SimpLanPlusLib;
 
 public class RetNode implements Node {
 
@@ -53,7 +51,12 @@ public class RetNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
+		String code = "";
+		if( exp != null )
+			code = code + exp.codeGeneration();
+		
+		code = code + "b " + /* label + */ "\n";
+		
 		return null;
 	}
 

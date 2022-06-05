@@ -38,8 +38,9 @@ public class PrintNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = exp.codeGeneration();
+		code = code + "print $a0\n";
+		return code;
 	}
 
 	@Override

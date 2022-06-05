@@ -94,8 +94,231 @@ public class BinExpNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = "";
+		
+		code = code + leftExp.codeGeneration();
+		code = code + "push $a0\n";
+		code = code + rightExp.codeGeneration();			// $a0 = rightExp
+		code = code + "lw $t1 0($sp)\n";  // $t1 <- top		$t1 = leftExp
+		
+		String trueLabel_1;
+		String endIfLabel_1;
+		String trueLabel_2;
+		String endIfLabel_2;
+		
+		switch( op ) {
+			case "*":
+				code = code + "mult $a0 $t1 $a0\n";
+				break;
+				
+			case "/":
+				code = code + "div $a0 $t1 $a0\n";
+				break;
+				
+			case "+":
+				code = code + "add $a0 $t1 $a0\n";
+				break;
+				
+			case "-":
+				code = code + "sub $a0 $t1 $a0\n";
+				break;
+				
+			case "&&":
+				code = code + "and $a0 $t1 $a0\n";
+				break;
+				
+			case "||":
+				code = code + "or $a0 $t1 $a0\n";
+				break;
+				
+			case "<":
+				/* if_1 ( $t1 <= $a0 )
+				 * 		if_2 ( $t1 == $a0 )
+				 * 			$a0 = 0
+				 * 		else_2
+				 * 			$a0 = 1
+				 * else_1 
+				 * 		$a0 = 0
+				 * */
+				trueLabel_1 = SimpLanPlusLib.freshLabel();
+				endIfLabel_1 = SimpLanPlusLib.freshLabel();
+				trueLabel_2 = SimpLanPlusLib.freshLabel();
+				endIfLabel_2 = SimpLanPlusLib.freshLabel();
+				
+				// verifico la condizione leftExp <= rightExp
+				code = code + "bleq $t1 $a0 " + trueLabel_1 + "\n";
+				
+				// se vale leftExp > rightExp
+				code = code + "li $a0 0\n";
+				code = code + "b " + endIfLabel_1 + "\n";
+				
+				// se vale leftExp <= rightExp
+				code = code + trueLabel_1 + ":\n";
+				
+				// verifico la condizione leftExp == rightExp
+				code = code + "beq $t1 $a0 " + trueLabel_2 + "\n";
+				
+				// se vale leftExp <= rightExp
+				code = code + "li $a0 1\n";
+				code = code + "b " + endIfLabel_2 + "\n";
+				
+				// se vale leftExp == rightExp
+				code = code + trueLabel_2 + ":\n";
+				code = code + "li $a0 0\n";
+				code = code + endIfLabel_2 + ":\n";
+				
+				
+				// fine if 
+				code = code + endIfLabel_1 + ":\n";
+				
+				break;
+				
+			case "<=":
+				/* if_1 ( $t1 <= $a0 )
+				 * 		$a0 = 1
+				 * else_1 
+				 * 		$a0 = 0
+				 * */
+				trueLabel_1 = SimpLanPlusLib.freshLabel();
+				endIfLabel_1 = SimpLanPlusLib.freshLabel();
+				
+				// verifico la condizione leftExp <= rightExp
+				code = code + "bleq $t1 $a0 " + trueLabel_1 + "\n";
+				
+				// se vale leftExp > rightExp
+				code = code + "li $a0 0\n";
+				code = code + "b " + endIfLabel_1 + "\n";
+				
+				// se vale leftExp <= rightExp
+				code = code + trueLabel_1 + ":\n";
+				code = code + "li $a0 1\n";
+				
+				// fine if 
+				code = code + endIfLabel_1 + ":\n";
+				
+				break;
+				
+			case ">":
+				/* if_1 ( $t1 <= $a0 )
+				 * 		$a0 = 0
+				 * else_1 
+				 * 		$a0 = 1
+				 * */
+				trueLabel_1 = SimpLanPlusLib.freshLabel();
+				endIfLabel_1 = SimpLanPlusLib.freshLabel();
+				
+				// verifico la condizione leftExp <= rightExp
+				code = code + "bleq $t1 $a0 " + trueLabel_1 + "\n";
+				
+				// se vale leftExp > rightExp
+				code = code + "li $a0 1\n";
+				code = code + "b " + endIfLabel_1 + "\n";
+				
+				// se vale leftExp <= rightExp
+				code = code + trueLabel_1 + ":\n";
+				code = code + "li $a0 0\n";
+				
+				// fine if 
+				code = code + endIfLabel_1 + ":\n";
+				
+				break;
+				
+			case ">=":
+				/* if_1 ( $t1 <= $a0 )
+				 * 		if_2 ( $t1 == $a0 )
+				 * 			$a0 = 1
+				 * 		else_2
+				 * 			$a0 = 0
+				 * else_1 
+				 * 		$a0 = 1
+				 * */
+				trueLabel_1 = SimpLanPlusLib.freshLabel();
+				endIfLabel_1 = SimpLanPlusLib.freshLabel();
+				trueLabel_2 = SimpLanPlusLib.freshLabel();
+				endIfLabel_2 = SimpLanPlusLib.freshLabel();
+				
+				// verifico la condizione leftExp <= rightExp
+				code = code + "bleq $t1 $a0 " + trueLabel_1 + "\n";
+				
+				// se vale leftExp > rightExp
+				code = code + "li $a0 1\n";
+				code = code + "b " + endIfLabel_1 + "\n";
+				
+				// se vale leftExp <= rightExp
+				code = code + trueLabel_1 + ":\n";
+				
+				// verifico la condizione leftExp == rightExp
+				code = code + "beq $t1 $a0 " + trueLabel_2 + "\n";
+				
+				// se vale leftExp <= rightExp
+				code = code + "li $a0 0\n";
+				code = code + "b " + endIfLabel_2 + "\n";
+				
+				// se vale leftExp == rightExp
+				code = code + trueLabel_2 + ":\n";
+				code = code + "li $a0 1\n";
+				code = code + endIfLabel_2 + ":\n";
+				
+				
+				// fine if 
+				code = code + endIfLabel_1 + ":\n";
+				
+				break;
+				
+			case "==":
+				/* if_1 ( $t1 == $a0 )
+				 * 		$a0 = 1
+				 * else_1 
+				 * 		$a0 = 0
+				 * */
+				trueLabel_1 = SimpLanPlusLib.freshLabel();
+				endIfLabel_1 = SimpLanPlusLib.freshLabel();
+				
+				// verifico la condizione leftExp == rightExp
+				code = code + "beq $t1 $a0 " + trueLabel_1 + "\n";
+				
+				// se vale leftExp != rightExp
+				code = code + "li $a0 0\n";
+				code = code + "b " + endIfLabel_1 + "\n";
+				
+				// se vale leftExp == rightExp
+				code = code + trueLabel_1 + ":\n";
+				code = code + "li $a0 1\n";
+				
+				// fine if 
+				code = code + endIfLabel_1 + ":\n";
+				
+				break;
+				
+			case "!=":
+				/* if_1 ( $t1 == $a0 ) 
+				 * 		$a0 = 0
+				 * else_1 
+				 * 		$a0 = 1
+				 * */
+				trueLabel_1 = SimpLanPlusLib.freshLabel();
+				endIfLabel_1 = SimpLanPlusLib.freshLabel();
+				
+				// verifico la condizione leftExp != rightExp
+				code = code + "beq $t1 $a0 " + trueLabel_1 + "\n";
+				
+				// se vale leftExp != rightExp
+				code = code + "li $a0 1\n";
+				code = code + "b " + endIfLabel_1 + "\n";
+				
+				// se vale leftExp == rightExp
+				code = code + trueLabel_1 + ":\n";
+				code = code + "li $a0 0\n";
+				
+				// fine if 
+				code = code + endIfLabel_1 + ":\n";
+				
+				break;
+		
+		}
+		code = code + "pop\n";
+		
+		return code;
 	}
 
 	@Override

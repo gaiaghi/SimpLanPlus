@@ -30,8 +30,10 @@ public class NewExpNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO da rivedere
+		String code = "li $t1 -1\n";
+		code = code + "sw $t1 0($hp)\n";
+		return code;
 	}
 
 	@Override
