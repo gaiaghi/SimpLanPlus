@@ -80,10 +80,37 @@ public class DecFunNode implements Node {
 		return null; //valore di ritorno non usato
 	}
 
+	/*
+	 * ...
+	 * 	 -->DECS
+	 *	 -->RA
+	 * AL
+	 * 
+	 * ARG 1
+	 * ...
+	 * ARG n-1
+	 * ARG n
+	 * 
+	 * OLD SP ?
+	 * OLD FP
+	 * */
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = "";
+		int n = args.size();
+		
+		code= code + id.getSTEntry().getFunLabel() + "\n";
+		code = code + "mv $fp $sp\n";
+		code = code + "push $ra\n";
+		code = code + block.codeGeneration(); //TODO: aggiunta e rimozione delle DECS?
+		code = code + "lw $ra 0($sp)\n"; //$ra <- top
+		//TODO n è corretto? un parametro = 1?
+		code = code + "addi $sp $sp "+n+"\n"; //pop di parametri formali + fp
+		code = code + "lw $fp 0($sp)\n";
+		code = code + "pop\n"; //pop di $ra
+		code = code + "jr $ra\n";
+		
+		return code;
 	}
 
 	@Override
@@ -100,6 +127,7 @@ public class DecFunNode implements Node {
   
         try {
         	env.addEntry(id.getId(), entry);
+        	entry.setFunLabel();
         	id.setSTEntry(entry);
         	
         	env.addScope();

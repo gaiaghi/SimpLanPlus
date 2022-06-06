@@ -13,6 +13,7 @@ public class STEntry {
 	private Node type;
 	private List<Effect> varEffects; //lista effetti per le variabili
 	private List< List<Effect> > parEffects; //lista effetti per le funzioni
+	private String funLabel; //label delle funzioni per codGen
 
 	
 	
@@ -48,6 +49,7 @@ public class STEntry {
 	public STEntry(STEntry entry) {
 		this(entry.nestingLvl, entry.offset);
 		this.type = entry.type;
+		this.funLabel = entry.funLabel;
 		
 		for (Effect e: entry.varEffects)
 			this.varEffects.add(new Effect(e));
@@ -113,6 +115,15 @@ public class STEntry {
 	public void setParEffectList(List<List<Effect>> l) {
 		this.parEffects = new ArrayList<>(l);
 	}
+	
+	public void setFunLabel() {
+		this.funLabel = LabelManager.getManager().newFunLabel();
+	}
+	
+	public String getFunLabel() {
+		return this.funLabel;
+	}
+	
 	
 	
 	//sempre per la stampa dell'ast (anche in simplan)

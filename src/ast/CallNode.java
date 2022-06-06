@@ -9,6 +9,7 @@ import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Effect;
 import util.Environment;
+import util.LabelManager;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 import util.STEntry;
@@ -60,10 +61,43 @@ public class CallNode implements Node {
 	     return funType.getRet();
 	}
 
+	/*
+	 * ...
+	 * DECS
+	 * RA
+	 * AL
+	 * 
+	 * ARG 1
+	 * ...
+	 * ARG n-1
+	 * ARG n
+	 * 
+	 * OLD SP ?
+	 * OLD FP
+	 * */
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = "";
+		code = code + "push $fp\n";
+		//TODO: old sp serve? 
+		//code = code + "push $sp\n";
+		
+		//caricamento dei parametri dall'ultimo al primo
+		for (int i = parlist.size()-1; i>=0; i--) {
+			code = code + parlist.get(i).codeGeneration();
+			code = code + "push $a0\n";
+		}
+		
+		//Access link
+		code = code + "mv $al $fp\n";
+		for (int i = 0; i < nestingLvl - id.getNestingLevel(); i++ ) {
+			code = code + "lw $al 0($al)\n";
+		}
+		code = code + "push $al\n";
+		
+		code = code + "jal " + entry.getFunLabel() + "\n";
+		
+		return code;
 	}
 
 	@Override

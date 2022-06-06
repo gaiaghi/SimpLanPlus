@@ -31,8 +31,7 @@ public class DecFunLNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		return decFun.codeGeneration();
 	}
 
 	@Override

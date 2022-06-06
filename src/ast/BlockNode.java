@@ -87,6 +87,9 @@ public class BlockNode implements Node {
 
 	@Override
 	public String codeGeneration() {
+		
+		String code = "";
+		
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -26,8 +26,7 @@ public class BoolTypeNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override

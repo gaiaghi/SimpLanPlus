@@ -82,8 +82,15 @@ public class AssignmentNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = "";
+		code = code + exp.codeGeneration();
+		code = code + "push $a0\n";
+		lhs.codeGeneration(); 
+		code = code + "lw $t1 0($sp)\n"; //risultato di exp
+		code = code +"pop\n";
+		code = code +"sw $t1 0($a0)"; //lasciamo il calcolo di al al LhsNode?
+		
+		return code;
 	}
 
 	@Override

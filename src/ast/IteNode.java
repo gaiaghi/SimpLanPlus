@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import exception.TypeErrorException;
 import util.Environment;
+import util.LabelManager;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 
@@ -64,8 +65,24 @@ public class IteNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = "";
+		
+		String endLabel = LabelManager.getManager().newLabel();
+		String thenLabel = LabelManager.getManager().newLabel();
+		
+		code = code + cond.codeGeneration(); //$a0 = risultato della condizione
+		code = code + "li $t1 1\n"; //true per il confronto
+		code = code + "beq $a0 $t1 " + thenLabel +"\n";
+		
+		if (elseStm != null)
+			code = code + elseStm.codeGeneration();
+		
+		code = code + "b " + endLabel +"\n";
+		code = code + thenLabel + "\n";
+		code = code + thenStm.codeGeneration();
+		code = code + endLabel + "\n";
+		
+		return code;
 	}
 
 	@Override
