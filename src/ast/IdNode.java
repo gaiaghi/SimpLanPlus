@@ -70,8 +70,18 @@ public class IdNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = "";
+		
+		code = code + "lw $al 0($fp)\n";
+		
+		for(int i = 0; i < nestingLvl - entry.getNestingLevel(); i ++ ) {
+			code = code + "lw $al 0($al)\n";
+		}
+		
+		int offset = entry.getOffset();
+		code = code + "lw $a0 " + offset + "($al)\n";
+		
+		return code;
 	}
 
 	@Override

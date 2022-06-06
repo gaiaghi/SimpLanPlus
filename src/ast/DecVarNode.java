@@ -88,8 +88,14 @@ public class DecVarNode implements Node{
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = "";
+		
+		if( exp != null )
+			code = code + exp.codeGeneration() + "push $a0\n";
+		else
+			code = code + "addi $sp $sp -1\n";
+		
+		return code;
 	}
 
 	

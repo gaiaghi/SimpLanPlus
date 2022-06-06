@@ -33,8 +33,7 @@ public class DecVarLNode implements Node{
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		return decVar.codeGeneration();
 	}
 
 	@Override

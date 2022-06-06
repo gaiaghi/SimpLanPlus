@@ -69,8 +69,17 @@ public class LhsNode implements Node {
 	
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
-		return null;
+		String code = "";
+		
+		code = id.codeGeneration();
+		
+		LhsNode currentNode = lhs;
+		while( currentNode != null ) {
+			code = code + "lw $a0 0($a0)\n";
+			currentNode = currentNode.lhs;
+		}
+		
+		return code;
 	}
 
 	
