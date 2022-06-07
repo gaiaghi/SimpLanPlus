@@ -72,15 +72,16 @@ public class CallNode implements Node {
 	 * ARG n-1
 	 * ARG n
 	 * 
-	 * OLD SP ?
 	 * OLD FP
 	 * */
+	/*the stack discipline guarantees that on function exit $sp is the
+	same as it was on function entry
+	there is no need to store $sp in the AR*/
+	
 	@Override
 	public String codeGeneration() {
 		String code = "";
 		code = code + "push $fp\n";
-		//TODO: old sp serve? 
-		//code = code + "push $sp\n";
 		
 		//caricamento dei parametri dall'ultimo al primo
 		for (int i = parlist.size()-1; i>=0; i--) {

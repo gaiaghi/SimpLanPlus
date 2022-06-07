@@ -90,8 +90,45 @@ public class BlockNode implements Node {
 		
 		String code = "";
 		
-		// TODO Auto-generated method stub
-		return null;
+		if (! isFunBody) {
+			//FP
+			code = code + "push $fp\n";
+			
+			/*AL
+			 * an inner block is entered or a function declared in the current
+			scope is called: ACCESS_LINK = address of ACCESS_LINK in current AR*/
+			code = code + "mv $al $fp\n";
+			code = code + "push $al\n";
+			
+			code = code + "mv $fp $sp\n";
+			//RA
+			code = code + "li $t1 0\n";
+            code = code + "push $t1\n";
+		}
+		
+        for (Node dec : declarations)
+        	code = code + dec.codeGeneration();
+
+        for (Node stm : statements)
+        	code = code + stm.codeGeneration();
+        
+		int n_var = 0;
+		for (Node dec : declarations)
+			if (dec instanceof DecVarLNode)
+				n_var++;
+		//pop var dec
+		code = code + "addi $sp $sp "+n_var+"\n"; 
+		
+		
+		if (! isFunBody) {
+			code = code + "pop\n"; // pop ra 
+			code = code + "pop\n"; // pop al
+			code = code + "lw $fp 0($sp)\n";
+			code = code + "pop\n"; // pop fp
+	        
+		}        
+		
+		return code;
 	}
 
 	@Override

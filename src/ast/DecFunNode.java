@@ -91,7 +91,6 @@ public class DecFunNode implements Node {
 	 * ARG n-1
 	 * ARG n
 	 * 
-	 * OLD SP ?
 	 * OLD FP
 	 * */
 	@Override
@@ -104,8 +103,9 @@ public class DecFunNode implements Node {
 		code = code + "push $ra\n";
 		code = code + block.codeGeneration(); //TODO: aggiunta e rimozione delle DECS?
 		code = code + "lw $ra 0($sp)\n"; //$ra <- top
+		
 		//TODO n è corretto? un parametro = 1?
-		code = code + "addi $sp $sp "+n+"\n"; //pop di parametri formali + fp
+		code = code + "addi $sp $sp "+(n+1)+"\n"; //pop di parametri formali + fp
 		code = code + "lw $fp 0($sp)\n";
 		code = code + "pop\n"; //pop di $ra
 		code = code + "jr $ra\n";
