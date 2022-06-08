@@ -30,9 +30,9 @@ public class NewExpNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO da rivedere
 		String code = "li $t1 -1\n";
 		code = code + "sw $t1 0($hp)\n";
+		code = code + "addi $a0 $hp 0\n"; // copio l'indirizzo puntato da $hp in $a0
 		return code;
 	}
 

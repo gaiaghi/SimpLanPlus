@@ -67,13 +67,7 @@ public class DecVarNode implements Node{
 			decType = ((PointerTypeNode) decType).getPointedType();
 			expType = ((PointerTypeNode) expType).getPointedType();
 		}
-//		else if( expType instanceof PointerTypeNode ) {
-//			System.out.println("ci entro con + "+exp.toPrint(""));
-//			int derNumExpDec =  ((PointerTypeNode) expType).getDerNumDec();
-//			int derNumExp = ((PointerTypeNode) expType).getDerNumStm();
-//			if( derNumExpDec == derNumExp )
-//				expType = ((PointerTypeNode) expType).getPointedType();
-//		}
+
 		else 
 			expType = util.SimpLanPlusLib.getNodeIfPointer(expType);
 
@@ -107,12 +101,7 @@ public class DecVarNode implements Node{
   		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
   	  
-  		//TODO env.offset = -2;
-  		//PROF: STentry entry = new STentry(env.nestingLevel,type, env.offset--);
-		//dovo decrementare l'offset dopo aver creato una nuova entry?
-  		//controlla offset passato come parametro
-        STEntry entry = new STEntry(env.getNestingLevel(), type, env.getOffset()); 
-        env.updateOffset(); //decremento offset
+        STEntry entry = new STEntry(env.getNestingLevel(), type, env.getAndUpdateOffset()); 
         
         try {
         	env.addEntry(id.getId(), entry);
@@ -136,14 +125,7 @@ public class DecVarNode implements Node{
 		if (exp != null) {
 			res.addAll(exp.checkEffects(env));
 			entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
-			/*try {
-				entry = env.lookup(id.getId());
-				entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
-			} catch (MissingDecException e) {
-				System.out.println("catch 3");
-			}*/
 		}
-		
 		
 		try {
 			env.addEntry(id.getId(), entry);

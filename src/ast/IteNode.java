@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import exception.TypeErrorException;
 import util.Environment;
-import util.LabelManager;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 
@@ -20,6 +19,8 @@ public class IteNode implements Node {
 	
 	private boolean thenRet;
 	private boolean elseRet;
+	
+	private String funEndLabel;
   
 	public IteNode(Node cond, Node thenStm, Node elseStm) {
 		this.cond = cond;
@@ -67,8 +68,8 @@ public class IteNode implements Node {
 	public String codeGeneration() {
 		String code = "";
 		
-		String endLabel = LabelManager.getManager().newLabel();
-		String thenLabel = LabelManager.getManager().newLabel();
+		String endLabel = SimpLanPlusLib.freshLabel();
+		String thenLabel = SimpLanPlusLib.freshLabel();
 		
 		code = code + cond.codeGeneration(); //$a0 = risultato della condizione
 		code = code + "li $t1 1\n"; //true per il confronto
@@ -78,9 +79,9 @@ public class IteNode implements Node {
 			code = code + elseStm.codeGeneration();
 		
 		code = code + "b " + endLabel +"\n";
-		code = code + thenLabel + "\n";
+		code = code + thenLabel + ":\n";
 		code = code + thenStm.codeGeneration();
-		code = code + endLabel + "\n";
+		code = code + endLabel + ":\n";
 		
 		return code;
 	}
@@ -183,6 +184,10 @@ public class IteNode implements Node {
 		else 
 			return thenType;
 		
+	}
+	
+	public void setFunEndLabel(String label) {
+		funEndLabel = label;
 	}
 	
 

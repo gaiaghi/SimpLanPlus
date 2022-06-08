@@ -56,4 +56,8 @@ public class IteLNode implements Node{
 	public boolean getReturns() {
 		return ((IteNode) ite).getReturns();
 	}
+	
+	public void setFunEndLabel(String label) {
+		((IteNode) ite).setFunEndLabel(label);
+	}
 }

@@ -49,5 +49,9 @@ public class RetLNode implements Node{
 	public void setInFunction(boolean b) {
 		((RetNode) ret).setInFunction(b);
 	}
+	
+	public void setFunEndLabel(String label) {
+		((RetNode) ret).setFunEndLabel(label);
+	}
 
 }

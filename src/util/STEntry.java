@@ -14,7 +14,7 @@ public class STEntry {
 	private List<Effect> varEffects; //lista effetti per le variabili
 	private List< List<Effect> > parEffects; //lista effetti per le funzioni
 	private String funLabel; //label delle funzioni per codGen
-
+	private String funEndLabel; // label fine funzione per il return
 	
 	
 	public STEntry (int nestingLvl, int offset) {
@@ -116,12 +116,17 @@ public class STEntry {
 		this.parEffects = new ArrayList<>(l);
 	}
 	
-	public void setFunLabel() {
-		this.funLabel = LabelManager.getManager().newFunLabel();
+	public void setFunLabels() {
+		this.funLabel = SimpLanPlusLib.freshFunLabel();
+		this.funEndLabel = SimpLanPlusLib.freshFunLabel();
 	}
 	
 	public String getFunLabel() {
 		return this.funLabel;
+	}
+	
+	public String getFunEndLabel() {
+		return this.funEndLabel;
 	}
 	
 	

@@ -19,13 +19,16 @@ public class BlockNode implements Node {
 	private boolean isFunBody; //true: è il blocco principale del corpo di una funzione
 	
 	private boolean returns;
+	private boolean main;
+	private String funEndLabel;
+	private String funEndBlock;
 	
 	public BlockNode(ArrayList<Node> declarations, ArrayList<Node> statements) {
 		this.declarations = declarations;
 		this.statements = statements;
 		this.inFunction = false;
 		this.isFunBody = false;
-		
+		main = false;
 		this.returns = findReturns();
 	}
 
@@ -90,6 +93,11 @@ public class BlockNode implements Node {
 		
 		String code = "";
 		
+		if( inFunction && !isFunBody )
+			funEndBlock = SimpLanPlusLib.freshLabel();
+		
+		code = code + "-------------------- inizio blocco\n";
+		
 		if (! isFunBody) {
 			//FP
 			code = code + "push $fp\n";
@@ -105,13 +113,21 @@ public class BlockNode implements Node {
 			code = code + "li $t1 0\n";
             code = code + "push $t1\n";
 		}
-		
+		code = code + "-------------------- inizio decs\n";
         for (Node dec : declarations)
         	code = code + dec.codeGeneration();
 
+        code = code + "-------------------- inizio stms\n";
         for (Node stm : statements)
         	code = code + stm.codeGeneration();
         
+        if( isFunBody )
+        	code = code + funEndLabel + ":\n";
+        
+        if( inFunction && !isFunBody )
+        	code = code + funEndBlock + ":\n";
+        
+        code = code + "-------------------- pulizia blocco\n";
 		int n_var = 0;
 		for (Node dec : declarations)
 			if (dec instanceof DecVarLNode)
@@ -124,16 +140,21 @@ public class BlockNode implements Node {
 			code = code + "pop\n"; // pop ra 
 			code = code + "pop\n"; // pop al
 			code = code + "lw $fp 0($sp)\n";
-			code = code + "pop\n"; // pop fp
-	        
+			code = code + "pop\n"; // pop fp 
 		}        
 		
+		if( main )
+			code = code + "halt\n";
+		code = code + "-------------------- fine blocco\n";
 		return code;
 	}
 
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		
+		if( env.getNestingLevel() == -1 )
+			main = true;
 		
 		//se è il blocco che definisce il corpo della funzione non devo creare un nuovo scope
 		if(! isFunBody) 
@@ -287,6 +308,26 @@ public class BlockNode implements Node {
 	
 	public boolean getReturns() {
 		return returns;
+	}
+	
+	public void setFunEndLabel(String label) {
+		
+		funEndLabel = label;
+		
+		for(int i=0; i<statements.size(); i++ ) {
+			Node n = statements.get(i);
+			
+			if( n instanceof RetLNode ) {
+				((RetLNode)n).setFunEndLabel(label);
+			}
+			else if ( n instanceof IteLNode ) {
+				((IteLNode)n).setFunEndLabel(label);
+			}
+			else if ( n instanceof BlockLNode ) {
+				((BlockLNode)n).setFunEndLabel(label);
+			}
+		}
+		
 	}
 	
 }

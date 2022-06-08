@@ -98,18 +98,24 @@ public class DecFunNode implements Node {
 		String code = "";
 		int n = args.size();
 		
-		code= code + id.getSTEntry().getFunLabel() + "\n";
+		code = code + "-------------------- inizio decFun\n";
+		
+		code = code + id.getSTEntry().getFunLabel() + ":\n";
 		code = code + "mv $fp $sp\n";
 		code = code + "push $ra\n";
-		code = code + block.codeGeneration(); //TODO: aggiunta e rimozione delle DECS?
-		code = code + "lw $ra 0($sp)\n"; //$ra <- top
+		block.setFunEndLabel(id.getSTEntry().getFunEndLabel());
 		
-		//TODO n è corretto? un parametro = 1?
+		code = code + "-------------------- inizio decFun.block\n";
+		code = code + block.codeGeneration(); 
+		
+		code = code + "-------------------- pulizia decFun\n";
+		//code = code + id.getSTEntry().getFunEndLabel() + ":\n";
+		code = code + "lw $ra 0($sp)\n"; //$ra <- top
 		code = code + "addi $sp $sp "+(n+1)+"\n"; //pop di parametri formali + fp
 		code = code + "lw $fp 0($sp)\n";
 		code = code + "pop\n"; //pop di $ra
 		code = code + "jr $ra\n";
-		
+		code = code + "-------------------- fine decFun\n";
 		return code;
 	}
 
@@ -122,12 +128,11 @@ public class DecFunNode implements Node {
   		//PROF: STentry entry = new STentry(env.nestingLevel, env.offset--);
 		//dovo decrementare l'offset dopo aver creato una nuova entry?
   		//controlla offset passato come parametro
-		STEntry entry = new STEntry(env.getNestingLevel(), env.getOffset()); 
-        env.updateOffset(); //decremento offset
+		STEntry entry = new STEntry(env.getNestingLevel(), env.getAndUpdateOffset() ); 
   
         try {
         	env.addEntry(id.getId(), entry);
-        	entry.setFunLabel();
+        	entry.setFunLabels();
         	id.setSTEntry(entry);
         	
         	env.addScope();
@@ -143,7 +148,7 @@ public class DecFunNode implements Node {
 				ArgNode arg = (ArgNode) a;
 				parTypes.add(arg.getType());
 				try {
-					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++); //TODO
+					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++); 
 					env.addEntry(arg.getId().getId(), parEntry);
 					arg.getId().setSTEntry(parEntry);
 				}catch(MultipleDecException e) {

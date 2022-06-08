@@ -37,7 +37,7 @@ public class ArgNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		return "addi $sp $sp 1\n";
+		return "addi $sp $sp -1\n";
 	}
 
 	@Override

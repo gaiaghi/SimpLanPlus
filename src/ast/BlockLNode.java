@@ -56,5 +56,9 @@ public class BlockLNode implements Node {
 		return ((BlockNode) block).getReturns();
 	}
 	
+	public void setFunEndLabel(String label) {
+		((BlockNode) block).setFunEndLabel(label);
+	}
+	
 
 }

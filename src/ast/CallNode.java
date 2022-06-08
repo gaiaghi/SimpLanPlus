@@ -2,14 +2,11 @@ package ast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.TreeSet;
 
 import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Effect;
 import util.Environment;
-import util.LabelManager;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 import util.STEntry;
@@ -81,6 +78,9 @@ public class CallNode implements Node {
 	@Override
 	public String codeGeneration() {
 		String code = "";
+		
+		code = code + "-------------------- inizio call\n";
+		
 		code = code + "push $fp\n";
 		
 		//caricamento dei parametri dall'ultimo al primo
@@ -98,6 +98,7 @@ public class CallNode implements Node {
 		
 		code = code + "jal " + entry.getFunLabel() + "\n";
 		
+		code = code + "-------------------- fine call\n";
 		return code;
 	}
 

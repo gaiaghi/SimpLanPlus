@@ -138,7 +138,7 @@ public class SimpLanPlus{
 		System.out.println("Visualizing AST...");
 		System.out.println(ast.toPrint(""));
 		
-		/*
+		
 		// CODE GENERATION  prova.SimpLan.asm
 		String code=ast.codeGeneration(); 
 		BufferedWriter out;
@@ -152,7 +152,7 @@ public class SimpLanPlus{
 		} 
 		 
 		System.out.println("Code generated! Assembling and running generated code.");
-
+		/*
 		//FileInputStream isASM = new FileInputStream(fileName+".asm");
 		CharStream isASM = null;
 		try {
@@ -166,8 +166,8 @@ public class SimpLanPlus{
 		CommonTokenStream tokensASM = new CommonTokenStream(lexerASM);
 		SVMParser parserASM = new SVMParser(tokensASM);
 		
-		//SVMVisitorImpl visitorSVM = new SVMVisitorImpl();
-		//visitorSVM.visit(parserASM.assembly()); 
+		SVMVisitorImpl visitorSVM = new SVMVisitorImpl();
+		visitorSVM.visit(parserASM.assembly()); 
 
 		System.out.println("You had: "+lexerASM.errorCount()+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.");
 		if (lexerASM.errorCount()>0 || parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);

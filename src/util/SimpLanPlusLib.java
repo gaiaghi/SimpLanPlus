@@ -29,12 +29,12 @@ public class SimpLanPlusLib {
   
 	
 	public static String freshLabel() { 
-		return "label"+(labCount++);
+		return "label_"+(labCount++);
 	} 
 
 	
 	public static String freshFunLabel() { 
-		return "function"+(funLabCount++);
+		return "function_"+(funLabCount++);
 	} 
   
   

@@ -13,10 +13,12 @@ public class LhsNode implements Node {
 	
 	private IdNode id;
 	private LhsNode lhs;
+	private boolean leftSide;
 	
 	public LhsNode(IdNode id, LhsNode lhs) {
 		this.id = id;
 		this.lhs = lhs;
+		this.leftSide = false;
 	}
 	
 	
@@ -71,7 +73,18 @@ public class LhsNode implements Node {
 	public String codeGeneration() {
 		String code = "";
 		
-		code = id.codeGeneration();
+		if( leftSide ) {
+			code = code + "lw $al 0($fp)\n";
+			
+			for(int i = 0; i < id.getNestingLevel() - id.getSTEntry().getNestingLevel(); i ++ ) {
+				code = code + "lw $al 0($al)\n";
+			}
+			
+			int offset = id.getSTEntry().getOffset();
+			code = code + "addi $a0 $al " + offset + "\n";
+		}
+		else
+			code = id.codeGeneration();
 		
 		LhsNode currentNode = lhs;
 		while( currentNode != null ) {
@@ -124,6 +137,10 @@ public class LhsNode implements Node {
 	
 	public boolean isPointer() {
 		return id.getSTEntry().getType() instanceof PointerTypeNode;
+	}
+	
+	public void setLeftSide(boolean value) {
+		leftSide = value;
 	}
 
 }

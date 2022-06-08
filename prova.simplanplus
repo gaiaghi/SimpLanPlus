@@ -281,10 +281,14 @@
 //{ void f(int x){ g(x); } void g(int x){ f(x); } }
 
 //n50
-//#n51#ERR
+//#n50#ERR
 //{ int y=2; void f(){ print y+x; } int x=3;  }
 
- 
+
+//n51
+//#n51#OK
+//{void f(int x, int y){ {int z; if(x==0) return; else print x;} print y; } }
+ { void f () {int x; {int y; {int z;   return;} print y;}  print x;}  }
 
 //p01
 //OK

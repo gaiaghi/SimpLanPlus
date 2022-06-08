@@ -26,7 +26,7 @@ public class Environment {
 	
 	//costruttore per environment vuoto
 	public Environment() {
-		this( new ArrayList<>(), -1, 0);
+		this( new ArrayList<>(), -1, -2);
 	}
 	
 	//to clone
@@ -51,8 +51,8 @@ public class Environment {
 		return this.offset;
 	}
 	
-	public void updateOffset() {
-		offset--;
+	public int getAndUpdateOffset() {
+		return offset--;
 	}
 	
 	public HashMap<String, STEntry> getCurrentScope(){

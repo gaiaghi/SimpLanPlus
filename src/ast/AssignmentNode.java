@@ -18,6 +18,7 @@ public class AssignmentNode implements Node {
 	private Node exp;
 	private LhsNode lhs;
 	
+	
 	public AssignmentNode(LhsNode lhs, Node exp) {
 		this.exp = exp;
 		this.lhs = lhs;
@@ -38,23 +39,9 @@ public class AssignmentNode implements Node {
 		Node expType = exp.typeCheck();
 		Node lhsType = lhs.typeCheck();
 		
-//		if( lhsType instanceof PointerTypeNode && !(expType instanceof PointerTypeNode) ) {
-//			int dereferenceNumDec = ((PointerTypeNode) lhsType).getDerNumDec();
-//			int dereferenceNumLhs = ((PointerTypeNode) lhsType).getDerNumStm();
-//			if( dereferenceNumLhs == dereferenceNumDec ) 
-//				lhsType = ((PointerTypeNode) lhsType).getPointedType();
-//		}
-//		else if( !(lhsType instanceof PointerTypeNode) && expType instanceof PointerTypeNode ) {
-//			int dereferenceNumDec = ((PointerTypeNode) expType).getDerNumDec();
-//			int dereferenceNumLhs = ((PointerTypeNode) expType).getDerNumStm();
-//			if( dereferenceNumLhs == dereferenceNumDec ) 
-//				expType = ((PointerTypeNode) expType).getPointedType();
-//		}
-		
 		lhsType =  util.SimpLanPlusLib.getNodeIfPointer(lhsType);		
 		expType =  util.SimpLanPlusLib.getNodeIfPointer(expType);
-		
-//		else 
+
 		if( lhsType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
 			PointerTypeNode pointerLhs = (PointerTypeNode) lhsType;
 			int derNumLhsDec = pointerLhs.getDerNumDec();
@@ -85,10 +72,11 @@ public class AssignmentNode implements Node {
 		String code = "";
 		code = code + exp.codeGeneration();
 		code = code + "push $a0\n";
-		lhs.codeGeneration(); 
+		lhs.setLeftSide(true);
+		code = code + lhs.codeGeneration(); 
 		code = code + "lw $t1 0($sp)\n"; //risultato di exp
 		code = code +"pop\n";
-		code = code +"sw $t1 0($a0)"; //lasciamo il calcolo di al al LhsNode?
+		code = code +"sw $t1 0($a0)\n"; //lasciamo il calcolo di al al LhsNode?
 		
 		return code;
 	}

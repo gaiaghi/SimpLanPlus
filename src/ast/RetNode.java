@@ -12,6 +12,7 @@ public class RetNode implements Node {
 
 	private Node exp;
 	private boolean inFunction;
+	private String funEndLabel;
 	
 	public RetNode(Node exp) {
 		this.exp = exp;
@@ -35,14 +36,7 @@ public class RetNode implements Node {
 			return new VoidTypeNode();
 		else {
 			Node expType = exp.typeCheck();	
-			
-//			if( expType instanceof PointerTypeNode ) {
-//				int derNumDec = ((PointerTypeNode) expType).getDerNumDec();
-//				int derNum = ((PointerTypeNode) expType).getDerNumStm();
-//				if( derNumDec == derNum ) {
-//					expType = ((PointerTypeNode) expType).getPointedType();
-//				}
-//			}
+
 			expType = util.SimpLanPlusLib.getNodeIfPointer(expType);
 			
 			return expType;
@@ -55,9 +49,9 @@ public class RetNode implements Node {
 		if( exp != null )
 			code = code + exp.codeGeneration();
 		
-		code = code + "b " + /* label + */ "\n";
+		code = code + "b " + funEndLabel + "\n";
 		
-		return null;
+		return code;
 	}
 
 	@Override
@@ -84,6 +78,10 @@ public class RetNode implements Node {
 	
 	public void setInFunction(boolean b){
 		inFunction = b;
+	}
+	
+	public void setFunEndLabel(String label) {
+		funEndLabel = label;
 	}
 	
 
