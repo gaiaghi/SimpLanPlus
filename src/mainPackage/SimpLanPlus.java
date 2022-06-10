@@ -1,32 +1,22 @@
 package mainPackage;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 import ast.Node;
-import ast.SVMVisitorImpl;
 import ast.SimpLanPlusVisitorImpl;
-import exception.MissingDecException;
-import exception.MultipleDecException;
 import exception.TypeErrorException;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
 import util.Environment;
-import util.STEntry;
 import util.SemanticError;
 import parser.SPPErrorListener;
-import svm.SVMLexer;
-import svm.SVMParser;
 
 
 public class SimpLanPlus{
@@ -171,8 +161,11 @@ public class SimpLanPlus{
 
 		System.out.println("You had: "+lexerASM.errorCount()+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.");
 		if (lexerASM.errorCount()>0 || parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);
-		*/
 		
+		System.out.println("Starting Virtual Machine...");
+		ExecuteVM vm = new ExecuteVM(visitorSVM.code);
+		vm.cpu();
+		*/
 	}
 	
 }

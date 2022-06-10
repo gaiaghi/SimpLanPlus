@@ -109,11 +109,12 @@ public class DecFunNode implements Node {
 		code = code + block.codeGeneration(); 
 		
 		code = code + "-------------------- pulizia decFun\n";
-		//code = code + id.getSTEntry().getFunEndLabel() + ":\n";
+		code = code + id.getSTEntry().getFunEndLabel() + ":\n";
 		code = code + "lw $ra 0($sp)\n"; //$ra <- top
 		code = code + "addi $sp $sp "+(n+1)+"\n"; //pop di parametri formali + fp
 		code = code + "lw $fp 0($sp)\n";
 		code = code + "pop\n"; //pop di $ra
+		code = code + "li $ret 0\n";	//ripristino il valore di $ret
 		code = code + "jr $ra\n";
 		code = code + "-------------------- fine decFun\n";
 		return code;

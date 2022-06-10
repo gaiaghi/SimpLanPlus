@@ -287,8 +287,16 @@
 
 //n51
 //#n51#OK
-//{void f(int x, int y){ {int z; if(x==0) return; else print x;} print y; } }
- { void f () {int x; {int y; {int z;   return;} print y;}  print x;}  }
+//{void f(int x, int y){ {int z; if(x==0) return; else print x;} print y; } f(2,3);}
+
+//n52
+//#n52#OK
+//{void f() {print true; {return;}}}
+
+
+//n53
+//#n53#OK
+//{ ^^int x = new ^int; ^int y ; x^=new int;  x^^=3; y=x^; }
 
 //p01
 //OK

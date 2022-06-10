@@ -92,10 +92,7 @@ public class BlockNode implements Node {
 	public String codeGeneration() {
 		
 		String code = "";
-		
-		if( inFunction && !isFunBody )
-			funEndBlock = SimpLanPlusLib.freshLabel();
-		
+
 		code = code + "-------------------- inizio blocco\n";
 		
 		if (! isFunBody) {
@@ -114,17 +111,22 @@ public class BlockNode implements Node {
             code = code + "push $t1\n";
 		}
 		code = code + "-------------------- inizio decs\n";
-        for (Node dec : declarations)
+		int jj=1;
+        for (Node dec : declarations) {
+        	code = code + "-------------------- dec " +jj +"\n"; jj++;
         	code = code + dec.codeGeneration();
+    	}
 
         code = code + "-------------------- inizio stms\n";
-        for (Node stm : statements)
+        jj=1;
+        for (Node stm : statements) {
+        	code = code + "-------------------- stm " +jj +"\n"; jj++;
         	code = code + stm.codeGeneration();
+        }
+        	
+        code = code + "-------------------- fine stms\n";
         
-        if( isFunBody )
-        	code = code + funEndLabel + ":\n";
-        
-        if( inFunction && !isFunBody )
+        if( inFunction )
         	code = code + funEndBlock + ":\n";
         
         code = code + "-------------------- pulizia blocco\n";
@@ -141,7 +143,35 @@ public class BlockNode implements Node {
 			code = code + "pop\n"; // pop al
 			code = code + "lw $fp 0($sp)\n";
 			code = code + "pop\n"; // pop fp 
-		}        
+		}     
+		
+		if( inFunction ) {
+			// se è stato eseguito un return allora $ret == 1
+			code = code + "-------------------- controllo se c'è stato un return\n";
+			String trueLabel = SimpLanPlusLib.freshLabel();
+			String endIfLabel = SimpLanPlusLib.freshLabel();
+			
+			// $a0 potrebbe avere un valore significativo, lo salvo sullo stack 
+			// e dopo ripristino il vecchio valore
+			code = code + "push $a0\n";
+			code = code + "li $a0 1\n";
+			code = code + "beq $ret $a0 " + trueLabel + "\n";
+			
+			// se vale $ret != 1
+			code = code + "lw $a0 0($sp)\n";
+			code = code + "pop\n";
+			code = code + "b " + endIfLabel + "\n";
+			
+			// se vale $ret == 1
+			code = code + trueLabel + ":\n";
+			code = code + "lw $a0 0($sp)\n";
+			code = code + "pop\n";
+			code = code + "-------------------- se $ret == 1 vai a\n";
+			code = code + "b " + funEndLabel + "\n";
+			
+			// fine if 
+			code = code + endIfLabel + ":\n";
+		}
 		
 		if( main )
 			code = code + "halt\n";
@@ -310,21 +340,22 @@ public class BlockNode implements Node {
 		return returns;
 	}
 	
-	public void setFunEndLabel(String label) {
+	public void setFunEndLabel(String labelEndFun) {
+		funEndLabel = labelEndFun;
 		
-		funEndLabel = label;
+		funEndBlock = SimpLanPlusLib.freshLabel();
 		
 		for(int i=0; i<statements.size(); i++ ) {
 			Node n = statements.get(i);
 			
 			if( n instanceof RetLNode ) {
-				((RetLNode)n).setFunEndLabel(label);
+				((RetLNode)n).setFunEndLabel(funEndBlock);
 			}
 			else if ( n instanceof IteLNode ) {
-				((IteLNode)n).setFunEndLabel(label);
+				((IteLNode)n).setFunEndLabel(funEndBlock);
 			}
 			else if ( n instanceof BlockLNode ) {
-				((BlockLNode)n).setFunEndLabel(label);
+				((BlockLNode)n).setFunEndLabel(funEndBlock);
 			}
 		}
 		
