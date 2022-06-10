@@ -298,6 +298,10 @@
 //#n53#OK
 //{ ^^int x = new ^int; ^int y ; x^=new int;  x^^=3; y=x^; }
 
+//n54
+//#n54#ERR
+//{^^int x=new ^int; ^int y=new int; y^=3; x^=y; delete y; print x^^;}
+
 //p01
 //OK
 //#p01#OK

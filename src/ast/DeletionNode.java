@@ -55,8 +55,12 @@ public class DeletionNode implements Node{
 		res.addAll(id.checkEffects(env));
 			
 		// si mettono a delete tutti gli oggetti della catena di puntatori
-		for (int i = 0; i <= id.getDerNumDec(); i++) 
-			id.getSTEntry().setVarEffect(i, Effect.seq(id.getSTEntry().getVarEffect(i), Effect.DELETED));
+		for (int i = 0; i <= id.getDerNumDec(); i++) {
+//			id.getSTEntry().setVarEffect(i, Effect.seq(id.getSTEntry().getVarEffect(i), Effect.DELETED));
+
+			Effect seqEffect = Effect.seq(id.getSTEntry().getVarEffect(i), Effect.DELETED);
+			id.getSTEntry().getVarEffect(i).setEffect(seqEffect);
+		}
 		
 		if (id.getSTEntry().getVarEffect(0).equals(Effect.ERROR) )
 			res.add(new SemanticError("Variable "+ id.getId() +" was already deleted.  Deletion"));
