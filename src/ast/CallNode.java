@@ -47,14 +47,41 @@ public class CallNode implements Node {
 		
 		//controllo che la chiamata abbia il numero corretto di parametri
 	     ArrayList<Node> par_formali = funType.getParList();
+	     
 	     if ( !(par_formali.size() == parlist.size()) ) 
-	    	 throw new TypeErrorException("wrong number of parameters in the invocation of " +id);
+	    	 throw new TypeErrorException("wrong number of parameters in the invocation of " +id.getId());
 	     
 	     //controllo che il tipo dei parametri sia corretto
 	     for (int i=0; i<parlist.size(); i++) 
-	    	 if ( !(SimpLanPlusLib.isEquals( (parlist.get(i)).typeCheck(), par_formali.get(i)) ) ) 
-	    		 throw new TypeErrorException("wrong type for "+(i+1)+"-th parameter in the invocation of " +id);
-	        
+	     {
+	    	 //Node formalParType =  util.SimpLanPlusLib.getNodeIfPointer(par_formali.get(i));		
+	    	 Node formalParType = par_formali.get(i);
+	 		 Node actualParType =  util.SimpLanPlusLib.getNodeIfPointer(parlist.get(i).typeCheck());
+	 		 
+	 		 if( formalParType instanceof PointerTypeNode && actualParType instanceof PointerTypeNode ) {
+	 			 System.out.println("aaaaa ");
+	 			 PointerTypeNode pointerFormal = (PointerTypeNode) formalParType;
+	 			 int derNumFormalDec = pointerFormal.getDerNumDec();
+	 			 int derNumFormal = pointerFormal.getDerNumStm();
+				
+	 			 PointerTypeNode pointerActual = (PointerTypeNode) actualParType;
+	 			 int derNumActualDec = pointerActual.getDerNumDec();
+	 			 int derNumActual = pointerActual.getDerNumStm();
+				
+	 			 //if( (derNumFormalDec - derNumFormal) != (derNumActualDec - derNumActual) ) 
+	 			 if( derNumFormalDec != (derNumActualDec - derNumActual) ) 
+	 				 throw new TypeErrorException("not valid pointer parameter "+ 
+							pointerFormal.getErrorMsg() +" and " +pointerActual.getErrorMsg());
+		 		
+	 			 formalParType = pointerFormal.getPointedType();
+	 			 actualParType = pointerActual.getPointedType();
+	 		 }
+	 		 
+		     if ( !(SimpLanPlusLib.isEquals( actualParType, formalParType) ) ) 
+	    		 throw new TypeErrorException("wrong type for "+(i+1)+"-th parameter in the invocation of " +id.getId());
+		     
+	     }
+	     
 	     return funType.getRet();
 	}
 
@@ -244,15 +271,18 @@ public class CallNode implements Node {
 			STEntry newEntry;
 			try {
 				newEntry = env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
-				 effettoParAttuale = newEntry.getVarEffectList();
+				effettoParAttuale = newEntry.getVarEffectList();
 			} catch (MissingDecException e) {
 				errors.add(new SemanticError("CallNode 2: Missing declaration: "+((DerExpNode) parlist.get(i)).getLhs().getId().getId()));
 				return errors;
 			}
 			
+			System.out.println(effettoParAttuale.size() +"  -------------   "+effettoParFormale.size());
+			
 			List<Effect> resultSeq = new ArrayList<Effect>();
 			for( int j = 0; j < effettoParAttuale.size(); j ++ ) {
-				resultSeq.add( Effect.seq(effettoParAttuale.get(j), effettoParFormale.get(j)) );
+				Effect ee=effettoParFormale.get(j);
+				resultSeq.add( Effect.seq(effettoParAttuale.get(j), ee) );
 			}
 			
 			newEntry.setVarEffectList(resultSeq);

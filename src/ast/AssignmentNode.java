@@ -125,6 +125,7 @@ public class AssignmentNode implements Node {
 		}
 		//assegnamento di puntatori: copio gli effetti di exp in lhs
 		else if (exp instanceof DerExpNode) {
+			
 			int lhsDer = lhs.getDereferenceNum();
 			int maxDer = lhs.getId().getSTEntry().getVarEffectList().size();
 

@@ -302,6 +302,23 @@
 //#n54#ERR
 //{^^int x=new ^int; ^int y=new int; y^=3; x^=y; delete y; print x^^;}
 
+
+//n55
+//#n55#ERR
+// dovrebbe dare errore perchè passo x^ e non x
+//{void f(^int x){ delete x; }  ^int x=new int; x^=3; f(x^);   }
+
+//n56
+//#n56#ERR
+// dovrebbe dare errore perchè passo un bool al posto di un int alla funzione
+//{void f(^int x){ delete x; }  ^bool x=new bool; x^=true; f(x);   }
+
+
+//n57
+//#n57#OK
+//{void h(^int x){ print x^; } ^^int y=new ^int; y^=new int; y^^=3; h(y^);  }
+
+
 //p01
 //OK
 //#p01#OK
@@ -322,6 +339,7 @@
 //p04     (per ora OK) 
 //#p04#OK
 //{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x); } }}
+
 
 //p05
 //#p05#ERR

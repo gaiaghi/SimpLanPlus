@@ -102,6 +102,7 @@ public class STEntry {
 	
 	public void setVarEffect(int level, Effect e) {
 		this.varEffects.set(level, e);
+		//varEffects.get(level).setEffect(e);
 	}
 	
 	public void setParEffect(int index, int level, Effect e) {

@@ -21,7 +21,7 @@ import parser.SPPErrorListener;
 
 public class SimpLanPlus{
 	public static void main(String[] args) {
-
+		
 		//String fileName = args[0];
 		String fileName = "prova.simplanplus";
 		
