@@ -318,6 +318,16 @@
 //#n57#OK
 //{void h(^int x){ print x^; } ^^int y=new ^int; y^=new int; y^^=3; h(y^);  }
 
+//n58
+//#n58#ERR
+// invocazione h(y) errata
+//{void h(^^int x){ print x^^; } ^int y=new int; y^=3; h(y);  }
+
+//n59
+//#n59#ERR
+// invocazione h(y^) errata
+//{void h(^^int x){ print x^^; } ^int y=new int; y^=3; h(y^);  }
+
 
 //p01
 //OK

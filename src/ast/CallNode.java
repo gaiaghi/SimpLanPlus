@@ -59,7 +59,7 @@ public class CallNode implements Node {
 	 		 Node actualParType =  util.SimpLanPlusLib.getNodeIfPointer(parlist.get(i).typeCheck());
 	 		 
 	 		 if( formalParType instanceof PointerTypeNode && actualParType instanceof PointerTypeNode ) {
-	 			 System.out.println("aaaaa ");
+	 			 
 	 			 PointerTypeNode pointerFormal = (PointerTypeNode) formalParType;
 	 			 int derNumFormalDec = pointerFormal.getDerNumDec();
 	 			 int derNumFormal = pointerFormal.getDerNumStm();
@@ -256,7 +256,6 @@ public class CallNode implements Node {
 		// 	e del parametro formale x_i corrispondente. Sono puntatori.
 		//  Sigma_3 = PAR_(1<=i<=m) [ u_i -> SEQ(Sigma(u_i), Sigma_1(x_i)) ]
 		ArrayList<Environment> envList = new ArrayList<Environment>();
-		
 		for( int i : x_indexes ) {
 			
 			Environment tmp_env = new Environment();
@@ -277,12 +276,16 @@ public class CallNode implements Node {
 				return errors;
 			}
 			
-			System.out.println(effettoParAttuale.size() +"  -------------   "+effettoParFormale.size());
-			
+			/* copio gli effetti del parametro attuale nel parametro formale.
+			 * devo considerare il caso in cui il parametro attuale sia un 
+			 * puntatore più lungo del parametro formale */
 			List<Effect> resultSeq = new ArrayList<Effect>();
-			for( int j = 0; j < effettoParAttuale.size(); j ++ ) {
-				Effect ee=effettoParFormale.get(j);
-				resultSeq.add( Effect.seq(effettoParAttuale.get(j), ee) );
+			int diff = effettoParAttuale.size() - effettoParFormale.size();
+			for( int j = 0; j < effettoParAttuale.size()-diff-1; j ++ )
+				resultSeq.add( effettoParAttuale.get(j) );
+			
+			for( int j = 0; j < effettoParFormale.size(); j ++ ) {
+				resultSeq.add( Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );
 			}
 			
 			newEntry.setVarEffectList(resultSeq);
