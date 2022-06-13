@@ -10,10 +10,14 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import ast.Node;
+import ast.SVMVisitorImpl;
 import ast.SimpLanPlusVisitorImpl;
 import exception.TypeErrorException;
+import interpreter.ExecuteVM;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
+import svm.SVMLexer;
+import svm.SVMParser;
 import util.Environment;
 import util.SemanticError;
 import parser.SPPErrorListener;
@@ -142,7 +146,7 @@ public class SimpLanPlus{
 		} 
 		 
 		System.out.println("Code generated! Assembling and running generated code.");
-		/*
+		
 		//FileInputStream isASM = new FileInputStream(fileName+".asm");
 		CharStream isASM = null;
 		try {
@@ -161,9 +165,9 @@ public class SimpLanPlus{
 
 		System.out.println("You had: "+lexerASM.errorCount()+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.");
 		if (lexerASM.errorCount()>0 || parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);
-		
+		/*
 		System.out.println("Starting Virtual Machine...");
-		ExecuteVM vm = new ExecuteVM(visitorSVM.code);
+		ExecuteVM vm = new ExecuteVM(visitorSVM.getCode());
 		vm.cpu();
 		*/
 	}

@@ -106,7 +106,7 @@ public class CallNode implements Node {
 	public String codeGeneration() {
 		String code = "";
 		
-		code = code + "-------------------- inizio call\n";
+		//code = code + "-------------------- inizio call\n";
 		
 		code = code + "push $fp\n";
 		
@@ -125,7 +125,7 @@ public class CallNode implements Node {
 		
 		code = code + "jal " + entry.getFunLabel() + "\n";
 		
-		code = code + "-------------------- fine call\n";
+		//code = code + "-------------------- fine call\n";
 		return code;
 	}
 

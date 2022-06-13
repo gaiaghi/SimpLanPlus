@@ -93,7 +93,7 @@ public class BlockNode implements Node {
 		
 		String code = "";
 
-		code = code + "-------------------- inizio blocco\n";
+		//code = code + "-------------------- inizio blocco\n";
 		
 		if (! isFunBody) {
 			//FP
@@ -110,26 +110,26 @@ public class BlockNode implements Node {
 			code = code + "li $t1 0\n";
             code = code + "push $t1\n";
 		}
-		code = code + "-------------------- inizio decs\n";
-		int jj=1;
+		//code = code + "-------------------- inizio decs\n";
+		//int jj=1;
         for (Node dec : declarations) {
-        	code = code + "-------------------- dec " +jj +"\n"; jj++;
+        	//code = code + "-------------------- dec " +jj +"\n"; jj++;
         	code = code + dec.codeGeneration();
     	}
 
-        code = code + "-------------------- inizio stms\n";
-        jj=1;
+       // code = code + "-------------------- inizio stms\n";
+        //jj=1;
         for (Node stm : statements) {
-        	code = code + "-------------------- stm " +jj +"\n"; jj++;
+        	//code = code + "-------------------- stm " +jj +"\n"; jj++;
         	code = code + stm.codeGeneration();
         }
         	
-        code = code + "-------------------- fine stms\n";
+        //code = code + "-------------------- fine stms\n";
         
         if( inFunction )
         	code = code + funEndBlock + ":\n";
         
-        code = code + "-------------------- pulizia blocco\n";
+        //code = code + "-------------------- pulizia blocco\n";
 		int n_var = 0;
 		for (Node dec : declarations)
 			if (dec instanceof DecVarLNode)
@@ -147,7 +147,7 @@ public class BlockNode implements Node {
 		
 		if( inFunction ) {
 			// se è stato eseguito un return allora $ret == 1
-			code = code + "-------------------- controllo se c'è stato un return\n";
+			//code = code + "-------------------- controllo se c'è stato un return\n";
 			String trueLabel = SimpLanPlusLib.freshLabel();
 			String endIfLabel = SimpLanPlusLib.freshLabel();
 			
@@ -166,7 +166,7 @@ public class BlockNode implements Node {
 			code = code + trueLabel + ":\n";
 			code = code + "lw $a0 0($sp)\n";
 			code = code + "pop\n";
-			code = code + "-------------------- se $ret == 1 vai a\n";
+			//code = code + "-------------------- se $ret == 1 vai a\n";
 			code = code + "b " + funEndLabel + "\n";
 			
 			// fine if 
@@ -175,7 +175,7 @@ public class BlockNode implements Node {
 		
 		if( main )
 			code = code + "halt\n";
-		code = code + "-------------------- fine blocco\n";
+		//code = code + "-------------------- fine blocco\n";
 		return code;
 	}
 

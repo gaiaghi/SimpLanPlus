@@ -158,7 +158,7 @@ public class SVMParser extends Parser {
 	}
 
 	public static class InstructionContext extends ParserRuleContext {
-		public Token n;
+		public Token reg;
 		public Token res;
 		public Token term1;
 		public Token term2;
@@ -167,7 +167,6 @@ public class SVMParser extends Parser {
 		public Token offset;
 		public Token address;
 		public Token l;
-		public Token reg;
 		public Token to;
 		public Token from;
 		public TerminalNode PUSH() { return getToken(SVMParser.PUSH, 0); }
@@ -232,7 +231,7 @@ public class SVMParser extends Parser {
 				setState(10);
 				match(PUSH);
 				setState(11);
-				((InstructionContext)_localctx).n = match(REGISTER);
+				((InstructionContext)_localctx).reg = match(REGISTER);
 				}
 				break;
 			case POP:

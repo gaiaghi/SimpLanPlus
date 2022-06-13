@@ -71,21 +71,21 @@ public class IteNode implements Node {
 		String endLabel = SimpLanPlusLib.freshLabel();
 		String thenLabel = SimpLanPlusLib.freshLabel();
 		
-		code = code + "-------------------- IF.cond\n";
+		//code = code + "-------------------- IF.cond\n";
 		
 		code = code + cond.codeGeneration(); //$a0 = risultato della condizione
 		code = code + "li $t1 1\n"; //true per il confronto
 		code = code + "beq $a0 $t1 " + thenLabel +"\n";
-		code = code + "-------------------- IF.else\n";
+		//code = code + "-------------------- IF.else\n";
 		
 		if (elseStm != null)
 			code = code + elseStm.codeGeneration();
 		
 		code = code + "b " + endLabel +"\n";
-		code = code + "-------------------- IF.then\n";
+		//code = code + "-------------------- IF.then\n";
 		code = code + thenLabel + ":\n";
 		code = code + thenStm.codeGeneration();
-		code = code + "-------------------- IF.end\n";
+		//code = code + "-------------------- IF.end\n";
 		code = code + endLabel + ":\n";
 		
 		return code;

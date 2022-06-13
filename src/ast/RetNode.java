@@ -49,7 +49,7 @@ public class RetNode implements Node {
 		if( exp != null )
 			code = code + exp.codeGeneration();
 		
-		code = code + "-------------------- RET\n";
+		//code = code + "-------------------- RET\n";
 		code = code + "li $ret 1\n";
 		code = code + "b " + funEndLabel + "\n";
 		

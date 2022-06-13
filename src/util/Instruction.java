@@ -1,6 +1,7 @@
 package util;
 
 public class Instruction {
+	
 	private int instr;
 	private String arg1;
 	private int offset;

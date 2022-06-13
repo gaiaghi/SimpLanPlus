@@ -1,13 +1,16 @@
 package interpreter;
 
+import java.util.ArrayList;
+
 import svm.SVMParser;
+import util.Instruction;
 
 public class ExecuteVM {
     
     public static final int CODESIZE = 10000;
     public static final int MEMSIZE = 10000;
  
-    private int[] code;
+    private ArrayList<Instruction> code;
     private int[] memory = new int[MEMSIZE];
     
     private int ip = 0;
@@ -15,9 +18,11 @@ public class ExecuteVM {
     private int hp = 0;       
     private int fp = MEMSIZE; 
     private int ra;           
-    private int rv;
+    private int ret;
+    private int a0;
+    private int al;
     
-    public ExecuteVM(int[] code) {
+    public ExecuteVM(ArrayList<Instruction> code) {
       this.code = code;
     }
     
@@ -28,10 +33,11 @@ public class ExecuteVM {
             return;
     	}
     	else {
-    		int bytecode = code[ip++]; // fetch
+    		Instruction bytecode = code.get(ip);  // fetch
+    		ip++;
             int v1,v2;
             int address;
-            switch ( bytecode ) {
+            switch ( bytecode.getInstr() ) {
               case SVMParser.PUSH:
                 push( code[ip++] );
                 break;

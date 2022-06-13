@@ -24,7 +24,7 @@ private List<String> errors = new ArrayList<>();
 assembly: (instruction)* ;
 
 instruction:
-    ( 	PUSH 	n=REGISTER 		     
+    ( 	PUSH 	reg=REGISTER 		     
 	  | POP		
 	     
 	  | ADD		res=REGISTER	term1=REGISTER		term2=REGISTER	    

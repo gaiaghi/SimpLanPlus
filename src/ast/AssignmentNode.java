@@ -101,7 +101,6 @@ public class AssignmentNode implements Node {
 		try {
 			lhsEntry = env.lookup(lhs.getId().getId());
 		} catch (MissingDecException e1) {
-			System.out.println("AssignmentNode: MissingDecException "+lhs.getId().getId());
 			res.add(new SemanticError("AssignmentNode: MissingDecException "+lhs.getId().getId()));
 			return res;
 		}
@@ -113,7 +112,6 @@ public class AssignmentNode implements Node {
 		if(lhs.isPointer()) {
 			if ( ! lhsEntry.getVarEffect(0).equals(Effect.READ_WRITE) ) {
 	            res.add(new SemanticError(lhs.getId().getId() + " has not status RW. AssignmentNode"));
-	            System.out.println(lhs.getId().getId() + " has not status RW.  AssignmentNode");
 			}
 		}
 		

@@ -2,16 +2,17 @@ package ast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import interpreter.ExecuteVM;
 import svm.SVMLexer;
 import svm.SVMParser;
-import svm.SVMBaseVisitor;
 import util.Instruction;
+import svm.SVMBaseVisitor;
 
 public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
  
-	public ArrayList<Instruction> code = new ArrayList<Instruction>();
+	private ArrayList<Instruction> code = new ArrayList<Instruction>();
     private int i = 0;
     private HashMap<String,Integer> labelAdd = new HashMap<String,Integer>(); 
     private HashMap<Integer,String> labelRef = new HashMap<Integer,String>();
@@ -19,12 +20,31 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
     @Override 
     public Void visitAssembly(SVMParser.AssemblyContext ctx) { 
     	visitChildren(ctx);
-    	for (Integer refAdd: labelRef.keySet()) {
-    		//TODO
-//            code[refAdd]=labelAdd.get(labelRef.get(refAdd));
+    	
+    	for (Map.Entry<Integer, String> ref: labelRef.entrySet()) {
+    		// recupero il valore della label
+    		String label = ref.getValue();
+    		// recupero l'istruzione da modificare che contiene la label
+    		Instruction instr = code.get(ref.getKey());
+    		// creo una nuova istruzione e la inizializzo in base al tipo di istruzione
+    		Instruction newInstr = null;
+    		switch( instr.getInstr() ) {
+    			case SVMLexer.BRANCHEQ:	
+    			case SVMLexer.BRANCHLESSEQ:
+    				newInstr = new Instruction(instr.getInstr(), instr.getArg1(), instr.getArg2(), labelAdd.get(label).toString());
+    				break;
+    			case SVMLexer.BRANCH:	
+    			case SVMLexer.JAL:
+    				newInstr = new Instruction(instr.getInstr(), labelAdd.get(label).toString());
+    				break;
+    		}
+    		// setto la nuova istruzione al posto della vecchia
+    		code.set(ref.getKey(), newInstr);
     	}
     	return null;
     }
+    
+   
     
     @Override 
     public Void visitInstruction(SVMParser.InstructionContext ctx) { 
@@ -86,22 +106,22 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 				break;
 				
 			case SVMLexer.LABEL:
-				labelAdd.put(ctx.l.getText(),i);
+				labelAdd.put(ctx.l.getText(), code.size());
 				break;
 				
 			case SVMLexer.BRANCH:
 				code.add(new Instruction(SVMParser.BRANCH, ctx.l.getText()));
-                labelRef.put(i++,(ctx.l!=null? ctx.l.getText():null));
+                labelRef.put(code.size()-1,(ctx.l!=null? ctx.l.getText():null));
 				break;
 				
 			case SVMLexer.BRANCHEQ:
 				code.add(new Instruction(SVMParser.BRANCHEQ, ctx.term1.getText(), ctx.term2.getText(), ctx.l.getText()));
-                labelRef.put(i++,(ctx.l!=null? ctx.l.getText():null));
+                labelRef.put(code.size()-1,(ctx.l!=null? ctx.l.getText():null));
                 break;
                 
 			case SVMLexer.BRANCHLESSEQ:
 				code.add(new Instruction(SVMParser.BRANCHEQ, ctx.term1.getText(), ctx.term2.getText(), ctx.l.getText()));
-                labelRef.put(i++,(ctx.l!=null? ctx.l.getText():null));
+                labelRef.put(code.size()-1,(ctx.l!=null? ctx.l.getText():null));
                 break;
                 
 			case SVMLexer.JR:
@@ -110,7 +130,7 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 				
 			case SVMLexer.JAL:
 				code.add(new Instruction(SVMParser.JAL, ctx.l.getText()));
-				labelRef.put(i++, ctx.l.getText());
+				labelRef.put(code.size()-1, ctx.l.getText());
 				break;
 				
 			case SVMLexer.MOVE:
@@ -159,5 +179,10 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
     	return null;
     }
 
+    
+    public ArrayList<Instruction> getCode(){
+    	return code;
+    }
+    
 	
 }
