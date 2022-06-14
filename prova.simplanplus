@@ -348,7 +348,7 @@
 
 //p04     (per ora OK) 
 //#p04#OK
-//{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x); } }}
+{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x); } }}
 
 
 //p05

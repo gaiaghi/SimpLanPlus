@@ -75,4 +75,18 @@ public class Instruction {
 	public int getOffset() {
 		return this.offset;
 	}
+	
+	public String toString() {
+		String str = "" + Integer.toString(instr) +" ";
+		if( arg1 != null )
+			str = str + arg1 + " ";
+		
+		str = str + Integer.toString(offset) + " ";
+		
+		if( arg2 != null )
+			str = str + arg2 + " ";
+		if( arg3 != null )
+			str = str + arg3 + " ";
+		return str;
+	}
 }
