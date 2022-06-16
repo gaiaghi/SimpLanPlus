@@ -76,6 +76,7 @@ public class Instruction {
 		return this.offset;
 	}
 	
+	
 	public String toString() {
 		String str = "" + Integer.toString(instr) +" ";
 		if( arg1 != null )

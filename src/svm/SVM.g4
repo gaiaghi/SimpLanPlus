@@ -71,9 +71,9 @@ SUB	 	: 'sub' ;
 MULT	: 'mult' ;  	
 DIV	 	: 'div' ;	
 ADDI	: 'addi' ;  	
-SUBI	: 'subi' ;	
+SUBI	: 'subi' ;	//non utilizzato
 MULTI	: 'multi' ;  	
-DIVI	: 'divi' ;
+DIVI	: 'divi' ;	//non utilizzato
 LI 		: 'li';
 LB 		: 'lb';
 STOREW	: 'sw' ; 			// store in the memory cell pointed by top the value next
@@ -89,9 +89,9 @@ MOVE 	: 'mv';
 AND 	: 'and';
 OR		: 'or';
 NOT 	: 'not';
-ANDB 	: 'andb';
-ORB 	: 'orb';
-NOTB 	: 'notb';
+ANDB 	: 'andb';	//non utilizzato
+ORB 	: 'orb';	//non utilizzato
+NOTB 	: 'notb';	//non utilizzato
 HALT	: 'halt' ;	// stop execution
 
 
