@@ -12,6 +12,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import ast.Node;
 import ast.SVMVisitorImpl;
 import ast.SimpLanPlusVisitorImpl;
+import exception.MemoryException;
+import exception.SmallCodeAreaCException;
 import exception.TypeErrorException;
 import interpreter.ExecuteVM;
 import parser.SimpLanPlusLexer;
@@ -165,11 +167,21 @@ public class SimpLanPlus{
 
 		System.out.println("You had: "+lexerASM.errorCount()+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.");
 		if (lexerASM.errorCount()>0 || parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);
-		/*
-		System.out.println("Starting Virtual Machine...");
-		ExecuteVM vm = new ExecuteVM(visitorSVM.getCode());
-		vm.cpu();
-		*/
+		
+		// TODO l'utente deve inserire queste dimensioni
+		// dimensione code area
+	    int CODESIZE = 10000;
+	    // dimensione other space (stack + heap)
+	    int MEMSIZE = 10000;
+	    
+	    try {
+			System.out.println("Starting Virtual Machine...");
+			ExecuteVM vm = new ExecuteVM(visitorSVM.getCode(), CODESIZE, MEMSIZE);
+			vm.cpu();
+	    }catch(SmallCodeAreaCException | MemoryException e) {
+	    	System.out.println(e.getMessage());
+	    }
+		
 	}
 	
 }

@@ -3,8 +3,10 @@ package interpreter;
 import java.util.ArrayList;
 
 import exception.AccessToFreeMemoryCellException;
+import exception.InvalidInstructionException;
 import exception.MemoryException;
 import exception.MissingValueCellException;
+import exception.SmallCodeAreaCException;
 import svm.SVMParser;
 import util.Cell;
 import util.Instruction;
@@ -22,24 +24,37 @@ public class ExecuteVM {
     private ArrayList<Cell> memory;
     
     private Registers regs;
-    /*private int ip = 0;
-    private int sp = MEMSIZE;
-    private int hp = 0;       
-    private int fp = MEMSIZE; 
-    private int ra;           
-    private int ret;
-    private int a0;
-    private int al;*/
     
-    public ExecuteVM(ArrayList<Instruction> c, int sizeCodeArea, int sizeOtherSpace) {
+    public ExecuteVM(ArrayList<Instruction> c, int sizeCodeArea, int sizeOtherSpace) throws SmallCodeAreaCException, MemoryException {
       code = c;
       CODESIZE = sizeCodeArea;
       MEMSIZE = sizeOtherSpace;
       memory = new ArrayList<Cell>(CODESIZE + MEMSIZE);
       
-      //TODO setta valori iniziali registri, devi settare hp
-      //a0, t1, sp, fp, al, ra, hp, ret, ip
-      regs = new Registers(0,0,MEMSIZE,MEMSIZE,0,0,0,0,0);
+      //TODO setta valori iniziali registri, 	 hp=CODESIZE ??? è corretto?
+      //ordine parametri: 	a0, t1, sp, fp, al, ra, hp, ret, ip
+      regs = new Registers(0,0,MEMSIZE,MEMSIZE,0,0,CODESIZE,0,0);
+      
+      // Inizializzo la memoria con celle vuote.
+      // Inizializzo le celle della code area. true indice una cella della code area
+      for(int i = 0; i < CODESIZE; i ++) 
+		  memory.set(i, new Cell( true ) );
+      // Inizializzo le celle di Other Space (stack + heap). false indice una cella dello stack/heap
+      for(int i = CODESIZE; i < memory.size(); i ++) 
+		  memory.set(i, new Cell( false ) );
+      
+      /* controllo che la dimensione della code area sia sufficiente a 
+       	 contenere il codice ricevuto in input.
+  		 	- Se è sufficiente, copio ogni istruzione del codice in input
+  		 	 	in una cella di memoria della code area
+	 	 	- altrimenti eccezione
+       */
+      if( code.size() > CODESIZE )
+    	  throw new SmallCodeAreaCException("Code area too small!");
+      else
+    	  for(int i = 0; i < code.size(); i ++) 
+    		  memory.get(i).setInstruction(code.get(i));
+    	
     }
     
     
@@ -55,9 +70,11 @@ public class ExecuteVM {
 	    			return;
 	    		}
 	    		else {
-		    		Instruction bytecode = code.get( regs.getIP() );  // fetch
+	    			// fetch
+		    		Instruction bytecode = code.get( regs.getIP() );  
 		    		regs.addOneToIP();
-		            int v1,v2;
+		            // TODO controlla se tutte queste variabili vengono usate
+		    		int v1,v2;
 		            int address;
 		            int arg1;
 		            int arg2;
@@ -68,89 +85,59 @@ public class ExecuteVM {
 		            	
 		            	case SVMParser.PUSH:
 		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		/*
-		            		push( Integer.parseInt(code.get( regs.getIP() ).getArg1() ) );
-		            		regs.addOneToIP();
-		            		*/
+		            		push(arg1);
 		            		break;
 		            	
 		            	case SVMParser.POP:
-		            		
-		            		/*
 		            		pop();
-		            		*/
 		            		break;
 		              
 		            	case SVMParser.ADD :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		/*
-			            	v1=pop();
-			                v2=pop();
-			                push(v2 + v1);
-			                */
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
+		            		arg3 = regs.getRegisterValue(bytecode.getArg3());
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2 + arg3);
 			                break;
 		            	
 		            	case SVMParser.SUB :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		/*
-			            	v1=pop();
-		            		v2=pop();
-		            		push(v2 - v1);
-			                */
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
+		            		arg3 = regs.getRegisterValue(bytecode.getArg3());
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2 - arg3);
 		            		break;
 		              
 		            	case SVMParser.MULT :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		/*
-			            	v1=pop();
-			                v2=pop();
-			                push(v2 * v1);
-			                */
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
+		            		arg3 = regs.getRegisterValue(bytecode.getArg3());
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2 * arg3);
 			                break;
 		              
 		            	case SVMParser.DIV :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		/*
-			            	v1=pop();
-			                v2=pop();
-			                push(v2 / v1);
-			                */
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
+		            		arg3 = regs.getRegisterValue(bytecode.getArg3());
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2 / arg3);
 			                break;  
 			                
 		            	case SVMParser.ADDI :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2 + arg3);
 			                break;
 		            	
 		            	case SVMParser.SUBI :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		
-		            		break;
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2 - arg3);
+			                break;
 		              
 		            	case SVMParser.MULTI :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2 * arg3);
 			                break;
 		              
 		            	case SVMParser.DIVI :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2 / arg3);
 			                break;  
 			            
 		            	case SVMParser.LI :
@@ -261,23 +248,20 @@ public class ExecuteVM {
 			                break;
 			                
 		            	case SVMParser.AND :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
+		            		arg3 = regs.getRegisterValue(bytecode.getArg3());
+		            		regs.setRegisterValue(bytecode.getArg1(), and(arg2, arg3) );
 			                break;
 			                
 		            	case SVMParser.OR :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
+		            		arg3 = regs.getRegisterValue(bytecode.getArg3());
+		            		regs.setRegisterValue(bytecode.getArg1(), or(arg2, arg3) );
 			                break;
 			                
 		            	case SVMParser.NOT :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		
+		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
+		            		regs.setRegisterValue(bytecode.getArg1(), not(arg2) );
 			                break;
 		             
 		            	case SVMParser.HALT :
@@ -294,24 +278,29 @@ public class ExecuteVM {
 		            }
 	    		} 
 	    	}	
-    	}catch(MemoryException | AccessToFreeMemoryCellException | MissingValueCellException e) {
+    	}catch(MemoryException | AccessToFreeMemoryCellException | 
+    			MissingValueCellException | InvalidInstructionException e) {
     		System.out.println("Error during execution:");
     		System.out.println(e.getMessage());
     	}
     } 
     
     
-    private int pop() throws AccessToFreeMemoryCellException, MemoryException, MissingValueCellException {
-    	int value = readFromMemory(regs.getSP());
+    private void pop() throws AccessToFreeMemoryCellException, MemoryException, MissingValueCellException {
+    	// TODO la free è necessaria? ci serve impostare la cella a isFree=false?
+    	free(regs.getSP());
+    	// addi $sp $sp 1
     	regs.setSP( regs.getSP() + 1);
-    	return value;
     }
     
     
     private void push(int value) throws MemoryException {
     	try {
-	    	regs.setSP( regs.getSP() - 1);
+    		// addi $sp $sp -1
+    		regs.moveUpSP();
+    		// sw $t 0($sp)
 	    	writeOnMemory(regs.getSP(), value );
+	    	
     	}catch(IndexOutOfBoundsException e) {
     		throw new MemoryException("Access out of memory.");
     	}
@@ -368,6 +357,27 @@ public class ExecuteVM {
     	}
     	
     	return indexCell;
+    }
+    
+    private int and(int x, int y) {
+    	if( x+y == 2 )
+    		return 1;
+    	else
+    		return 0;
+    }
+    
+    private int or(int x, int y) {
+    	if( x+y == 0 )
+    		return 0;
+    	else
+    		return 1;
+    }
+    
+    private int not(int x) {
+    	if( x == 0 )
+    		return 1;
+    	else
+    		return 0;
     }
     
 }

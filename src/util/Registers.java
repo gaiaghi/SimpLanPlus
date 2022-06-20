@@ -1,5 +1,7 @@
 package util;
 
+import exception.InvalidInstructionException;
+
 public class Registers {
 
 	private int a0;
@@ -116,7 +118,86 @@ public class Registers {
 	}
 	
 	public void addOneToIP() {
-		this.ip = ip+1;
+		ip = ip+1;
+	}
+	
+	public void moveUpSP() {
+		sp = sp - 1;
+	}
+	
+	public void moveDownSP() {
+		sp = sp + 1;
+	}
+	
+	public int getRegisterValue(String reg) throws InvalidInstructionException {
+		switch( reg ) {
+			case "$a0":
+				return getA0();
+			
+			case "$t1":
+				return getT1();
+				
+			case "$sp":
+				return getSP();
+				
+			case "$fp":
+				return getFP();
+				
+			case "$al":
+				return getAL();
+				
+			case "$ra":
+				return getRA();
+				
+			case "$hp":
+				return getHP();
+				
+			case "$ret":
+				return getRET();
+				
+			case "$ip":
+				return getIP();
+			
+			default:
+				throw new InvalidInstructionException("Unknown register.");	
+		}
+		
+	}
+	
+	
+	public void setRegisterValue(String reg, int value) throws InvalidInstructionException {
+		switch( reg ) {
+			case "$a0":
+				setA0(value);
+			
+			case "$t1":
+				setT1(value);
+				
+			case "$sp":
+				setSP(value);
+				
+			case "$fp":
+				setFP(value);
+				
+			case "$al":
+				setAL(value);
+				
+			case "$ra":
+				setRA(value);
+				
+			case "$hp":
+				setHP(value);
+				
+			case "$ret":
+				setRET(value);
+				
+			case "$ip":
+				setIP(value);
+			
+			default:
+				throw new InvalidInstructionException("Unknown register.");	
+		}
+		
 	}
 	
 	
