@@ -74,7 +74,7 @@ public class ExecuteVM {
 		    		Instruction bytecode = code.get( regs.getIP() );  
 		    		regs.addOneToIP();
 		            // TODO controlla se tutte queste variabili vengono usate
-		    		int v1,v2;
+		    		int value;
 		            int address;
 		            int arg1;
 		            int arg2;
@@ -141,78 +141,46 @@ public class ExecuteVM {
 			                break;  
 			            
 		            	case SVMParser.LI :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
 		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2);
 			                break; 
 		                
 		            	case SVMParser.LB :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
 		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		
+		            		regs.setRegisterValue(bytecode.getArg1(), arg2);
 			                break; 
 		              
-		            	case SVMParser.STOREW : 
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
+		            	case SVMParser.STOREW :   //TODO da rivedere, nel caso heap?
 		            		offset = bytecode.getOffset();
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		/*
-			            	address = pop();
-			            	writeOnMemory(address, pop() );
-			                */
+		            		address = regs.getRegisterValue(bytecode.getArg2()) + offset;
+		            		value = regs.getRegisterValue(bytecode.getArg1());
+		            		writeOnMemory(address, value);
 			                break;
 		              
-		            	case SVMParser.LOADW : //
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
+		            	case SVMParser.LOADW : 
 		            		offset = bytecode.getOffset();
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		/*
-			            	// check if object address where we take the method label
-			            	// is null value (-10000)
-			                if ( readFromMemory(regs.getSP() ) == -10000 ) {
-			                	System.out.println("\nError: Null pointer exception");
-			                	return;
-			                }  
-			                push( readFromMemory(pop()) );
-			                */
+		            		address = regs.getRegisterValue(bytecode.getArg2()) + offset;
+		            		value = readFromMemory(address);
+		            		regs.setRegisterValue(bytecode.getArg1(), value);
 			                break;
 		              
 		            	case SVMParser.BRANCH : 
 		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		/*
-			            	address = Integer.parseInt( code.get(regs.getIP()).getArg1() );
-			                regs.setIP(address); 
-			                */
+		            		regs.setIP(arg1);
 			                break;
 		              
-		            	case SVMParser.BRANCHEQ : //
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
+		            	case SVMParser.BRANCHEQ : 
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		
-		            		/*
-			            	address = Integer.parseInt(code.get(regs.getIP()).getArg3());
-			                regs.addOneToIP();
-			                v1 = pop();
-			                v2 = pop();
-			                if (v2 == v1) 
-			                	regs.setIP(address);
-			                */
+		            		value = regs.getRegisterValue(bytecode.getArg1());
+		            		if( value == regs.getRegisterValue(bytecode.getArg2()) )
+		            			regs.setIP(arg3);
 			                break;
 		              
 		            	case SVMParser.BRANCHLESSEQ :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
-		            		
-		            		/*
-			            	address = Integer.parseInt(code.get(regs.getIP()).getArg3());
-			                regs.addOneToIP();
-			                v1=pop();
-			                v2=pop();
-			                if (v2 <= v1) 
-			                	regs.setIP(address);
-			                */
+		            		value = regs.getRegisterValue(bytecode.getArg1());
+		            		if( value <= regs.getRegisterValue(bytecode.getArg2()) )
+		            			regs.setIP(arg3);
 			                break;
 		            	
 		            	case SVMParser.JR :
