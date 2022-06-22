@@ -169,54 +169,63 @@ public class Registers {
 		switch( reg ) {
 			case "$a0":
 				setA0(value);
+				break;
 			
 			case "$t1":
 				setT1(value);
+				break;
 				
 			case "$sp":
 				setSP(value);
+				break;
 				
 			case "$fp":
 				setFP(value);
+				break;
 				
 			case "$al":
 				setAL(value);
+				break;
 				
 			case "$ra":
 				setRA(value);
+				break;
 				
 			case "$hp":
 				setHP(value);
+				break;
 				
 			case "$ret":
 				setRET(value);
+				break;
 				
 			case "$ip":
 				setIP(value);
+				break;
 			
 			default:
-				throw new InvalidInstructionException("Unknown register.");	
+				throw new InvalidInstructionException("Unknown register. " +reg);	
 		}
 		
 	}
 	
 	
 	public String toString() {
-		String str = "Registers:\n";
-		
-		str = str + "$ip = " + ip +"\n";
-		
-		str = str + "$sp = " + sp +"\t";
-		str = str + "$fp = " + fp +"\t";
-		str = str + "$al = " + al +"\t";
-		str = str + "$hp = " + hp +"\n";
-		
-		str = str + "$a0 = " + a0 +"\t";
-		str = str + "$t1 = " + t1 +"\t";
-		str = str + "$ra = " + ra +"\t";
-		str = str + "$ret = " + ret;
-		
-		return str;
+		return "Registers:\n" +
+			
+			"$ip = " + ip +"\n" +
+			
+			"$sp = " + sp +"\t" +
+			"$fp = " + fp +"\n" +
+			
+			"$al = " + al +"\t" +
+			"$hp = " + hp +"\n" +
+			
+			"$a0 = " + a0 +"\t" +
+			"$t1 = " + t1 +"\n" +
+			
+			"$ra = " + ra +"\t" +
+			"$ret = " + ret;
 	}
 	
 

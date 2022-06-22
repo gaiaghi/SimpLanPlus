@@ -116,11 +116,11 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 				break;
 				
 			case SVMLexer.STOREW:
-				code.add(new Instruction(SVMParser.STOREW, ctx.value.getText(), Integer.parseInt(ctx.offset.getText()) ) );
+				code.add(new Instruction(SVMParser.STOREW, ctx.value.getText(), Integer.parseInt(ctx.offset.getText()), ctx.address.getText() ) );
 				break;
 				
 			case SVMLexer.LOADW:
-				code.add(new Instruction(SVMParser.LOADW, ctx.value.getText(), Integer.parseInt(ctx.offset.getText()) ) );
+				code.add(new Instruction(SVMParser.LOADW, ctx.value.getText(), Integer.parseInt(ctx.offset.getText()), ctx.address.getText() ) );
 				break;
 				
 			case SVMLexer.LABEL:

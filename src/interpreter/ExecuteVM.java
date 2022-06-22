@@ -15,10 +15,10 @@ import util.Registers;
 public class ExecuteVM {
     
 	// dimensione code area
-    public int CODESIZE = 10000;
+    public int CODESIZE;
     
     // dimensione other space (stack + heap)
-    public int MEMSIZE = 10000;
+    public int MEMSIZE;
  
     private ArrayList<Instruction> code;
     private ArrayList<Cell> memory;
@@ -33,15 +33,16 @@ public class ExecuteVM {
       
       //TODO setta valori iniziali registri, 	 hp=CODESIZE ??? è corretto?
       //ordine parametri: 	a0, t1, sp, fp, al, ra, hp, ret, ip
-      regs = new Registers(0,0,MEMSIZE,MEMSIZE,0,0,CODESIZE,0,0);
+      regs = new Registers(0,0,MEMSIZE-1,MEMSIZE-1,0,0,CODESIZE,0,0);
       
       // Inizializzo la memoria con celle vuote.
       // Inizializzo le celle della code area. true indice una cella della code area
       for(int i = 0; i < CODESIZE; i ++) 
-		  memory.set(i, new Cell( true ) );
+		  memory.add(new Cell( true ));
+      
       // Inizializzo le celle di Other Space (stack + heap). false indice una cella dello stack/heap
-      for(int i = CODESIZE; i < memory.size(); i ++) 
-		  memory.set(i, new Cell( false ) );
+      for(int i = CODESIZE; i < CODESIZE + MEMSIZE; i ++) 
+		  memory.add(new Cell( false ));
       
       /* controllo che la dimensione della code area sia sufficiente a 
        	 contenere il codice ricevuto in input.
@@ -55,14 +56,19 @@ public class ExecuteVM {
     	  for(int i = 0; i < code.size(); i ++) 
     		  memory.get(i).setInstruction(code.get(i));
     	
+      //TODO debug
+      System.out.println("Dimensione Code Area = "+CODESIZE +
+    		  "Dimensione stack/heap = "+MEMSIZE +
+    		  "Dimensione totale memoria = "+(CODESIZE+MEMSIZE));
     }
     
     
     
     
     public void cpu(){
-      
+    	Instruction bytecode = null;
     	try {
+    		
 	    	while ( true ) {
 	    	
 	    		if( regs.getHP() + 1 >= regs.getSP() ) {
@@ -71,7 +77,7 @@ public class ExecuteVM {
 	    		}
 	    		else {
 	    			// fetch
-		    		Instruction bytecode = code.get( regs.getIP() );  
+		    		bytecode = code.get( regs.getIP() );  
 		    		regs.addOneToIP();
 		            // TODO controlla se tutte queste variabili vengono usate
 		    		int value;
@@ -84,8 +90,8 @@ public class ExecuteVM {
 		            switch ( bytecode.getInstr() ) {
 		            	
 		            	case SVMParser.PUSH:
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		push(arg1);
+		            		value = regs.getRegisterValue( bytecode.getArg1() );
+		            		push(value);
 		            		break;
 		            	
 		            	case SVMParser.POP:
@@ -158,10 +164,30 @@ public class ExecuteVM {
 			                break;
 		              
 		            	case SVMParser.LOADW : 
+		            		printCPU();
 		            		offset = bytecode.getOffset();
 		            		address = regs.getRegisterValue(bytecode.getArg2()) + offset;
+		            		
+		            		// TODO debug
+		            		System.err.println("LOADW\targ1=" +bytecode.getArg1() +
+		            				"\toffset="+offset + "\targ2=" +bytecode.getArg2());
+		            		System.err.println("address = " + address +"\tvalueArg2="+ regs.getRegisterValue(bytecode.getArg2())
+		            				); 
+		            		// fine debug 
+		            		
 		            		value = readFromMemory(address);
+		            		
+		            		// TODO debug
+		            		System.err.println("LOADW\tvalue=" +value );
+		            		// fine debug 
+		            		
 		            		regs.setRegisterValue(bytecode.getArg1(), value);
+		            		
+		            		// TODO debug
+		            		System.err.println("LOADW\tnuovo valore registro = " +regs.getRegisterValue(bytecode.getArg1()) +"\n");
+		            		// fine debug 
+		            		
+		            		printCPU();
 			                break;
 		              
 		            	case SVMParser.BRANCH : 
@@ -184,35 +210,32 @@ public class ExecuteVM {
 			                break;
 		            	
 		            	case SVMParser.JR :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		
+		            		address = regs.getRegisterValue( bytecode.getArg1() );
+		            		regs.setIP(address);
 			                break;
 			                
 		            	case SVMParser.JAL :
 		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		
+		            		regs.setRegisterValue("$ra", regs.getIP() );
+		            		regs.setIP(arg1);
 			                break;
 			                
 		            	case SVMParser.MOVE :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		arg2 = Integer.parseInt( bytecode.getArg2() );
-		            		
+		            		value = regs.getRegisterValue( bytecode.getArg2() );
+		            		regs.setRegisterValue(bytecode.getArg1(), value);
 			                break;
 			                
-		            	case SVMParser.PRINT :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		
-		            		/*
-			            	if( regs.getSP() < MEMSIZE )
-		            			System.out.println( readFromMemory(regs.getSP()) );
+		            	case SVMParser.PRINT :		//TODO da rivedere
+		            		if( regs.getSP() <= MEMSIZE + CODESIZE )
+		            			System.out.println( "--print--> " + regs.getRegisterValue(bytecode.getArg1()) );
 		            		else
 		            			System.out.println("Empty stack!");
-			                */
+			                
 			                break;
 			                
 		            	case SVMParser.DELETION :
-		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		
+		            		arg1 = regs.getRegisterValue( bytecode.getArg1() );
+		            		free(arg1);
 			                break;
 			                
 		            	case SVMParser.AND :
@@ -233,24 +256,36 @@ public class ExecuteVM {
 			                break;
 		             
 		            	case SVMParser.HALT :
+		            		//TODO non posso fare niente perchè a questo punto 
+		            		// lo stack è vuoto
 		            		
-		            		/*
+		            		/* versione prof
 			            	//to print the result 
 			             	System.out.println("\nResult: " + readFromMemory(regs.getSP()) + "\n");
 			             	*/
 			             	return;
 			             	
 		            	default:
-		            		System.out.println("Error: invalid instruction "+bytecode.getInstr());
+		            		System.err.println("Error: invalid instruction "+bytecode.getInstr());
 		    	            return;
 		            }
 	    		} 
 	    	}	
     	}catch(MemoryException | AccessToFreeMemoryCellException | 
     			MissingValueCellException | InvalidInstructionException e) {
-    		System.out.println("Error during execution:");
+    		System.err.println("Error during execution:");
     		System.out.println(e.getMessage());
+    		System.err.println("Instruction: " + bytecode.getInstr());
+    		/*
+    		 * T__0=1, T__1=2, PUSH=3, POP=4, ADD=5, SUB=6, MULT=7, DIV=8, ADDI=9, SUBI=10, 
+				MULTI=11, DIVI=12, LI=13, LB=14, STOREW=15, LOADW=16, BRANCH=17, BRANCHEQ=18, 
+				BRANCHLESSEQ=19, JR=20, JAL=21, PRINT=22, DELETION=23, MOVE=24, AND=25, 
+				OR=26, NOT=27, ANDB=28, ORB=29, NOTB=30, HALT=31, REGISTER=32, COL=33, 
+				LABEL=34, NUMBER=35, BOOL=36, WHITESP=37, ERR=38;
+    		 * */
     	}
+    	
+    	printCPU();
     } 
     
     
@@ -346,6 +381,32 @@ public class ExecuteVM {
     		return 1;
     	else
     		return 0;
+    }
+    
+    private void printCPU() {
+    	System.out.println("\n------------------------------------------");
+    	System.out.println("|           CPU status	                 |");
+    	System.out.println("------------------------------------------");
+    	
+    	System.out.println(regs.toString());
+    	
+    	System.out.println("------------------------------------------");
+    	
+    	for(int i = CODESIZE; i < MEMSIZE+CODESIZE; i ++) {
+    		if( !memory.get(i).isFree() ) {
+	    		String str = "[" + i + "]\t" + memory.get(i);
+	    		
+	    		if( regs.getAL() == i ) str = str + "\t<--  $al";
+	    		if( regs.getFP() == i ) str = str + "\t<--  $fp";
+	    		if( regs.getHP() == i ) str = str + "\t<--  $hp";
+	    		if( regs.getSP() == i ) str = str + "\t<--  $sp";
+	    		
+	    		System.out.println(str);
+    		}
+    		
+    	}
+    	
+    	System.out.println("------------------------------------------");
     }
     
 }

@@ -55,6 +55,14 @@ public class Instruction {
 		this.arg3 = null;
 		this.offset = offset;
 	}
+	
+	public Instruction(int instr, String arg1, int offset, String arg2) {
+		this.instr = instr;
+		this.arg1 = arg1;
+		this.arg2 = arg2;
+		this.arg3 = null;
+		this.offset = offset;
+	}
 
 	public String getArg1() {
 		return this.arg1;

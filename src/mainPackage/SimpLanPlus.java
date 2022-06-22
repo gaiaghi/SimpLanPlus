@@ -147,7 +147,7 @@ public class SimpLanPlus{
 			e1.printStackTrace();
 		} 
 		 
-		System.out.println("Code generated! Assembling and running generated code.");
+		System.out.println("\nCode generated! Assembling and running generated code.");
 		
 		//FileInputStream isASM = new FileInputStream(fileName+".asm");
 		CharStream isASM = null;
@@ -170,12 +170,12 @@ public class SimpLanPlus{
 		
 		// TODO l'utente deve inserire queste dimensioni
 		// dimensione code area
-	    int CODESIZE = 10000;
+	    int CODESIZE = 500;
 	    // dimensione other space (stack + heap)
-	    int MEMSIZE = 10000;
+	    int MEMSIZE = 1000;
 	    
 	    try {
-			System.out.println("Starting Virtual Machine...");
+			System.out.println("\nStarting Virtual Machine...\n");
 			ExecuteVM vm = new ExecuteVM(visitorSVM.getCode(), CODESIZE, MEMSIZE);
 			vm.cpu();
 	    }catch(SmallCodeAreaCException | MemoryException e) {
