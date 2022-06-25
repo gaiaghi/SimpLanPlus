@@ -100,6 +100,9 @@ public class DecFunNode implements Node {
 		
 		//code = code + "-------------------- inizio decFun\n";
 		
+		String label = SimpLanPlusLib.freshLabel();
+		code = code + "b " + label + "\n";
+				
 		code = code + id.getSTEntry().getFunLabel() + ":\n";
 		code = code + "mv $fp $sp\n";
 		code = code + "push $ra\n";
@@ -111,11 +114,13 @@ public class DecFunNode implements Node {
 		//code = code + "-------------------- pulizia decFun\n";
 		code = code + id.getSTEntry().getFunEndLabel() + ":\n";
 		code = code + "lw $ra 0($sp)\n"; //$ra <- top
-		code = code + "addi $sp $sp "+(n+1)+"\n"; //pop di parametri formali + fp
+		code = code + "addi $sp $sp "+(n+2)+"\n"; //pop di parametri formali + ra + al
 		code = code + "lw $fp 0($sp)\n";
-		code = code + "pop\n"; //pop di $ra
+		code = code + "pop\n"; //pop di OldFP
 		code = code + "li $ret 0\n";	//ripristino il valore di $ret
 		code = code + "jr $ra\n";
+		
+		code = code + label + ":\n";
 		//code = code + "-------------------- fine decFun\n";
 		return code;
 	}

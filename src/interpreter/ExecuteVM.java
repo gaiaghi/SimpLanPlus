@@ -1,5 +1,8 @@
 package interpreter;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import exception.AccessToFreeMemoryCellException;
@@ -14,6 +17,10 @@ import util.Registers;
 
 public class ExecuteVM {
     
+	//TODO 
+	private boolean debug = true;
+	private ArrayList<Boolean> stack;
+	
 	// dimensione code area
     public int CODESIZE;
     
@@ -32,8 +39,15 @@ public class ExecuteVM {
       memory = new ArrayList<Cell>(CODESIZE + MEMSIZE);
       
       //TODO setta valori iniziali registri, 	 hp=CODESIZE ??? è corretto?
-      //ordine parametri: 	a0, t1, sp, fp, al, ra, hp, ret, ip
-      regs = new Registers(0,0,MEMSIZE-1,MEMSIZE-1,0,0,CODESIZE,0,0);
+      regs = new Registers(0,           // $a0
+    		  0,						// $t1
+    		  CODESIZE + MEMSIZE,		// $sp
+    		  CODESIZE + MEMSIZE-1,		// $fp
+    		  CODESIZE + MEMSIZE-2,		// $al
+    		  0,						// $ra
+    		  CODESIZE,					// $hp
+    		  0,						// $ret
+    		  0);						// $ip
       
       // Inizializzo la memoria con celle vuote.
       // Inizializzo le celle della code area. true indice una cella della code area
@@ -58,8 +72,15 @@ public class ExecuteVM {
     	
       //TODO debug
       System.out.println("Dimensione Code Area = "+CODESIZE +
-    		  "Dimensione stack/heap = "+MEMSIZE +
-    		  "Dimensione totale memoria = "+(CODESIZE+MEMSIZE));
+    		  "\nDimensione stack/heap = "+MEMSIZE +
+    		  "\nDimensione totale memoria = "+(CODESIZE+MEMSIZE));
+      
+      
+      //TODO
+      stack = new ArrayList();
+      for(int i = 0; i < CODESIZE+MEMSIZE; i ++) 
+    	  stack.add(false);
+      writeCode();
     }
     
     
@@ -69,6 +90,9 @@ public class ExecuteVM {
     	Instruction bytecode = null;
     	try {
     		
+    		//TODO cancellare
+    		printCPU("INIT");
+    		
 	    	while ( true ) {
 	    	
 	    		if( regs.getHP() + 1 >= regs.getSP() ) {
@@ -77,6 +101,7 @@ public class ExecuteVM {
 	    		}
 	    		else {
 	    			// fetch
+	    			System.out.println("Size "+code.size() +"     ip "+regs.getIP());
 		    		bytecode = code.get( regs.getIP() );  
 		    		regs.addOneToIP();
 		            // TODO controlla se tutte queste variabili vengono usate
@@ -92,6 +117,11 @@ public class ExecuteVM {
 		            	case SVMParser.PUSH:
 		            		value = regs.getRegisterValue( bytecode.getArg1() );
 		            		push(value);
+		            		
+		            		
+		            		//TODO
+		            		if( bytecode.getArg1().compareTo("$fp") == 0 )
+		            			stack.set(regs.getSP(), true);
 		            		break;
 		            	
 		            	case SVMParser.POP:
@@ -126,6 +156,33 @@ public class ExecuteVM {
 		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2 + arg3);
+		            		
+		            		
+		            		if( bytecode.getArg1().compareTo("$sp") == 0 &&	
+		            				bytecode.getArg2().compareTo("$sp") == 0 ) {
+		            			if( arg3 > 0 ) {
+		            				//TODO quando facciamo "addi $sp $sp n" equivale a fare "n" pop
+				            		// quindi devo settare le celle a free
+				            		// "n" deve essere positivo
+		            				int tmp = regs.getRegisterValue("$sp");
+			            			for(int i = tmp - 1; i > tmp-1-arg3; i -- )
+			            				free(i);
+		            			}
+		            			else {
+		            				if( arg3 < 0 ) {
+		            					//TODO quando facciamo "addi $sp $sp -n" equivale a fare "n" dec senze valore
+					            		// per settare la cella a isFree=false per visualizzarla nella printCPU
+		            					// scrivo nella cella il valore -1, non dovrebbe essere acceduta senza prima un
+		            					// assegnamento
+					            		// "n" deve essere negativo
+		            					int tmp = regs.getRegisterValue("$sp");
+				            			for(int i = tmp; i < tmp+(arg3*-1); i ++ ) {
+				            				writeOnMemory(i,-1);
+				            			}
+		            				}
+		            			}
+		            		}
+		            		
 			                break;
 		            	
 		            	case SVMParser.SUBI :
@@ -157,41 +214,49 @@ public class ExecuteVM {
 			                break; 
 		              
 		            	case SVMParser.STOREW :   //TODO da rivedere, nel caso heap?
+		            
 		            		offset = bytecode.getOffset();
 		            		address = regs.getRegisterValue(bytecode.getArg2()) + offset;
 		            		value = regs.getRegisterValue(bytecode.getArg1());
+		            		
+		            		/*System.err.println("STOREW\targ1=" +bytecode.getArg1() + "=" +regs.getRegisterValue(bytecode.getArg1()) +
+		            				"\toffset="+offset + "\targ2=" +bytecode.getArg2()+"="+regs.getRegisterValue(bytecode.getArg2()) );
+		            		System.err.println("STOREW\taddress = " + address );
+		            		*/
 		            		writeOnMemory(address, value);
+		            		
+		            		
+		            		
 			                break;
 		              
 		            	case SVMParser.LOADW : 
-		            		printCPU();
+		            		
 		            		offset = bytecode.getOffset();
 		            		address = regs.getRegisterValue(bytecode.getArg2()) + offset;
 		            		
 		            		// TODO debug
-		            		System.err.println("LOADW\targ1=" +bytecode.getArg1() +
-		            				"\toffset="+offset + "\targ2=" +bytecode.getArg2());
-		            		System.err.println("address = " + address +"\tvalueArg2="+ regs.getRegisterValue(bytecode.getArg2())
-		            				); 
+		            		/*System.err.println("LOADW\targ1=" +bytecode.getArg1() + "=" +regs.getRegisterValue(bytecode.getArg1()) +
+		            				"\toffset="+offset + "\targ2=" +bytecode.getArg2()+"="+regs.getRegisterValue(bytecode.getArg2()) );
+		            		System.err.println("LOADW\taddress = " + address ); 
 		            		// fine debug 
-		            		
+		            		*/
 		            		value = readFromMemory(address);
 		            		
 		            		// TODO debug
-		            		System.err.println("LOADW\tvalue=" +value );
+		            		//System.err.println("LOADW\tvalore letto=" +value );
 		            		// fine debug 
 		            		
 		            		regs.setRegisterValue(bytecode.getArg1(), value);
 		            		
 		            		// TODO debug
-		            		System.err.println("LOADW\tnuovo valore registro = " +regs.getRegisterValue(bytecode.getArg1()) +"\n");
+		            		//System.err.println("LOADW\tnuovo valore registro = " +regs.getRegisterValue(bytecode.getArg1()) +"\n");
 		            		// fine debug 
 		            		
-		            		printCPU();
 			                break;
 		              
 		            	case SVMParser.BRANCH : 
 		            		arg1 = Integer.parseInt( bytecode.getArg1() );
+		            		//System.err.println("BRANCH "+arg1); //TODO
 		            		regs.setIP(arg1);
 			                break;
 		              
@@ -200,6 +265,7 @@ public class ExecuteVM {
 		            		value = regs.getRegisterValue(bytecode.getArg1());
 		            		if( value == regs.getRegisterValue(bytecode.getArg2()) )
 		            			regs.setIP(arg3);
+		            		//System.err.println("BRANCHEQ "+value +"     "+regs.getRegisterValue(bytecode.getArg2())); //TODO
 			                break;
 		              
 		            	case SVMParser.BRANCHLESSEQ :
@@ -207,16 +273,19 @@ public class ExecuteVM {
 		            		value = regs.getRegisterValue(bytecode.getArg1());
 		            		if( value <= regs.getRegisterValue(bytecode.getArg2()) )
 		            			regs.setIP(arg3);
+		            		//System.err.println("BRANCHLESSEQ "); //TODO
 			                break;
 		            	
 		            	case SVMParser.JR :
 		            		address = regs.getRegisterValue( bytecode.getArg1() );
+		            		//System.err.println("JR "+address +"    reg "+bytecode.getArg1()); //TODO
 		            		regs.setIP(address);
 			                break;
 			                
 		            	case SVMParser.JAL :
 		            		arg1 = Integer.parseInt( bytecode.getArg1() );
 		            		regs.setRegisterValue("$ra", regs.getIP() );
+		            		//System.err.println("JAL "+arg1); //TODO
 		            		regs.setIP(arg1);
 			                break;
 			                
@@ -230,7 +299,7 @@ public class ExecuteVM {
 		            			System.out.println( "--print--> " + regs.getRegisterValue(bytecode.getArg1()) );
 		            		else
 		            			System.out.println("Empty stack!");
-			                
+		            		
 			                break;
 			                
 		            	case SVMParser.DELETION :
@@ -256,21 +325,17 @@ public class ExecuteVM {
 			                break;
 		             
 		            	case SVMParser.HALT :
-		            		//TODO non posso fare niente perchè a questo punto 
-		            		// lo stack è vuoto
-		            		
-		            		/* versione prof
-			            	//to print the result 
-			             	System.out.println("\nResult: " + readFromMemory(regs.getSP()) + "\n");
-			             	*/
+		            		System.out.println("\nEnd of execution!");
 			             	return;
 			             	
 		            	default:
 		            		System.err.println("Error: invalid instruction "+bytecode.getInstr());
 		    	            return;
 		            }
+		            printCPU(bytecode.toString());
 	    		} 
 	    	}	
+	    	
     	}catch(MemoryException | AccessToFreeMemoryCellException | 
     			MissingValueCellException | InvalidInstructionException e) {
     		System.err.println("Error during execution:");
@@ -283,9 +348,10 @@ public class ExecuteVM {
 				OR=26, NOT=27, ANDB=28, ORB=29, NOTB=30, HALT=31, REGISTER=32, COL=33, 
 				LABEL=34, NUMBER=35, BOOL=36, WHITESP=37, ERR=38;
     		 * */
+    		printCPU("Exception");
     	}
     	
-    	printCPU();
+    	
     } 
     
     
@@ -383,30 +449,75 @@ public class ExecuteVM {
     		return 0;
     }
     
-    private void printCPU() {
-    	System.out.println("\n------------------------------------------");
-    	System.out.println("|           CPU status	                 |");
-    	System.out.println("------------------------------------------");
-    	
-    	System.out.println(regs.toString());
-    	
-    	System.out.println("------------------------------------------");
-    	
-    	for(int i = CODESIZE; i < MEMSIZE+CODESIZE; i ++) {
-    		if( !memory.get(i).isFree() ) {
-	    		String str = "[" + i + "]\t" + memory.get(i);
+    private void printCPU(String s) {
+    	if( debug ) {
+	    	System.out.println("\n------------------------------------------");
+	    	System.out.println("|           CPU status	                 |");
+	    	System.out.println("------------------------------------------");
+	    	
+	    	if( s.compareTo("") != 0 ) {
+	        	System.out.println("|           " +s);
+	        	System.out.println("------------------------------------------");
+	    	}
+	    	
+	    	System.out.println(regs.toString());
+	    	
+	    	System.out.println("------------------------------------------");
+	    	
+	    	System.out.println("Heap:");
+	    	for(int i = CODESIZE; i <= regs.getHP(); i ++) {
+	    		if( !memory.get(i).isFree() ) {
+		    		String str = "[" + i + "]\t" + memory.get(i);
+		    		
+		    		if( regs.getHP() == i ) str = str + "\t<--  $hp";
+		    		
+		    		System.out.println(str);
+	    		}	
+	    	}
+	    	
+	    	System.out.println("\nStack:");
+	    	for(int i = regs.getHP()+1; i <= CODESIZE+MEMSIZE-1; i ++) {
 	    		
-	    		if( regs.getAL() == i ) str = str + "\t<--  $al";
-	    		if( regs.getFP() == i ) str = str + "\t<--  $fp";
-	    		if( regs.getHP() == i ) str = str + "\t<--  $hp";
-	    		if( regs.getSP() == i ) str = str + "\t<--  $sp";
 	    		
-	    		System.out.println(str);
-    		}
-    		
+	    		
+	    		if( !memory.get(i).isFree() ) {
+	    			
+	    			
+		    		String str = "[" + i + "]\t" + memory.get(i);
+		    		
+		    		if( regs.getAL() == i ) str = str + "\t<--  $al";
+		    		if( regs.getFP() == i ) str = str + "\t<--  $fp";
+		    		if( regs.getSP() == i ) str = str + "\t<--  $sp";
+		    		
+		    		System.out.println(str);
+		    		
+		    		if( stack.get(i) )
+		    			System.out.println("");
+	    		}	
+	    		
+	    		
+	    	}
+	    	
+	    	System.out.println("------------------------------------------");
     	}
+    }
+    
+    
+    private void writeCode() {
+    	BufferedWriter out;
+    	String str="";
+    	for(Instruction i : code)
+    		str = str + i.toString() +"\n";
     	
-    	System.out.println("------------------------------------------");
+    	
+		try {
+			out = new BufferedWriter(new FileWriter("bytecode"));
+			out.write(str);
+			out.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
     }
     
 }

@@ -1,9 +1,10 @@
-// Generated from SVM.g4 by ANTLR 4.9.3
+// Generated from SVM.g4 by ANTLR 4.4
 package svm;
 
 import java.util.List;
 import java.util.ArrayList;
 
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -15,15 +16,15 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface SVMVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link SVMParser#assembly}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssembly(SVMParser.AssemblyContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SVMParser#instruction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitInstruction(SVMParser.InstructionContext ctx);
+	T visitInstruction(@NotNull SVMParser.InstructionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SVMParser#assembly}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssembly(@NotNull SVMParser.AssemblyContext ctx);
 }

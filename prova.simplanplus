@@ -329,8 +329,14 @@
 //{void h(^^int x){ print x^^; } ^int y=new int; y^=3; h(y^);  }
 
 
+//n59		Output = 4
+//#n59#ERR
+//{void h(^int x, ^int y){ if (y^==0) {print x^; delete x;}  else { x^ = x^ - 1; h(y,x); } } ^int a=new int; ^int b=new int; a^=1; b^=4; h(a,b);}
+
+
+
 //p01
-//OK
+//OK		output = 1
 //#p01#OK
 //{^^int x ; ^int y = new int; y^ = 1 ; x = new ^int; x^ = y ; print x^^ ;}
 
@@ -346,9 +352,9 @@
 //#p03#ERR
 //{void f(^int x, ^int y){delete x; delete y;} ^int x = new int; f(x,x);}
 
-//p04     (per ora OK) 
+//p04      
 //#p04#OK
-{void h(^int x, ^int y){ if (y^==0) delete x ; else { x^ = x^ - 1; h(y,x); } }}
+//{void h(^int x, ^int y){ if (y^==0) delete x;  else { x^ = x^ - 1; h(y,x); } } }
 
 
 //p05
@@ -371,5 +377,9 @@
 
 //p08
 //??????? f(5,4) ok, mentre f(4,5) "reached max memory limit"
+// f(5,4) --> 9
+// f(4,5) --> out of memory
 //#p08#OK
-//{void f(int m, int n){if (m>n) {print(m+n);} else {int x = 1; f(m+1, n+1);} } f(5,4);}
+//{void f(int m, int n){if (m>n) {print(m+n);} else {int x = 1; f(m+1, n+1);} } f(4,5);}
+
+

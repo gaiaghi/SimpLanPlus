@@ -72,7 +72,8 @@ public class IdNode implements Node {
 	public String codeGeneration() {
 		String code = "";
 		
-		code = code + "lw $al 0($fp)\n";
+		//code = code + "lw $al 0($fp)\n";
+		code = code + "mv $al $fp\n";
 		
 		for(int i = 0; i < nestingLvl - entry.getNestingLevel(); i ++ ) {
 			code = code + "lw $al 0($al)\n";

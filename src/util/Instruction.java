@@ -4,7 +4,7 @@ public class Instruction {
 	
 	private int instr;
 	private String arg1;
-	private int offset;
+	private Integer offset;
 	private String arg2;
 	private String arg3;
 
@@ -21,7 +21,7 @@ public class Instruction {
 		this.instr = instr;
 		this.arg2 = null;
 		this.arg3 = null;
-		this.offset = 0;
+		this.offset = null;
 	}
 	
 	public Instruction(int instr) {
@@ -29,7 +29,7 @@ public class Instruction {
 		this.arg1 = null;		
 		this.arg2 = null;
 		this.arg3 = null;
-		this.offset = 0;
+		this.offset = null;
 	}
 
 	public Instruction(int instr, String arg1, String arg2, String arg3) {
@@ -37,7 +37,7 @@ public class Instruction {
 		this.arg1 = arg1;
 		this.arg2 = arg2;
 		this.arg3 = arg3;
-		this.offset = 0;
+		this.offset = null;
 	}
 
 	public Instruction (int instr, String arg1, String arg2) {
@@ -45,7 +45,7 @@ public class Instruction {
 		this.arg1 = arg1;
 		this.arg2 = arg2;
 		this.arg3 = null;
-		this.offset = 0;
+		this.offset = null;
 	} 
 	
 	public Instruction(int instr, String arg1, int offset) {
@@ -90,7 +90,8 @@ public class Instruction {
 		if( arg1 != null )
 			str = str + arg1 + " ";
 		
-		str = str + Integer.toString(offset) + " ";
+		if( offset != null )
+			str = str + Integer.toString(offset) + " ";
 		
 		if( arg2 != null )
 			str = str + arg2 + " ";

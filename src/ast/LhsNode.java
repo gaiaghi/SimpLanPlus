@@ -74,7 +74,8 @@ public class LhsNode implements Node {
 		String code = "";
 		
 		if( leftSide ) {
-			code = code + "lw $al 0($fp)\n";
+			//code = code + "lw $al 0($fp)\n";
+			code = code + "mv $al $fp\n";
 			
 			for(int i = 0; i < id.getNestingLevel() - id.getSTEntry().getNestingLevel(); i ++ ) {
 				code = code + "lw $al 0($al)\n";

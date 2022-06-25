@@ -87,15 +87,13 @@ public class Environment {
 	public void addScope(HashMap<String,STEntry> scope) {
 		this.symbolTable.add(scope);
 		this.nestingLvl += 1;
-		//per godgen: TODO
-		//offset = 0;
+		offset = -2;
 	}
 	
 	public void addScope() {
 		this.symbolTable.add(new HashMap<>());
 		this.nestingLvl +=1;
-		//per codgen:TODO
-		//offset = 0;
+		offset = -2;
 	}
 	
 	public void removeScope() {

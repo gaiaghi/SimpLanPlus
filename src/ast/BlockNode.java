@@ -102,6 +102,7 @@ public class BlockNode implements Node {
 			/*AL
 			 * an inner block is entered or a function declared in the current
 			scope is called: ACCESS_LINK = address of ACCESS_LINK in current AR*/
+			
 			code = code + "mv $al $fp\n";
 			code = code + "push $al\n";
 			
