@@ -1,9 +1,11 @@
 package mainPackage;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -14,12 +16,18 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import ast.Node;
+import ast.SVMVisitorImpl;
 import ast.SimpLanPlusVisitorImpl;
+import exception.MemoryException;
 import exception.MissingDecException;
 import exception.MultipleDecException;
+import exception.SmallCodeAreaCException;
 import exception.TypeErrorException;
+import interpreter.ExecuteVM;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
+import svm.SVMLexer;
+import svm.SVMParser;
 import util.Environment;
 import util.SemanticError;
 import parser.SPPErrorListener;
@@ -204,6 +212,56 @@ public class SimpLanPlus_test{
 		
 		System.out.println("Visualizing AST...");
 		System.out.println(ast.toPrint(""));
+		
+		// CODE GENERATION  prova.SimpLan.asm
+		String code=ast.codeGeneration(); 
+		BufferedWriter out;
+		try {
+			out = new BufferedWriter(new FileWriter("prova.simplanplus.asm"));
+			out.write(code);
+			out.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			risultatoEsempi.add("ERR");
+			continue;
+		} 
+		
+		CharStream isASM = null;
+		try {
+			isASM = CharStreams.fromFileName("prova.simplanplus.asm");
+		} 
+		catch (IOException e) {
+			System.err.println("The file " + "prova.simplanplus.asm" + " was not found");
+			//System.exit(1);
+			risultatoEsempi.add("ERR");
+			continue;
+		}
+		SVMLexer lexerASM = new SVMLexer(isASM);
+		CommonTokenStream tokensASM = new CommonTokenStream(lexerASM);
+		SVMParser parserASM = new SVMParser(tokensASM);
+		
+		SVMVisitorImpl visitorSVM = new SVMVisitorImpl();
+		visitorSVM.visit(parserASM.assembly()); 
+
+		System.out.println("You had: "+lexerASM.errorCount()+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.");
+		if (lexerASM.errorCount()>0 || parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);
+		
+		// TODO l'utente deve inserire queste dimensioni
+		// dimensione code area
+	    int CODESIZE = 500;
+	    // dimensione other space (stack + heap)
+	    int MEMSIZE = 1000;
+	    
+	    try {
+			System.out.println("\nStarting Virtual Machine...\n");
+			ExecuteVM vm = new ExecuteVM(visitorSVM.getCode(), CODESIZE, MEMSIZE);
+			vm.cpu();
+	    }catch(SmallCodeAreaCException | MemoryException e) {
+	    	System.out.println(e.getMessage());
+	    	risultatoEsempi.add("ERR");
+			continue;
+	    }
 		
 		risultatoEsempi.add("OK");
 	}//for esempi

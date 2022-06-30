@@ -138,7 +138,7 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 break;
                 
 			case SVMLexer.BRANCHLESSEQ:
-				code.add(new Instruction(SVMParser.BRANCHEQ, ctx.term1.getText(), ctx.term2.getText(), ctx.l.getText()));
+				code.add(new Instruction(SVMParser.BRANCHLESSEQ, ctx.term1.getText(), ctx.term2.getText(), ctx.l.getText()));
                 labelRef.put(code.size()-1,(ctx.l!=null? ctx.l.getText():null));
                 break;
                 

@@ -18,7 +18,7 @@ import util.Registers;
 public class ExecuteVM {
     
 	//TODO 
-	private boolean debug = true;
+	private boolean debug = false;
 	private ArrayList<Boolean> stack;
 	
 	// dimensione code area
@@ -73,7 +73,7 @@ public class ExecuteVM {
       //TODO debug
       System.out.println("Dimensione Code Area = "+CODESIZE +
     		  "\nDimensione stack/heap = "+MEMSIZE +
-    		  "\nDimensione totale memoria = "+(CODESIZE+MEMSIZE));
+    		  "\nDimensione totale memoria = "+(CODESIZE+MEMSIZE) +"\n");
       
       
       //TODO
@@ -101,7 +101,8 @@ public class ExecuteVM {
 	    		}
 	    		else {
 	    			// fetch
-	    			System.out.println("Size "+code.size() +"     ip "+regs.getIP());
+	    			if( debug ) // TODO cancellare
+	    				System.out.println("Size "+code.size() +"     ip "+regs.getIP());
 		    		bytecode = code.get( regs.getIP() );  
 		    		regs.addOneToIP();
 		            // TODO controlla se tutte queste variabili vengono usate
@@ -265,7 +266,7 @@ public class ExecuteVM {
 		            		value = regs.getRegisterValue(bytecode.getArg1());
 		            		if( value == regs.getRegisterValue(bytecode.getArg2()) )
 		            			regs.setIP(arg3);
-		            		//System.err.println("BRANCHEQ "+value +"     "+regs.getRegisterValue(bytecode.getArg2())); //TODO
+		            		//System.err.println("BRANCHEQ "+value +"  ==   "+regs.getRegisterValue(bytecode.getArg2())); //TODO
 			                break;
 		              
 		            	case SVMParser.BRANCHLESSEQ :
@@ -273,7 +274,7 @@ public class ExecuteVM {
 		            		value = regs.getRegisterValue(bytecode.getArg1());
 		            		if( value <= regs.getRegisterValue(bytecode.getArg2()) )
 		            			regs.setIP(arg3);
-		            		//System.err.println("BRANCHLESSEQ "); //TODO
+		            		//System.err.println("BRANCHLESSEQ "+value +"  <=   "+regs.getRegisterValue(bytecode.getArg2())); //TODO
 			                break;
 		            	
 		            	case SVMParser.JR :

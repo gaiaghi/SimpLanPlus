@@ -42,7 +42,7 @@
 //n8
 //OK
 //#n8#OK
-//{int f(int x) {print x+1; {x=1; if(x==1) return x;} return 1; } f(1);}
+//{int f(int x) {print x+1; {x=1; if(x==1) return x;} return 2; } print f(5);}
 
 
 //n9 
@@ -128,7 +128,7 @@
 //n22
 //OK
 //#n22#OK
-//{^^bool z; ^int x= new int; x^=2; z = new ^bool;}
+//{^^bool z; ^int x= new int; x^=2; z = new ^bool; print x^; print x;}
 
 //n23
 //Type error: cannot assign IntType value for variable z of type BoolType
@@ -151,7 +151,7 @@
 //n26
 //OK
 //#n26#OK
-//{ int f(int x) {^int y = new int; y^ = 1 ; return (y^);} }
+//{ int f(int x) {^int y = new int; y^ = 1 ; return (y^);} print f(4);}
 
 
 //n27		
@@ -163,17 +163,17 @@
 //n28
 //OK
 //#n28#OK
-//{^int y = new int; ^int x = new int; y^ = 1; x^ = y^; } 
+//{^int y = new int; ^int x = new int; y^ = 1; x^ = y^; print x^; print y^; } 
 
 
 //n29
 //OK
 //#n29#OK
-//{^int y = new int; ^int x = new int; y^ = 1; x^ = (y^); } 
+//{^int y = new int; ^int x = new int; y^ = 1; x^ = (y^); print x^; } 
 
 
 //n30
-//effetti?
+// x non e' inizializzato
 //#n30#ERR
 //{int f() {^int x = new int; return (x^);} }
 
@@ -181,7 +181,7 @@
 //n31
 //OK
 //#n31#OK
-//{int f(int x){return x+1;} int g(int x){return f(x);} int z=2; if(z==f(1)) z=f(1); else z=g(1); }
+//{int f(int x){return x+1;} int g(int x){return f(x);} int z=1; if(z==f(1)) z=f(2); else z=g(3); print (z);}
 
 
 //n32
@@ -193,13 +193,13 @@
 //n33
 //OK
 //#n33#OK
-//{bool g(){ return true; } bool f(){ return false; } if(g()==f()) print 4;}
+//{bool g(){ return true; } bool f(){ return false; } if(g()==f()) print 4; else print 3;}
 
 
 //n34
 //OK
 //#n34#OK
-//{bool g(){ return true; } bool f(){ return false; } if(!g()==f()) print 4;}
+//{bool g(){ return true; } bool f(){ return false; } if(!g()==f()) print 4; else print 3;}
 
 
 //n35
@@ -209,7 +209,7 @@
 
 
 //n36
-// effetti sulla x?
+// alla x manca "new int"
 //#n36#ERR
 //{int g(){ return 1; }  ^int x; x^=3; if(g()==x^) print 4;}
 
@@ -224,7 +224,7 @@
 //n38
 //OK
 //#n38#OK
-//{  bool g(){return true;} int f(int x) {^int y = new int; g(); y^ = 1 ; return y^;} }
+//{  bool g(){return true;} int f(int x) {^int y = new int; g(); y^ = 1 ; return y^;} print f(2); }
 
 
 //n40 
@@ -235,7 +235,7 @@
 //n41
 //OK
 //#n41#OK
-//{void f(){}}
+//{void f(){} }
 
 //n42 
 //Type error: function f cannot be of type pointer.
@@ -264,13 +264,12 @@
 
 
 //n47
-//ERR????
+// x non inizializzata
 //#n47#ERR
 //{int f(int a){ return a;} int x; f(x); print x;}
 
 //n48
-// dovrebbe dare errore perchè Effect(z)=init, ma non è così.
-// aggiungendo in CallNode.checkEffects un for che fa la checkEffects di tutti i parametri, funziona.
+// z non inizializzata
 //#n48#ERR
 //{void f(int x){ print x;} int y=2; int z; f(y+z); }
 
@@ -290,13 +289,14 @@
 //{void f(int x, int y){ {int z; if(x==0) return; else print x;} print y; } f(2,3);}
 
 //n52
+// "true" viene stampato come 1
 //#n52#OK
-//{void f() {print true; {return;}}}
+//{void f() {print true; {return;} }  f();  }
 
 
 //n53
 //#n53#OK
-//{ ^^int x = new ^int; ^int y ; x^=new int;  x^^=3; y=x^; }
+//{ ^^int x = new ^int; ^int y ; x^=new int;  x^^=3; y=x^; print y^;}
 
 //n54
 //#n54#ERR
@@ -329,9 +329,14 @@
 //{void h(^^int x){ print x^^; } ^int y=new int; y^=3; h(y^);  }
 
 
-//n59		Output = 4
-//#n59#ERR
+//n60		Output = 4
+//#n60#OK
 //{void h(^int x, ^int y){ if (y^==0) {print x^; delete x;}  else { x^ = x^ - 1; h(y,x); } } ^int a=new int; ^int b=new int; a^=1; b^=4; h(a,b);}
+
+//n61		
+// fa vedere la differenza tra passaggio dei parametri per valore e per riferimento
+//#n61#OK
+//{int f(^int x, int n){ x^=3; n=4; return 5;}  ^int y=new int; int z=2; int t; y^=1; t=f(y,z); print t; print y^; print z; }
 
 
 
@@ -352,7 +357,8 @@
 //#p03#ERR
 //{void f(^int x, ^int y){delete x; delete y;} ^int x = new int; f(x,x);}
 
-//p04      
+//p04   
+// guarda esempio n60   
 //#p04#OK
 //{void h(^int x, ^int y){ if (y^==0) delete x;  else { x^ = x^ - 1; h(y,x); } } }
 
@@ -364,22 +370,31 @@
 
 
 //p06
-//OK
+//ERR x non è visibile dal corpo della funzione
 //#p06#ERR
 //{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(54); }
 
 
 //p07
+// x^=720		x=506
 //#p07#OK
-//{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y = new int; y^ = x^ * n; } } ^int u = new int; u^ = 1; f(u,6); }
-
+//{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y=new int; y^=x^ * n; f(y,n-1);} } ^int u=new int; u^=1; f(u,6); }
 
 
 //p08
-//??????? f(5,4) ok, mentre f(4,5) "reached max memory limit"
 // f(5,4) --> 9
 // f(4,5) --> out of memory
 //#p08#OK
 //{void f(int m, int n){if (m>n) {print(m+n);} else {int x = 1; f(m+1, n+1);} } f(4,5);}
 
+
+
+// dichiarazione di una funzione dentro il corpo di un'altra funzione
+// e' possibile scrivere questo codice?
+//{void f(){ void g(){print 2; f();} print 1; g(); } f();}
+//{void f(){ void g(){print 2; } print 1; g(); } f(); g();}
+
+// i puntatori devono essere riutilizzabili?
+// a lezione avevo scritto questo appunto: "quando facciamo una deletion non cancelliamo il puntatore ma l’oggetto puntato"
+//{^int x=new int; x^=3; delete x; x^=4;}
 

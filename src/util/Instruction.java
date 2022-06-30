@@ -86,7 +86,7 @@ public class Instruction {
 	
 	
 	public String toString() {
-		String str = "" + Integer.toString(instr) +" ";
+		String str = "" + getInstructionNameFromNumber(instr) +" ";
 		if( arg1 != null )
 			str = str + arg1 + " ";
 		
@@ -98,5 +98,71 @@ public class Instruction {
 		if( arg3 != null )
 			str = str + arg3 + " ";
 		return str;
+	}
+	
+	public String getInstructionNameFromNumber(int x) {
+		switch(x) {
+			case 3:
+				return "PUSH";
+			case 4:
+				return "POP";
+			case 5:
+				return "ADD";
+			case 6:
+				return "SUB";
+			case 7:
+				return "MULT";
+			case 8:
+				return "DIV";
+			case 9:
+				return "ADDI";
+			case 10:
+				return "SUBI";
+			case 11:
+				return "MULTI";
+			case 12:
+				return "DIVI";
+			case 13:
+				return "LI";
+			case 14:
+				return "LB";
+			case 15:
+				return "STOREW";
+			case 16:
+				return "LOADW";
+				
+			case 17:
+				return "BRANCH";
+			case 18:
+				return "BRANCHEQ";
+			case 19:
+				return "BRANCHLESSEQ";
+			case 20:
+				return "JR";
+			case 21:
+				return "JAL";
+			case 22:
+				return "PRINT";
+			case 23:
+				return "DELETION";
+			case 24:
+				return "MOVE";
+			case 25:
+				return "AND";
+			case 26:
+				return "OR";
+			case 27:
+				return "NOT";
+			case 28:
+				return "ANDB";
+			case 29:
+				return "ORB";
+			case 30:
+				return "NOTB";
+			case 31:
+				return "HALT";
+			default: 
+				return "no name instruction";
+		}
 	}
 }

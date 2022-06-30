@@ -197,12 +197,12 @@ public class BinExpNode implements Node {
 				code = code + "bleq $t1 $a0 " + trueLabel_1 + "\n";
 				
 				// se vale leftExp > rightExp
-				code = code + "li $a0 0\n";
+				code = code + "li $a0 1\n";
 				code = code + "b " + endIfLabel_1 + "\n";
 				
 				// se vale leftExp <= rightExp
 				code = code + trueLabel_1 + ":\n";
-				code = code + "li $a0 1\n";
+				code = code + "li $a0 0\n";
 				
 				// fine if 
 				code = code + endIfLabel_1 + ":\n";
