@@ -156,7 +156,7 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 				break;
 				
 			case SVMLexer.PRINT:
-				code.add(new Instruction(SVMParser.PRINT, ctx.reg.getText()));
+				code.add(new Instruction(SVMParser.PRINT, ctx.reg.getText(), ctx.term1.getText()));
 				break;
 				
 			case SVMLexer.DELETION:

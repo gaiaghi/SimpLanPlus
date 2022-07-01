@@ -281,7 +281,8 @@ public class CallNode implements Node {
 			 * puntatore più lungo del parametro formale */
 			List<Effect> resultSeq = new ArrayList<Effect>();
 			int diff = effettoParAttuale.size() - effettoParFormale.size();
-			for( int j = 0; j < effettoParAttuale.size()-diff-1; j ++ )
+			
+			for( int j = 0; j < effettoParAttuale.size() - effettoParFormale.size(); j ++ )
 				resultSeq.add( effettoParAttuale.get(j) );
 			
 			for( int j = 0; j < effettoParFormale.size(); j ++ ) {

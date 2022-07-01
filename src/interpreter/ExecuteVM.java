@@ -296,9 +296,19 @@ public class ExecuteVM {
 			                break;
 			                
 		            	case SVMParser.PRINT :		//TODO da rivedere
-		            		if( regs.getSP() <= MEMSIZE + CODESIZE )
-		            			System.out.println( "--print--> " + regs.getRegisterValue(bytecode.getArg1()) );
-		            		else
+		            		if( regs.getSP() <= MEMSIZE + CODESIZE ) {
+		            			arg1 = regs.getRegisterValue(bytecode.getArg1());
+		            			arg2 = Integer.parseInt( bytecode.getArg2() );
+		            			if( arg2 == 1 )
+		            				System.out.println( "--print--> " + arg1 );
+		            			else {
+		            				if( arg1 == 1 )
+		            					System.out.println( "--print--> true");
+		            				else
+		            					System.out.println( "--print--> false");
+		            			}
+		            		}
+		            		else		//TODO questo ramo else forse non serve perchè non prendo il valore da stampare dallo stack
 		            			System.out.println("Empty stack!");
 		            		
 			                break;

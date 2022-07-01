@@ -4,21 +4,92 @@ push $al
 mv $fp $sp
 li $t1 0
 push $t1
-b label_0
-function_0:
+b label_155
+function_100:
 mv $fp $sp
 push $ra
+mv $al $fp
+lw $a0 1($al)
+push $a0
+mv $al $fp
+lw $a0 2($al)
+lw $t1 0($sp)
+bleq $t1 $a0 label_161
 li $a0 1
-print $a0
+b label_162
+label_161:
+li $a0 0
+label_162:
+pop
+li $t1 1
+beq $a0 $t1 label_160
 push $fp
 mv $al $fp
 push $al
 mv $fp $sp
 li $t1 0
 push $t1
-li $ret 1
-b label_2
-label_2:
+li $a0 1
+push $a0
+push $fp
+mv $al $fp
+lw $al 0($al)
+lw $a0 2($al)
+push $a0
+li $a0 1
+lw $t1 0($sp)
+add $a0 $t1 $a0
+pop
+push $a0
+mv $al $fp
+lw $al 0($al)
+lw $a0 1($al)
+push $a0
+li $a0 1
+lw $t1 0($sp)
+add $a0 $t1 $a0
+pop
+push $a0
+mv $al $fp
+push $al
+jal function_100
+label_158:
+addi $sp $sp 1
+pop
+pop
+lw $fp 0($sp)
+pop
+push $a0
+li $a0 1
+beq $ret $a0 label_163
+lw $a0 0($sp)
+pop
+b label_164
+label_163:
+lw $a0 0($sp)
+pop
+b label_156
+label_164:
+b label_159
+label_160:
+push $fp
+mv $al $fp
+push $al
+mv $fp $sp
+li $t1 0
+push $t1
+mv $al $fp
+lw $al 0($al)
+lw $a0 1($al)
+push $a0
+mv $al $fp
+lw $al 0($al)
+lw $a0 2($al)
+lw $t1 0($sp)
+add $a0 $t1 $a0
+pop
+print $a0 1
+label_157:
 addi $sp $sp 0
 pop
 pop
@@ -26,40 +97,45 @@ lw $fp 0($sp)
 pop
 push $a0
 li $a0 1
-beq $ret $a0 label_3
+beq $ret $a0 label_165
 lw $a0 0($sp)
 pop
-b label_4
-label_3:
+b label_166
+label_165:
 lw $a0 0($sp)
 pop
-b label_1
-label_4:
-label_1:
+b label_156
+label_166:
+label_159:
+label_156:
 addi $sp $sp 0
 push $a0
 li $a0 1
-beq $ret $a0 label_5
+beq $ret $a0 label_167
 lw $a0 0($sp)
 pop
-b label_6
-label_5:
+b label_168
+label_167:
 lw $a0 0($sp)
 pop
-b function_1
-label_6:
-function_1:
+b function_101
+label_168:
+function_101:
 lw $ra 0($sp)
-addi $sp $sp 2
+addi $sp $sp 4
 lw $fp 0($sp)
 pop
 li $ret 0
 jr $ra
-label_0:
+label_155:
 push $fp
+li $a0 5
+push $a0
+li $a0 4
+push $a0
 mv $al $fp
 push $al
-jal function_0
+jal function_100
 addi $sp $sp 0
 pop
 pop

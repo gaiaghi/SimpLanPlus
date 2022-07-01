@@ -4,19 +4,84 @@ PUSH $al
 MOVE $fp $sp 
 LI $t1 0 
 PUSH $t1 
-BRANCH 49 
+BRANCH 114 
 MOVE $fp $sp 
 PUSH $ra 
+MOVE $al $fp 
+LOADW $a0 1 $al 
+PUSH $a0 
+MOVE $al $fp 
+LOADW $a0 2 $al 
+LOADW $t1 0 $sp 
+BRANCHLESSEQ $t1 $a0 18 
 LI $a0 1 
-PRINT $a0 
+BRANCH 19 
+LI $a0 0 
+POP 
+LI $t1 1 
+BRANCHEQ $a0 $t1 67 
 PUSH $fp 
 MOVE $al $fp 
 PUSH $al 
 MOVE $fp $sp 
 LI $t1 0 
 PUSH $t1 
-LI $ret 1 
-BRANCH 19 
+LI $a0 1 
+PUSH $a0 
+PUSH $fp 
+MOVE $al $fp 
+LOADW $al 0 $al 
+LOADW $a0 2 $al 
+PUSH $a0 
+LI $a0 1 
+LOADW $t1 0 $sp 
+ADD $a0 $t1 $a0 
+POP 
+PUSH $a0 
+MOVE $al $fp 
+LOADW $al 0 $al 
+LOADW $a0 1 $al 
+PUSH $a0 
+LI $a0 1 
+LOADW $t1 0 $sp 
+ADD $a0 $t1 $a0 
+POP 
+PUSH $a0 
+MOVE $al $fp 
+PUSH $al 
+JAL 7 
+ADDI $sp $sp 1 
+POP 
+POP 
+LOADW $fp 0 $sp 
+POP 
+PUSH $a0 
+LI $a0 1 
+BRANCHEQ $ret $a0 63 
+LOADW $a0 0 $sp 
+POP 
+BRANCH 66 
+LOADW $a0 0 $sp 
+POP 
+BRANCH 98 
+BRANCH 98 
+PUSH $fp 
+MOVE $al $fp 
+PUSH $al 
+MOVE $fp $sp 
+LI $t1 0 
+PUSH $t1 
+MOVE $al $fp 
+LOADW $al 0 $al 
+LOADW $a0 1 $al 
+PUSH $a0 
+MOVE $al $fp 
+LOADW $al 0 $al 
+LOADW $a0 2 $al 
+LOADW $t1 0 $sp 
+ADD $a0 $t1 $a0 
+POP 
+PRINT $a0 1 
 ADDI $sp $sp 0 
 POP 
 POP 
@@ -24,30 +89,34 @@ LOADW $fp 0 $sp
 POP 
 PUSH $a0 
 LI $a0 1 
-BRANCHEQ $ret $a0 30 
+BRANCHEQ $ret $a0 95 
 LOADW $a0 0 $sp 
 POP 
-BRANCH 33 
+BRANCH 98 
 LOADW $a0 0 $sp 
 POP 
-BRANCH 33 
+BRANCH 98 
 ADDI $sp $sp 0 
 PUSH $a0 
 LI $a0 1 
-BRANCHEQ $ret $a0 40 
+BRANCHEQ $ret $a0 105 
 LOADW $a0 0 $sp 
 POP 
-BRANCH 43 
+BRANCH 108 
 LOADW $a0 0 $sp 
 POP 
-BRANCH 43 
+BRANCH 108 
 LOADW $ra 0 $sp 
-ADDI $sp $sp 2 
+ADDI $sp $sp 4 
 LOADW $fp 0 $sp 
 POP 
 LI $ret 0 
 JR $ra 
 PUSH $fp 
+LI $a0 5 
+PUSH $a0 
+LI $a0 4 
+PUSH $a0 
 MOVE $al $fp 
 PUSH $al 
 JAL 7 

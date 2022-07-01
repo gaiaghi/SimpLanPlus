@@ -223,7 +223,7 @@ public class SVMParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(109);
+			setState(110);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case PUSH:
@@ -460,87 +460,89 @@ public class SVMParser extends Parser {
 				match(PRINT);
 				setState(83);
 				((InstructionContext)_localctx).reg = match(REGISTER);
+				setState(84);
+				((InstructionContext)_localctx).term1 = match(NUMBER);
 				}
 				break;
 			case DELETION:
 				{
-				setState(84);
-				match(DELETION);
 				setState(85);
+				match(DELETION);
+				setState(86);
 				((InstructionContext)_localctx).reg = match(REGISTER);
 				}
 				break;
 			case AND:
 				{
-				setState(86);
-				match(AND);
 				setState(87);
-				((InstructionContext)_localctx).res = match(REGISTER);
+				match(AND);
 				setState(88);
-				((InstructionContext)_localctx).term1 = match(REGISTER);
+				((InstructionContext)_localctx).res = match(REGISTER);
 				setState(89);
+				((InstructionContext)_localctx).term1 = match(REGISTER);
+				setState(90);
 				((InstructionContext)_localctx).term2 = match(REGISTER);
 				}
 				break;
 			case OR:
 				{
-				setState(90);
-				match(OR);
 				setState(91);
-				((InstructionContext)_localctx).res = match(REGISTER);
+				match(OR);
 				setState(92);
-				((InstructionContext)_localctx).term1 = match(REGISTER);
+				((InstructionContext)_localctx).res = match(REGISTER);
 				setState(93);
+				((InstructionContext)_localctx).term1 = match(REGISTER);
+				setState(94);
 				((InstructionContext)_localctx).term2 = match(REGISTER);
 				}
 				break;
 			case NOT:
 				{
-				setState(94);
-				match(NOT);
 				setState(95);
-				((InstructionContext)_localctx).res = match(REGISTER);
+				match(NOT);
 				setState(96);
+				((InstructionContext)_localctx).res = match(REGISTER);
+				setState(97);
 				((InstructionContext)_localctx).term1 = match(REGISTER);
 				}
 				break;
 			case ANDB:
 				{
-				setState(97);
-				match(ANDB);
 				setState(98);
-				((InstructionContext)_localctx).res = match(REGISTER);
+				match(ANDB);
 				setState(99);
-				((InstructionContext)_localctx).term1 = match(REGISTER);
+				((InstructionContext)_localctx).res = match(REGISTER);
 				setState(100);
+				((InstructionContext)_localctx).term1 = match(REGISTER);
+				setState(101);
 				((InstructionContext)_localctx).term2 = match(BOOL);
 				}
 				break;
 			case ORB:
 				{
-				setState(101);
-				match(ORB);
 				setState(102);
-				((InstructionContext)_localctx).res = match(REGISTER);
+				match(ORB);
 				setState(103);
-				((InstructionContext)_localctx).term1 = match(REGISTER);
+				((InstructionContext)_localctx).res = match(REGISTER);
 				setState(104);
+				((InstructionContext)_localctx).term1 = match(REGISTER);
+				setState(105);
 				((InstructionContext)_localctx).term2 = match(BOOL);
 				}
 				break;
 			case NOTB:
 				{
-				setState(105);
-				match(NOTB);
 				setState(106);
-				((InstructionContext)_localctx).res = match(REGISTER);
+				match(NOTB);
 				setState(107);
+				((InstructionContext)_localctx).res = match(REGISTER);
+				setState(108);
 				((InstructionContext)_localctx).term1 = match(BOOL);
 				}
 				break;
 			case HALT:
 				{
-				setState(108);
+				setState(109);
 				match(HALT);
 				}
 				break;
@@ -561,36 +563,36 @@ public class SVMParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3(r\4\2\t\2\4\3\t\3"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3(s\4\2\t\2\4\3\t\3"+
 		"\3\2\7\2\b\n\2\f\2\16\2\13\13\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\5\3p\n\3\3\3\2\2\4\2\4\2\2\2\u008d\2\t\3\2\2\2\4o\3\2\2\2\6\b"+
-		"\5\4\3\2\7\6\3\2\2\2\b\13\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\3\3\2\2\2"+
-		"\13\t\3\2\2\2\f\r\7\5\2\2\rp\7\"\2\2\16p\7\6\2\2\17\20\7\7\2\2\20\21\7"+
-		"\"\2\2\21\22\7\"\2\2\22p\7\"\2\2\23\24\7\b\2\2\24\25\7\"\2\2\25\26\7\""+
-		"\2\2\26p\7\"\2\2\27\30\7\t\2\2\30\31\7\"\2\2\31\32\7\"\2\2\32p\7\"\2\2"+
-		"\33\34\7\n\2\2\34\35\7\"\2\2\35\36\7\"\2\2\36p\7\"\2\2\37 \7\13\2\2 !"+
-		"\7\"\2\2!\"\7\"\2\2\"p\7%\2\2#$\7\f\2\2$%\7\"\2\2%&\7\"\2\2&p\7%\2\2\'"+
-		"(\7\r\2\2()\7\"\2\2)*\7\"\2\2*p\7%\2\2+,\7\16\2\2,-\7\"\2\2-.\7\"\2\2"+
-		".p\7%\2\2/\60\7\17\2\2\60\61\7\"\2\2\61p\7%\2\2\62\63\7\20\2\2\63\64\7"+
-		"\"\2\2\64p\7&\2\2\65\66\7\21\2\2\66\67\7\"\2\2\678\7%\2\289\7\3\2\29:"+
-		"\7\"\2\2:p\7\4\2\2;<\7\22\2\2<=\7\"\2\2=>\7%\2\2>?\7\3\2\2?@\7\"\2\2@"+
-		"p\7\4\2\2AB\7$\2\2Bp\7#\2\2CD\7\23\2\2Dp\7$\2\2EF\7\24\2\2FG\7\"\2\2G"+
-		"H\7\"\2\2Hp\7$\2\2IJ\7\25\2\2JK\7\"\2\2KL\7\"\2\2Lp\7$\2\2MN\7\26\2\2"+
-		"Np\7\"\2\2OP\7\27\2\2Pp\7$\2\2QR\7\32\2\2RS\7\"\2\2Sp\7\"\2\2TU\7\30\2"+
-		"\2Up\7\"\2\2VW\7\31\2\2Wp\7\"\2\2XY\7\33\2\2YZ\7\"\2\2Z[\7\"\2\2[p\7\""+
-		"\2\2\\]\7\34\2\2]^\7\"\2\2^_\7\"\2\2_p\7\"\2\2`a\7\35\2\2ab\7\"\2\2bp"+
-		"\7\"\2\2cd\7\36\2\2de\7\"\2\2ef\7\"\2\2fp\7&\2\2gh\7\37\2\2hi\7\"\2\2"+
-		"ij\7\"\2\2jp\7&\2\2kl\7 \2\2lm\7\"\2\2mp\7&\2\2np\7!\2\2o\f\3\2\2\2o\16"+
-		"\3\2\2\2o\17\3\2\2\2o\23\3\2\2\2o\27\3\2\2\2o\33\3\2\2\2o\37\3\2\2\2o"+
-		"#\3\2\2\2o\'\3\2\2\2o+\3\2\2\2o/\3\2\2\2o\62\3\2\2\2o\65\3\2\2\2o;\3\2"+
-		"\2\2oA\3\2\2\2oC\3\2\2\2oE\3\2\2\2oI\3\2\2\2oM\3\2\2\2oO\3\2\2\2oQ\3\2"+
-		"\2\2oT\3\2\2\2oV\3\2\2\2oX\3\2\2\2o\\\3\2\2\2o`\3\2\2\2oc\3\2\2\2og\3"+
-		"\2\2\2ok\3\2\2\2on\3\2\2\2p\5\3\2\2\2\4\to";
+		"\3\3\3\3\3\3\5\3q\n\3\3\3\2\2\4\2\4\2\2\2\u008e\2\t\3\2\2\2\4p\3\2\2\2"+
+		"\6\b\5\4\3\2\7\6\3\2\2\2\b\13\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\3\3\2"+
+		"\2\2\13\t\3\2\2\2\f\r\7\5\2\2\rq\7\"\2\2\16q\7\6\2\2\17\20\7\7\2\2\20"+
+		"\21\7\"\2\2\21\22\7\"\2\2\22q\7\"\2\2\23\24\7\b\2\2\24\25\7\"\2\2\25\26"+
+		"\7\"\2\2\26q\7\"\2\2\27\30\7\t\2\2\30\31\7\"\2\2\31\32\7\"\2\2\32q\7\""+
+		"\2\2\33\34\7\n\2\2\34\35\7\"\2\2\35\36\7\"\2\2\36q\7\"\2\2\37 \7\13\2"+
+		"\2 !\7\"\2\2!\"\7\"\2\2\"q\7%\2\2#$\7\f\2\2$%\7\"\2\2%&\7\"\2\2&q\7%\2"+
+		"\2\'(\7\r\2\2()\7\"\2\2)*\7\"\2\2*q\7%\2\2+,\7\16\2\2,-\7\"\2\2-.\7\""+
+		"\2\2.q\7%\2\2/\60\7\17\2\2\60\61\7\"\2\2\61q\7%\2\2\62\63\7\20\2\2\63"+
+		"\64\7\"\2\2\64q\7&\2\2\65\66\7\21\2\2\66\67\7\"\2\2\678\7%\2\289\7\3\2"+
+		"\29:\7\"\2\2:q\7\4\2\2;<\7\22\2\2<=\7\"\2\2=>\7%\2\2>?\7\3\2\2?@\7\"\2"+
+		"\2@q\7\4\2\2AB\7$\2\2Bq\7#\2\2CD\7\23\2\2Dq\7$\2\2EF\7\24\2\2FG\7\"\2"+
+		"\2GH\7\"\2\2Hq\7$\2\2IJ\7\25\2\2JK\7\"\2\2KL\7\"\2\2Lq\7$\2\2MN\7\26\2"+
+		"\2Nq\7\"\2\2OP\7\27\2\2Pq\7$\2\2QR\7\32\2\2RS\7\"\2\2Sq\7\"\2\2TU\7\30"+
+		"\2\2UV\7\"\2\2Vq\7%\2\2WX\7\31\2\2Xq\7\"\2\2YZ\7\33\2\2Z[\7\"\2\2[\\\7"+
+		"\"\2\2\\q\7\"\2\2]^\7\34\2\2^_\7\"\2\2_`\7\"\2\2`q\7\"\2\2ab\7\35\2\2"+
+		"bc\7\"\2\2cq\7\"\2\2de\7\36\2\2ef\7\"\2\2fg\7\"\2\2gq\7&\2\2hi\7\37\2"+
+		"\2ij\7\"\2\2jk\7\"\2\2kq\7&\2\2lm\7 \2\2mn\7\"\2\2nq\7&\2\2oq\7!\2\2p"+
+		"\f\3\2\2\2p\16\3\2\2\2p\17\3\2\2\2p\23\3\2\2\2p\27\3\2\2\2p\33\3\2\2\2"+
+		"p\37\3\2\2\2p#\3\2\2\2p\'\3\2\2\2p+\3\2\2\2p/\3\2\2\2p\62\3\2\2\2p\65"+
+		"\3\2\2\2p;\3\2\2\2pA\3\2\2\2pC\3\2\2\2pE\3\2\2\2pI\3\2\2\2pM\3\2\2\2p"+
+		"O\3\2\2\2pQ\3\2\2\2pT\3\2\2\2pW\3\2\2\2pY\3\2\2\2p]\3\2\2\2pa\3\2\2\2"+
+		"pd\3\2\2\2ph\3\2\2\2pl\3\2\2\2po\3\2\2\2q\5\3\2\2\2\4\tp";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

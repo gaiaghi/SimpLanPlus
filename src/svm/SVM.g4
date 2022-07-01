@@ -47,7 +47,7 @@ instruction:
 	  | JR 			reg=REGISTER     
 	  | JAL 		l=LABEL 
 	  | MOVE 		to=REGISTER 	from=REGISTER  
-	  | PRINT 		reg=REGISTER  
+	  | PRINT 		reg=REGISTER  	term1=NUMBER
 	  | DELETION 	reg=REGISTER 
 	  
 	  | AND		res=REGISTER 	term1=REGISTER 		term2=REGISTER

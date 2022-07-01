@@ -38,8 +38,19 @@ public class PrintNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-				String code = exp.codeGeneration();
-		code = code + "print $a0\n";
+		String code = exp.codeGeneration();
+		Node expType = null;
+		try {
+			expType = exp.typeCheck();
+		} catch (TypeErrorException e) {
+			return code + "print $a0 1\n";
+		}
+		if( expType instanceof BoolTypeNode )
+			code = code + "print $a0 0\n";
+		
+		if( expType instanceof IntTypeNode )
+			code = code + "print $a0 1\n";
+		
 		return code;
 	}
 

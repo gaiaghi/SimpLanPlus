@@ -289,9 +289,9 @@
 //{void f(int x, int y){ {int z; if(x==0) return; else print x;} print y; } f(2,3);}
 
 //n52
-// "true" viene stampato come 1
+// Output: true, false, true
 //#n52#OK
-//{void f() {print true; {return;} }  f();  }
+//{void f() {print true; {return;} } bool x=false; f(); print x; print !x;  }
 
 
 //n53
@@ -335,10 +335,16 @@
 
 //n61		
 // fa vedere la differenza tra passaggio dei parametri per valore e per riferimento
+// Output = 5,3,2
 //#n61#OK
 //{int f(^int x, int n){ x^=3; n=4; return 5;}  ^int y=new int; int z=2; int t; y^=1; t=f(y,z); print t; print y^; print z; }
 
 
+//n62		
+// come il 61, ma con parametro attuale che è un puntatore di puntatore mentre il parametro formale è un puntatore
+// Output = 5,3
+//#n62#OK
+//{int f(^int x, int n){ x^=3; n=4; return 5;} ^^int y=new ^int; int t; y^=new int;  y^^=1; t=f(y^,2); print t; print y^^;}
 
 //p01
 //OK		output = 1
