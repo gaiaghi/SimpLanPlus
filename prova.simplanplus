@@ -346,6 +346,30 @@
 //#n62#OK
 //{int f(^int x, int n){ x^=3; n=4; return 5;} ^^int y=new ^int; int t; y^=new int;  y^^=1; t=f(y^,2); print t; print y^^;}
 
+
+
+//n63
+// errore lettura di un puntatore dopo la delete
+//#n63#ERR
+//{^int x=new int; x^=3; delete x; print x^;}
+
+
+
+//n64
+// esempio riuso di un puntatore dopo la delete
+// viene cancellato il valore nello heap puntato dal puntatore
+// la catena del puntatore non viene cancellata
+//#n64#OK
+//{^int x=new int; x^=3; delete x; x^=4;}
+
+
+
+//n65
+// esempio riuso di un puntatore dopo la delete
+//#n65#OK
+//{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; delete x; y^=4; x^^=2; }
+
+
 //p01
 //OK		output = 1
 //#p01#OK
@@ -395,12 +419,12 @@
 
 
 
-// dichiarazione di una funzione dentro il corpo di un'altra funzione
-// e' possibile scrivere questo codice?
-//{void f(){ void g(){print 2; f();} print 1; g(); } f();}
-//{void f(){ void g(){print 2; } print 1; g(); } f(); g();}
 
-// i puntatori devono essere riutilizzabili?
-// a lezione avevo scritto questo appunto: "quando facciamo una deletion non cancelliamo il puntatore ma l’oggetto puntato"
-//{^int x=new int; x^=3; delete x; x^=4;}
 
+
+
+//TODO
+	- cancellare parti commentate ed eventuali print
+	- relazione
+	- scegliere esempi da consegnare
+	- main con scelte utente (dimensione memoria, file esempio, stampa albero, debugCPU)

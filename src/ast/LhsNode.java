@@ -116,9 +116,12 @@ public class LhsNode implements Node {
 		else {
 			errors.addAll(lhs.checkEffects(env));
 			
-			if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) {
-	            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW.  LhsNode"));
+			if( leftSide ) {
+				if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) {
+		            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW.  LhsNode"));
+				}
 			}
+			
 		}
 		
 		return errors;

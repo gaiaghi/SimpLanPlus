@@ -72,7 +72,7 @@ public class AssignmentNode implements Node {
 		String code = "";
 		code = code + exp.codeGeneration();
 		code = code + "push $a0\n";
-		lhs.setLeftSide(true);
+		//lhs.setLeftSide(true);
 		code = code + lhs.codeGeneration(); 
 		code = code + "lw $t1 0($sp)\n"; //risultato di exp
 		code = code +"pop\n";
@@ -94,9 +94,10 @@ public class AssignmentNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
+		lhs.setLeftSide(true);
+		
 		res.addAll(exp.checkEffects(env));
 		
-		//STEntry lhsEntry = lhs.getId().getSTEntry();		
 		STEntry lhsEntry = null;
 		try {
 			lhsEntry = env.lookup(lhs.getId().getId());
@@ -106,23 +107,30 @@ public class AssignmentNode implements Node {
 		}
 		
 		//env seq[lhs = RW]
+		if( lhs.isPointer() 
+				&& lhs.getId().getDerNumLhs() == lhs.getId().getDerNumDec() 
+				&& lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.DELETED)) {
+			lhsEntry.setVarEffect(lhs.getDereferenceNum(), Effect.READ_WRITE);
+		}
+		
+		// controllo che la catena del puntatore non sia a INIT
+		if(lhs.isPointer()) {
+			for(int i = 0; i < lhs.getDereferenceNum(); i ++)
+				if ( ! lhsEntry.getVarEffect(i).equals(Effect.READ_WRITE) ) {
+		            res.add(new SemanticError(lhs.getId().getId() + " has not status RW. AssignmentNode2"));
+		            return res;
+				}
+		}
+		
+		// aggiorno effetto variabile left side
 		Effect newEffect = Effect.seq(lhsEntry.getVarEffect(lhs.getDereferenceNum()), Effect.READ_WRITE);
 		lhsEntry.setVarEffect(lhs.getDereferenceNum(), newEffect);
-
-		if(lhs.isPointer()) {
-			if ( ! lhsEntry.getVarEffect(0).equals(Effect.READ_WRITE) ) {
-	            res.add(new SemanticError(lhs.getId().getId() + " has not status RW. AssignmentNode"));
-			}
-		}
 		
 		res.addAll(lhs.checkEffects(env));
 		
-		// if variable statuts = ERROR
-		if ( lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.ERROR)) {
-			res.add(new SemanticError("Variable "+lhs.getId().getId()+" cannot be used after deletion."));
-		}
+		
 		//assegnamento di puntatori: copio gli effetti di exp in lhs
-		else if (exp instanceof DerExpNode) {
+		if (exp instanceof DerExpNode) {
 			
 			int lhsDer = lhs.getDereferenceNum();
 			int maxDer = lhs.getId().getSTEntry().getVarEffectList().size();
