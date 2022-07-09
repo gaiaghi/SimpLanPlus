@@ -45,13 +45,17 @@ public class PrintNode implements Node {
 		} catch (TypeErrorException e) {
 			return code + "print $a0 1\n";
 		}
+		
+		if( expType instanceof PointerTypeNode )
+			expType = ((PointerTypeNode) expType).getPointedType();
+		
 		if( expType instanceof BoolTypeNode )
-			code = code + "print $a0 0\n";
+			return code + "print $a0 0\n";
 		
 		if( expType instanceof IntTypeNode )
-			code = code + "print $a0 1\n";
+			return code + "print $a0 1\n";
 		
-		return code;
+		return code + "print $a0 1\n";
 	}
 
 	@Override

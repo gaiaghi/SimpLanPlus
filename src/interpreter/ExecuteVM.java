@@ -18,7 +18,9 @@ import util.Registers;
 public class ExecuteVM {
     
 	//TODO 
-	private boolean debug = false;
+	private boolean debug;
+	// stack utilizzata per stampare una riga bianca tra un AR e l'altro.
+	// stack[i] = true 		indica che sta iniziando un nuovo AR quindi devo lasciare una riga bianca
 	private ArrayList<Boolean> stack;
 	
 	// dimensione code area
@@ -32,8 +34,9 @@ public class ExecuteVM {
     
     private Registers regs;
     
-    public ExecuteVM(ArrayList<Instruction> c, int sizeCodeArea, int sizeOtherSpace) throws SmallCodeAreaCException, MemoryException {
+    public ExecuteVM(ArrayList<Instruction> c, int sizeCodeArea, int sizeOtherSpace, boolean d) throws SmallCodeAreaCException, MemoryException {
       code = c;
+      debug = d;
       CODESIZE = sizeCodeArea;
       MEMSIZE = sizeOtherSpace;
       memory = new ArrayList<Cell>(CODESIZE + MEMSIZE);
@@ -70,17 +73,20 @@ public class ExecuteVM {
     	  for(int i = 0; i < code.size(); i ++) 
     		  memory.get(i).setInstruction(code.get(i));
     	
-      //TODO debug
-      System.out.println("Dimensione Code Area = "+CODESIZE +
+      //TODO cancellare??
+      /*System.out.println("Dimensione Code Area = "+CODESIZE +
     		  "\nDimensione stack/heap = "+MEMSIZE +
     		  "\nDimensione totale memoria = "+(CODESIZE+MEMSIZE) +"\n");
+      */
       
       
-      //TODO
       stack = new ArrayList();
       for(int i = 0; i < CODESIZE+MEMSIZE; i ++) 
     	  stack.add(false);
-      writeCode();
+      
+    //TODO da cancellare
+      //writeCode();
+      
     }
     
     
@@ -101,8 +107,12 @@ public class ExecuteVM {
 	    		}
 	    		else {
 	    			// fetch
-	    			if( debug ) // TODO cancellare
+	    			
+	    			// TODO cancellare
+	    			/*if( debug ) 
 	    				System.out.println("Size "+code.size() +"     ip "+regs.getIP());
+	    			*/
+	    			
 		    		bytecode = code.get( regs.getIP() );  
 		    		regs.addOneToIP();
 		            // TODO controlla se tutte queste variabili vengono usate
@@ -119,8 +129,7 @@ public class ExecuteVM {
 		            		value = regs.getRegisterValue( bytecode.getArg1() );
 		            		push(value);
 		            		
-		            		
-		            		//TODO
+		            		// quando c'è una "push $fp" vuol dire che sta iniziando un nuovo AR
 		            		if( bytecode.getArg1().compareTo("$fp") == 0 )
 		            			stack.set(regs.getSP(), true);
 		            		break;
@@ -300,12 +309,12 @@ public class ExecuteVM {
 		            			arg1 = regs.getRegisterValue(bytecode.getArg1());
 		            			arg2 = Integer.parseInt( bytecode.getArg2() );
 		            			if( arg2 == 1 )
-		            				System.out.println( "--print--> " + arg1 );
+		            				System.out.println( "-> " + arg1 );
 		            			else {
 		            				if( arg1 == 1 )
-		            					System.out.println( "--print--> true");
+		            					System.out.println( "-> true");
 		            				else
-		            					System.out.println( "--print--> false");
+		            					System.out.println( "-> false");
 		            			}
 		            		}
 		            		else		//TODO questo ramo else forse non serve perchè non prendo il valore da stampare dallo stack
@@ -336,6 +345,8 @@ public class ExecuteVM {
 			                break;
 		             
 		            	case SVMParser.HALT :
+		            		clearHeap();
+		            		printCPU(bytecode.toString());
 		            		System.out.println("\nEnd of execution!");
 			             	return;
 			             	
@@ -350,15 +361,8 @@ public class ExecuteVM {
     	}catch(MemoryException | AccessToFreeMemoryCellException | 
     			MissingValueCellException | InvalidInstructionException e) {
     		System.err.println("Error during execution:");
-    		System.out.println(e.getMessage());
+    		System.err.println(e.getMessage());
     		System.err.println("Instruction: " + bytecode.getInstr());
-    		/*
-    		 * T__0=1, T__1=2, PUSH=3, POP=4, ADD=5, SUB=6, MULT=7, DIV=8, ADDI=9, SUBI=10, 
-				MULTI=11, DIVI=12, LI=13, LB=14, STOREW=15, LOADW=16, BRANCH=17, BRANCHEQ=18, 
-				BRANCHLESSEQ=19, JR=20, JAL=21, PRINT=22, DELETION=23, MOVE=24, AND=25, 
-				OR=26, NOT=27, ANDB=28, ORB=29, NOTB=30, HALT=31, REGISTER=32, COL=33, 
-				LABEL=34, NUMBER=35, BOOL=36, WHITESP=37, ERR=38;
-    		 * */
     		printCPU("Exception");
     	}
     	
@@ -462,12 +466,15 @@ public class ExecuteVM {
     
     private void printCPU(String s) {
     	if( debug ) {
-	    	System.out.println("\n------------------------------------------");
+	    	System.out.println("\n\n\n\n------------------------------------------");
 	    	System.out.println("|           CPU status	                 |");
 	    	System.out.println("------------------------------------------");
 	    	
 	    	if( s.compareTo("") != 0 ) {
-	        	System.out.println("|           " +s);
+	        	System.out.print("|           " +s);
+	        	for(int i = 0; i < 28-s.length(); i ++)
+	        		System.out.print(" ");
+	        	System.out.print(" |\n");
 	        	System.out.println("------------------------------------------");
 	    	}
 	    	
@@ -475,24 +482,22 @@ public class ExecuteVM {
 	    	
 	    	System.out.println("------------------------------------------");
 	    	
-	    	System.out.println("Heap:");
+	    	System.out.println("  Heap:");
 	    	for(int i = CODESIZE; i <= regs.getHP(); i ++) {
 	    		if( !memory.get(i).isFree() ) {
 		    		String str = "[" + i + "]\t" + memory.get(i);
 		    		
+		    		// "<--  $hp" non verrà stampata mai perchè $hp dovrebbe puntare sempre ad una cella libera
 		    		if( regs.getHP() == i ) str = str + "\t<--  $hp";
 		    		
-		    		System.out.println(str);
+		    		System.out.println("  " + str);
 	    		}	
 	    	}
 	    	
-	    	System.out.println("\nStack:");
+	    	System.out.println("\n  Stack:");
 	    	for(int i = regs.getHP()+1; i <= CODESIZE+MEMSIZE-1; i ++) {
 	    		
-	    		
-	    		
 	    		if( !memory.get(i).isFree() ) {
-	    			
 	    			
 		    		String str = "[" + i + "]\t" + memory.get(i);
 		    		
@@ -500,15 +505,12 @@ public class ExecuteVM {
 		    		if( regs.getFP() == i ) str = str + "\t<--  $fp";
 		    		if( regs.getSP() == i ) str = str + "\t<--  $sp";
 		    		
-		    		System.out.println(str);
+		    		System.out.println("  "+str);
 		    		
 		    		if( stack.get(i) )
 		    			System.out.println("");
 	    		}	
-	    		
-	    		
 	    	}
-	    	
 	    	System.out.println("------------------------------------------");
     	}
     }
@@ -529,6 +531,12 @@ public class ExecuteVM {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} 
+    }
+    
+    void clearHeap() {
+    	for(int i = CODESIZE; i <= CODESIZE+MEMSIZE-1; i ++) 
+    		if( !memory.get(i).isFree() ) 
+    			memory.get(i).free();
     }
     
 }

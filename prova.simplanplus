@@ -304,13 +304,13 @@
 
 
 //n55
-//#n55#ERR
 // dovrebbe dare errore perchè passo x^ e non x
+//#n55#ERR
 //{void f(^int x){ delete x; }  ^int x=new int; x^=3; f(x^);   }
 
 //n56
-//#n56#ERR
 // dovrebbe dare errore perchè passo un bool al posto di un int alla funzione
+//#n56#ERR
 //{void f(^int x){ delete x; }  ^bool x=new bool; x^=true; f(x);   }
 
 
@@ -319,13 +319,13 @@
 //{void h(^int x){ print x^; } ^^int y=new ^int; y^=new int; y^^=3; h(y^);  }
 
 //n58
-//#n58#ERR
 // invocazione h(y) errata
+//#n58#ERR
 //{void h(^^int x){ print x^^; } ^int y=new int; y^=3; h(y);  }
 
 //n59
-//#n59#ERR
 // invocazione h(y^) errata
+//#n59#ERR
 //{void h(^^int x){ print x^^; } ^int y=new int; y^=3; h(y^);  }
 
 
@@ -367,7 +367,7 @@
 //n65
 // esempio riuso di un puntatore dopo la delete
 //#n65#OK
-//{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; delete x; y^=4; x^^=2; }
+//{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; delete x; y^=4; x^^=2; print x^^; }
 
 
 //p01
@@ -408,7 +408,7 @@
 //p07
 // x^=720		x=506
 //#p07#OK
-//{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y=new int; y^=x^ * n; f(y,n-1);} } ^int u=new int; u^=1; f(u,6); }
+{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y=new int; y^=x^ * n; f(y,n-1);} } ^int u=new int; u^=1; f(u,6); }
 
 
 //p08
@@ -420,11 +420,3 @@
 
 
 
-
-
-
-//TODO
-	- cancellare parti commentate ed eventuali print
-	- relazione
-	- scegliere esempi da consegnare
-	- main con scelte utente (dimensione memoria, file esempio, stampa albero, debugCPU)

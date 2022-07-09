@@ -28,8 +28,102 @@ import parser.SPPErrorListener;
 public class SimpLanPlus{
 	public static void main(String[] args) {
 		
+		String usageString = "Usage:\n"
+	            + "   java -jar exec/SimpLanPlus.jar <inputFileName> [-ast] [-codesize=n1] [-memsize=n2] [-debug]\n"
+	            + "\n   where:\n"
+	          	+ "      - n1 and n2 are non-zero positive numbers\n"
+	          	+ "\n";
+		
 		//String fileName = args[0];
-		String fileName = "prova.simplanplus";
+		// parametro nome del file di input
+		String fileName = null;
+		// parametro ast
+		boolean printAST = false;
+		// parametro booleano per indicare le stampe di debug
+	    boolean debug = false;
+		// parametro dimensione code area
+	    int CODESIZE = 1000;
+	    // parametro dimensione other space (stack + heap)
+	    int MEMSIZE = 1000;
+	       
+	    switch( args.length ) {
+		    case 0:
+		    	// il programma viene eseguito senza parametri
+		    	System.out.println(usageString);
+		    	System.exit(1);
+		    	break;
+		    	
+		    case 1:
+		    	// il programma viene eseguito con un solo parametro, 
+		    	// dovrebbe essere il nome del file in input
+		    	if( checkInputFileName(args[0]) )
+		    		fileName = args[0];
+		    	else {
+		    		System.out.println("Wrong argument: " + args[0] + ".\nThe first argument must be the name of the input file.");
+		    		System.out.println("\n" + usageString);
+		    		System.exit(1);
+		    	}
+		    		
+		    	break;
+		    	
+		    default:
+		    	if( checkInputFileName(args[0]) )
+		    		fileName = args[0];
+		    	else {
+		    		System.out.println("Wrong argument: " + args[0] + ".\nThe first argument must be the name of the input file.");
+		    		System.out.println("\n" + usageString);
+		    		System.exit(1);
+		    	}
+		    	// conta il numero di argomenti errati
+			    int counter = 0;
+		    	boolean isWrongArg = true;
+		    	for( int i = 1; i < args.length; i ++) {
+		    		if( args[i].compareTo("-ast") == 0 ) {
+		    			printAST = true;
+		    			isWrongArg = false;
+		    		}
+		    		else if( args[i].compareTo("-debug") == 0 ) {
+		    			debug = true;
+		    			isWrongArg = false;
+		    		}
+		    		else {
+		    			if( args[i].contains("-codesize=") ) {
+		    				String[] parSize = args[i].split("=");
+		    				if( parSize.length == 2 ) {
+		    					try {
+		    						CODESIZE = Integer.parseInt(parSize[1]);
+		    						if( CODESIZE > 0 )
+		    							isWrongArg = false;
+		    					}catch(NumberFormatException e) {}
+		    				}
+		    			}
+		    			else if( args[i].contains("-memsize=") ) {
+		    				String[] parSize = args[i].split("=");
+		    				if( parSize.length == 2 ) {
+		    					try {
+		    						MEMSIZE = Integer.parseInt(parSize[1]);
+		    						if( MEMSIZE > 0 )
+		    							isWrongArg = false;
+		    					}catch(NumberFormatException e) {}
+		    				}
+		    			}
+		    		}
+		    		
+		    		if( isWrongArg ) {
+		    			counter ++;
+		    			System.out.println("Wrong argument: " +args[i]);
+		    		}
+		    	}
+		    	
+		    	if( counter != 0 ) {
+		    		System.out.println("\n" + usageString);
+		    		System.exit(1);
+		    	}
+		    	break;
+	    }
+	    
+	    
+	    	
 		
 		CharStream inputCode = null;
 		
@@ -38,7 +132,7 @@ public class SimpLanPlus{
 			inputCode = CharStreams.fromFileName(fileName);
 		} 
 		catch (IOException e) {
-			System.err.println("The file " + fileName + " was not found");
+			System.err.println("The file " + fileName + " was not found.");
 			System.exit(1);
 		}
 		
@@ -83,7 +177,7 @@ public class SimpLanPlus{
 		
 		//checking syntactical errors
 		if(parser.getNumberOfSyntaxErrors()>0) {
-			ArrayList syErrors = listener.getErrors();
+			ArrayList<String> syErrors = listener.getErrors();
 			for (int i=0; i<syErrors.size(); i++)
 				System.err.println(syErrors.get(i));
 		
@@ -95,8 +189,7 @@ public class SimpLanPlus{
 			
 		//checking semantic errors
 		Environment env = new Environment();	
-		ArrayList<SemanticError> err = new ArrayList();
-		err = ast.checkSemantics(env);
+		ArrayList<SemanticError> err = ast.checkSemantics(env);
 		
 		if(err.size()>0){
 			System.err.println("You had: " +err.size()+" semantic errors:");
@@ -109,10 +202,7 @@ public class SimpLanPlus{
 		//type-checking bottom-up 
 		try {
 			Node type = ast.typeCheck(); 
-			if( type == null )
-				System.out.println("Type checking ok! Type of the program is: NULL");
-			else
-				System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
+			System.out.println("Type checking ok! Type of the program is: void");
 		}catch(TypeErrorException e){
 			System.err.println("Type error: " +e.getMessage());
 			System.exit(1);
@@ -123,17 +213,18 @@ public class SimpLanPlus{
 		//checking effect errors
 		ArrayList<SemanticError> effectsErrors = ast.checkEffects(env);
 		if(effectsErrors.size()>0){
-            System.err.println("There are " +effectsErrors.size()+ " errors from the effects analysis:");
+			System.err.println("There are " +effectsErrors.size()+ " errors from the effects analysis:");
             
-           for(SemanticError e : effectsErrors)
-			System.err.println("\t" + e);
+			for(SemanticError e : effectsErrors)
+				System.err.println("\t" + e);
+			
 			System.exit(1);
         }
 
-		
-		System.out.println("Visualizing AST...");
-		System.out.println(ast.toPrint(""));
-		
+		if( printAST ) {
+			System.out.println("\nVisualizing AST...");
+			System.out.println(ast.toPrint(""));
+		}
 		
 		// CODE GENERATION  prova.SimpLan.asm
 		String code=ast.codeGeneration(); 
@@ -149,7 +240,6 @@ public class SimpLanPlus{
 		 
 		System.out.println("\nCode generated! Assembling and running generated code.");
 		
-		//FileInputStream isASM = new FileInputStream(fileName+".asm");
 		CharStream isASM = null;
 		try {
 			isASM = CharStreams.fromFileName(fileName+".asm");
@@ -166,21 +256,33 @@ public class SimpLanPlus{
 		visitorSVM.visit(parserASM.assembly()); 
 
 		System.out.println("You had: "+lexerASM.errorCount()+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.");
-		if (lexerASM.errorCount()>0 || parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);
+		if (lexerASM.errorCount()>0 || parserASM.getNumberOfSyntaxErrors()>0) 
+			System.exit(1);
 		
-		// TODO l'utente deve inserire queste dimensioni
-		// dimensione code area
-	    int CODESIZE = 500;
-	    // dimensione other space (stack + heap)
-	    int MEMSIZE = 1000;
-	    
+			    
 	    try {
 			System.out.println("\nStarting Virtual Machine...\n");
-			ExecuteVM vm = new ExecuteVM(visitorSVM.getCode(), CODESIZE, MEMSIZE);
+			ExecuteVM vm = new ExecuteVM(visitorSVM.getCode(), CODESIZE, MEMSIZE, debug);
 			vm.cpu();
 	    }catch(SmallCodeAreaCException | MemoryException e) {
 	    	System.out.println(e.getMessage());
 	    }
+		
+	}
+	
+	
+	private static boolean checkInputFileName(String name) {
+		
+		if( name.contains("-ast") )
+			return false;
+		else if( name.contains("-debug") )
+			return false;
+		else if( name.contains("-codesize") )
+			return false;
+		else if( name.contains("-memsize") )
+			return false;
+		else 
+			return true;
 		
 	}
 	

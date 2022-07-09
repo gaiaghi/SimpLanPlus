@@ -211,21 +211,21 @@ public class Registers {
 	
 	
 	public String toString() {
-		return "Registers:\n" +
+		return "  Registers:\n" +
 			
-			"$ip = " + ip +"\n" +
+			"  $ip = " + ip +"\n" +
 			
-			"$sp = " + sp +"\t" +
-			"$fp = " + fp +"\n" +
+			"  $sp = " + sp +"\t" +
+			"  $fp = " + fp +"\n" +
 			
-			"$al = " + al +"\t" +
-			"$hp = " + hp +"\n" +
+			"  $al = " + al +"\t" +
+			"  $hp = " + hp +"\n" +
 			
-			"$a0 = " + a0 +"\t" +
-			"$t1 = " + t1 +"\n" +
+			"  $a0 = " + a0 +"\t" +
+			"  $t1 = " + t1 +"\n" +
 			
-			"$ra = " + ra +"\t" +
-			"$ret = " + ret;
+			"  $ra = " + ra +"\t" +
+			"  $ret = " + ret;
 	}
 	
 

@@ -249,13 +249,15 @@ public class SimpLanPlus_test{
 		
 		// TODO l'utente deve inserire queste dimensioni
 		// dimensione code area
-	    int CODESIZE = 500;
+	    int CODESIZE = 1000;
 	    // dimensione other space (stack + heap)
 	    int MEMSIZE = 1000;
+	    // booleano per indicare le stampe di debug
+	    boolean debug = false;
 	    
 	    try {
 			System.out.println("\nStarting Virtual Machine...\n");
-			ExecuteVM vm = new ExecuteVM(visitorSVM.getCode(), CODESIZE, MEMSIZE);
+			ExecuteVM vm = new ExecuteVM(visitorSVM.getCode(), CODESIZE, MEMSIZE, debug);
 			vm.cpu();
 	    }catch(SmallCodeAreaCException | MemoryException e) {
 	    	System.out.println(e.getMessage());
