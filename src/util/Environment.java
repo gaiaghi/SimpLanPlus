@@ -302,7 +302,7 @@ public class Environment {
 				entry.setVarEffect(derNum, result);
 				
 				if( result.equals(Effect.ERROR) ) {
-					errors.add(new SemanticError("Cannot read "+ id.getId().getId() +" after its deletion.  Env.checkExpressionEffects"));
+					errors.add(new SemanticError("Cannot read '"+ id.getId().getId() +"' after its deletion.  Env.checkExpressionEffects"));
 					
 					for( int i = 0; i < entry.getSizeVarEffects(); i ++ )
 						entry.setVarEffect(i, result);

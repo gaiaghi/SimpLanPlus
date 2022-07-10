@@ -360,10 +360,10 @@ public class ExecuteVM {
 	    	
     	}catch(MemoryException | AccessToFreeMemoryCellException | 
     			MissingValueCellException | InvalidInstructionException e) {
-    		System.err.println("Error during execution:");
+    		printCPU("Exception");
+    		System.err.println("\n\nError during execution:");
     		System.err.println(e.getMessage());
     		System.err.println("Instruction: " + bytecode.getInstr());
-    		printCPU("Exception");
     	}
     	
     	

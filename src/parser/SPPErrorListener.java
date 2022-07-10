@@ -21,7 +21,6 @@ public class SPPErrorListener extends BaseErrorListener{
             RecognitionException e) {
 		
 		errors.add("Error at line " + line + ":" + charPositionInLine + " " + msg);
-//		System.err.println("Error at line " + line + ":" + charPositionInLine + " " + msg);
 		underlineError(recognizer, (Token) offendingSymbol, line, charPositionInLine);
 			
 	}
@@ -32,12 +31,15 @@ public class SPPErrorListener extends BaseErrorListener{
 		String[] lines = input.split("\n");
 		String errorLine = lines[line - 1];
 		
+		String tabString = "\t";
+		errorLine = errorLine.replaceAll(tabString, " ");
+		
 		String errorMsg="";
 		
 		//System.err.println(errorLine);
 		errorMsg = errorMsg.concat(errorLine+"\n");
 		for (int i=0; i<charPositionInLine; i++)
-			errorMsg= errorMsg.concat(" ");
+			errorMsg = errorMsg.concat(" ");
 		//	System.err.print(" ");
 		int start = offendingToken.getStartIndex();
 		int stop = offendingToken.getStopIndex();
