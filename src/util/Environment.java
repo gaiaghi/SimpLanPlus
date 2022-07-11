@@ -119,7 +119,7 @@ public class Environment {
 		Environment envSeq = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		int envLength = env1.symbolTable.size(); 
 		
-		//per ogni scope dell'albiente
+		//per ogni scope dell'ambiente
 		for (int i = 0; i < envLength; i++) {
 			HashMap<String, STEntry> scopeSeq = new HashMap<>();
 			
@@ -156,7 +156,7 @@ public class Environment {
 		Environment envMax = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		int envLength = env1.symbolTable.size(); 
 		
-		//per ogni scope dell'albiente
+		//per ogni scope dell'ambiente
 		for (int i = 0; i < envLength; i++) {
 			HashMap<String, STEntry> scopeMax = new HashMap<>();
 			

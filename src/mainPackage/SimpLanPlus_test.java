@@ -211,7 +211,7 @@ public class SimpLanPlus_test{
 		
 		
 		System.out.println("Visualizing AST...");
-		System.out.println(ast.toPrint(""));
+		//System.out.println(ast.toPrint(""));
 		
 		// CODE GENERATION  prova.SimpLan.asm
 		String code=ast.codeGeneration(); 

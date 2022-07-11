@@ -75,12 +75,12 @@ SUBI	: 'subi' ;	//non utilizzato
 MULTI	: 'multi' ;  	
 DIVI	: 'divi' ;	//non utilizzato
 LI 		: 'li';
-LB 		: 'lb';
-STOREW	: 'sw' ; 			// store in the memory cell pointed by top the value next
-LOADW	: 'lw' ;			// load a value from the memory cell pointed by top
-BRANCH	: 'b' ;				// jump to label
-BRANCHEQ 		: 'beq' ;	// jump to label if top == next
-BRANCHLESSEQ	: 'bleq' ;	// jump to label if top <= next
+LB 		: 'lb';		//non utilizzato
+STOREW	: 'sw' ; 			
+LOADW	: 'lw' ;			
+BRANCH	: 'b' ;				
+BRANCHEQ 		: 'beq' ;	
+BRANCHLESSEQ	: 'bleq' ;
 JR	 	: 'jr' ;	
 JAL	 	: 'jal' ;
 PRINT	: 'print' ;
@@ -92,29 +92,29 @@ NOT 	: 'not';
 ANDB 	: 'andb';	//non utilizzato
 ORB 	: 'orb';	//non utilizzato
 NOTB 	: 'notb';	//non utilizzato
-HALT	: 'halt' ;	// stop execution
+HALT	: 'halt' ;	
 
 
 REGISTER:
-	'$a0'
-	| // Accumulator is used to store the computed value of expressions
-	'$t1'
-	| // General purpose register is used to store temporary values
-	'$sp'
-	| // Stack Pointer points to the top of the stack
-	'$fp'
-	| // Frame Pointer points to the current Access Link relative to the active frame
-	'$al'
-	| // Access Link is used to go through the static chain (i.e. scopes)
-	'$ra'
-	| // Return address stores the return address
-	'$hp' // Heap pointer points to the top of the heap
-	| // 
-	'$ret'; // 
+	'$a0'	// registro accumulatore utilizzato per memorizzare i risultati 
+	| 
+	'$t1'	// registro utilizzato per memorizzare valori temporanei
+	|
+	'$sp'	// Stack Pointer, punta alla cima dello stack
+	| 
+	'$fp'	// Frame Pointer, punta alla cella Access Link del frame corrente
+	| 
+	'$al'	// Access Link, usato per implementare la catena statica
+	| 
+	'$ra'	// Return address, contiene il return address
+	| 
+	'$hp' 	// Heap pointer, punta alla prima cella libera nello heap
+	| 
+	'$ret'; // registro utilizzato per la gestione dei return di funzione
 	
 	
 
-COL	 : ':' ;
+COL	 	 : ':' ;
 LABEL	 : ('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z')*'_'('0'..'9')('0'..'9')* ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
 BOOL 	 : 'false' | 'true';

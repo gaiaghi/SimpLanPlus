@@ -58,7 +58,7 @@ public class SimpLanPlus{
 			    	if( checkInputFileName(args[0]) )
 			    		fileName = args[0];
 			    	else {
-			    		System.out.println("Wrong argument: " + args[0] + ".\nThe first argument must be the name of the input file.");
+			    		System.err.println("Wrong argument: " + args[0] + ".\nThe first argument must be the name of the input file.");
 			    		System.out.println("\n" + usageString);
 			    		System.exit(1);
 			    	}
@@ -69,7 +69,7 @@ public class SimpLanPlus{
 			    	if( checkInputFileName(args[0]) )
 			    		fileName = args[0];
 			    	else {
-			    		System.out.println("Wrong argument: " + args[0] + ".\nThe first argument must be the name of the input file.");
+			    		System.err.println("Wrong argument: " + args[0] + ".\nThe first argument must be the name of the input file.");
 			    		System.out.println("\n" + usageString);
 			    		System.exit(1);
 			    	}
@@ -110,7 +110,7 @@ public class SimpLanPlus{
 			    		
 			    		if( isWrongArg ) {
 			    			counter ++;
-			    			System.out.println("Wrong argument: " +args[i]);
+			    			System.err.println("Wrong argument: " +args[i]);
 			    		}
 			    	}
 			    	
@@ -148,7 +148,7 @@ public class SimpLanPlus{
 			parser.addErrorListener(listener);
 		}
 		catch (NullPointerException e) {
-			System.err.println("Error in ErrorListener: " +e.getMessage());
+			System.err.println("Error in ErrorListener: " + e.toString());
 			System.exit(1);
 		}
 		
@@ -164,23 +164,25 @@ public class SimpLanPlus{
 		}
 		
 		//checking lexical errors
-		if (lexer.errorCount() > 0) {
+		if ( lexer.errorCount() > 0 ) {
 			ArrayList lxErrors = lexer.getErrors();
-			for (int i=0; i<lexer.errorCount(); i++)
+			for (int i = 0; i < lexer.errorCount(); i ++)
 				System.err.println(lxErrors.get(i));
 		
-            System.err.println("There are (" +lexer.errorCount()+") lexical errors in the file. Impossible to compile.");
+            System.err.println("There are (" + lexer.errorCount() 
+            	+ ") lexical errors in the file. Impossible to compile.");
             System.exit(1);
         } 
 
 		
 		// checking syntactical errors
-		if(parser.getNumberOfSyntaxErrors()>0) {
+		if( parser.getNumberOfSyntaxErrors() > 0 ) {
 			ArrayList<String> syErrors = listener.getErrors();
-			for (int i=0; i<syErrors.size(); i++)
+			for (int i = 0; i < syErrors.size(); i ++)
 				System.err.println(syErrors.get(i));
 		
-			System.err.println("There are (" + parser.getNumberOfSyntaxErrors() +") syntax errors in the file. Impossible to compile.");
+			System.err.println("There are (" + parser.getNumberOfSyntaxErrors() 
+				+ ") syntax errors in the file. Impossible to compile.");
             System.exit(1); 
 		}
 		
@@ -191,14 +193,14 @@ public class SimpLanPlus{
 		try {
 			ArrayList<SemanticError> err = ast.checkSemantics(env);
 			
-			if(err.size()>0){
-				System.err.println("You had: " +err.size()+" semantic errors:");
+			if( err.size() > 0 ){
+				System.err.println("You had: " + err.size() + " semantic errors:");
 				for(SemanticError e : err)
 					System.err.println("\t" + e);
 				System.exit(1);
 			}
 		}catch(Exception e){
-			System.err.println("Error in semantic analysis: " +e.toString());
+			System.err.println("Error in semantic analysis: " + e.toString());
 			System.exit(1);
 		}
 		
@@ -209,11 +211,11 @@ public class SimpLanPlus{
 			Node type = ast.typeCheck(); 
 			System.out.println("Type checking ok! Type of the program is: void.");
 		}catch(TypeErrorException e){
-			System.err.println("Type error: " +e.getMessage());
+			System.err.println("Type error: " + e.getMessage());
 			System.exit(1);
 		}
 		catch(Exception e){
-			System.err.println("Error in type analysis: " +e.toString());
+			System.err.println("Error in type analysis: " + e.toString());
 			System.exit(1);
 		}
 	
@@ -222,8 +224,9 @@ public class SimpLanPlus{
 		//checking effect errors
 		try {
 			ArrayList<SemanticError> effectsErrors = ast.checkEffects(env);
-			if(effectsErrors.size()>0){
-				System.err.println("There are " +effectsErrors.size()+ " errors from the effects analysis:");
+			if( effectsErrors.size() > 0 ){
+				System.err.println("There are " + effectsErrors.size() 
+					+ " errors from the effects analysis:");
 	            
 				for(SemanticError e : effectsErrors)
 					System.err.println("\t" + e);
@@ -231,56 +234,83 @@ public class SimpLanPlus{
 				System.exit(1);
 	        }
 		}catch(Exception e){
-			System.err.println("Error in effects analysis: " +e.toString());
+			System.err.println("Error in effects analysis: " + e.toString());
 			System.exit(1);
 		}
 
+		
+		// stampa albero di sintassi astratta
 		if( printAST ) {
 			System.out.println("\nVisualizing AST...");
 			System.out.println(ast.toPrint(""));
 		}
 		
-		// CODE GENERATION  prova.SimpLan.asm
-		String code=ast.codeGeneration(); 
+		
+		// code generation
+		String code = null;
 		BufferedWriter out;
 		try {
-			out = new BufferedWriter(new FileWriter(fileName+".asm"));
+			code = ast.codeGeneration();
+			out = new BufferedWriter(new FileWriter(fileName + ".asm"));
 			out.write(code);
 			out.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} 
+			System.out.println("\nCode generated! Assembling and running generated code.");
+			
+		}catch (IOException e) {
+			System.err.println("Write error for '" + fileName + ".asm" + "' file: " + e.toString());
+			System.exit(1);
+			
+		}catch(Exception e){
+			System.err.println("Error in code generation: " + e.toString());
+			System.exit(1);
+		}
 		 
-		System.out.println("\nCode generated! Assembling and running generated code.");
 		
+		// leggo il file .asm
 		CharStream isASM = null;
 		try {
 			isASM = CharStreams.fromFileName(fileName+".asm");
 		} 
 		catch (IOException e) {
-			System.err.println("The file " + fileName + " was not found");
+			System.err.println("The file " + fileName + ".asm" + " was not found.");
 			System.exit(1);
 		}
-		SVMLexer lexerASM = new SVMLexer(isASM);
-		CommonTokenStream tokensASM = new CommonTokenStream(lexerASM);
-		SVMParser parserASM = new SVMParser(tokensASM);
 		
-		SVMVisitorImpl visitorSVM = new SVMVisitorImpl();
-		visitorSVM.visit(parserASM.assembly()); 
-
-		System.out.println("You had: "+lexerASM.errorCount()+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.");
-		if (lexerASM.errorCount()>0 || parserASM.getNumberOfSyntaxErrors()>0) 
+		
+		
+		SVMVisitorImpl visitorSVM = null;
+		try {
+			SVMLexer lexerASM = new SVMLexer(isASM);
+			CommonTokenStream tokensASM = new CommonTokenStream(lexerASM);
+			SVMParser parserASM = new SVMParser(tokensASM);
+			
+			visitorSVM = new SVMVisitorImpl();
+			visitorSVM.visit(parserASM.assembly()); 
+	
+			System.out.println("You had: " + lexerASM.errorCount() + " lexical errors and " 
+					+ parserASM.getNumberOfSyntaxErrors() + " syntax errors.");
+			
+			if ( lexerASM.errorCount() > 0 || parserASM.getNumberOfSyntaxErrors() > 0 ) 
+				System.exit(1);
+			
+		}catch(Exception e){
+			System.err.println("Error in assembling generated code: " + e.toString());
 			System.exit(1);
-		
+		}
 			    
 	    try {
 			System.out.println("\nStarting Virtual Machine...\n");
 			ExecuteVM vm = new ExecuteVM(visitorSVM.getCode(), CODESIZE, MEMSIZE, debug);
 			vm.cpu();
+			
 	    }catch(SmallCodeAreaCException | MemoryException e) {
-	    	System.out.println(e.getMessage());
-	    }
+	    	System.err.println("Error during execution:");
+	    	System.err.println(e.getMessage());
+	    	
+	    }catch(Exception e){
+			System.err.println("Error during execution: " + e.toString());
+			System.exit(1);
+		}
 		
 	}
 	

@@ -96,7 +96,7 @@ public class ExecuteVM {
     	Instruction bytecode = null;
     	try {
     		
-    		//TODO cancellare
+    		//TODO cancellare?
     		printCPU("INIT");
     		
 	    	while ( true ) {
@@ -107,15 +107,9 @@ public class ExecuteVM {
 	    		}
 	    		else {
 	    			// fetch
-	    			
-	    			// TODO cancellare
-	    			/*if( debug ) 
-	    				System.out.println("Size "+code.size() +"     ip "+regs.getIP());
-	    			*/
-	    			
-		    		bytecode = code.get( regs.getIP() );  
+	    			bytecode = code.get( regs.getIP() );  
 		    		regs.addOneToIP();
-		            // TODO controlla se tutte queste variabili vengono usate
+
 		    		int value;
 		            int address;
 		            int arg1;
@@ -195,11 +189,12 @@ public class ExecuteVM {
 		            		
 			                break;
 		            	
-		            	case SVMParser.SUBI :
+		            	/* SUBI non utilizzato
+		            	 * case SVMParser.SUBI :
 		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2 - arg3);
-			                break;
+			                break;*/
 		              
 		            	case SVMParser.MULTI :
 		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
@@ -207,66 +202,41 @@ public class ExecuteVM {
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2 * arg3);
 			                break;
 		              
-		            	case SVMParser.DIVI :
+		            	/* DIVI non utilizzato
+		            	 * case SVMParser.DIVI :
 		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2 / arg3);
-			                break;  
+			                break;  */
 			            
 		            	case SVMParser.LI :
 		            		arg2 = Integer.parseInt( bytecode.getArg2() );
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2);
 			                break; 
 		                
-		            	case SVMParser.LB :
+		            	/* LB non utilizzato
+		            	 * case SVMParser.LB :
 		            		arg2 = Integer.parseInt( bytecode.getArg2() );
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2);
-			                break; 
+			                break; */
 		              
 		            	case SVMParser.STOREW :   //TODO da rivedere, nel caso heap?
-		            
 		            		offset = bytecode.getOffset();
 		            		address = regs.getRegisterValue(bytecode.getArg2()) + offset;
 		            		value = regs.getRegisterValue(bytecode.getArg1());
-		            		
-		            		/*System.err.println("STOREW\targ1=" +bytecode.getArg1() + "=" +regs.getRegisterValue(bytecode.getArg1()) +
-		            				"\toffset="+offset + "\targ2=" +bytecode.getArg2()+"="+regs.getRegisterValue(bytecode.getArg2()) );
-		            		System.err.println("STOREW\taddress = " + address );
-		            		*/
 		            		writeOnMemory(address, value);
-		            		
-		            		
-		            		
-			                break;
+		            		break;
 		              
 		            	case SVMParser.LOADW : 
 		            		
 		            		offset = bytecode.getOffset();
 		            		address = regs.getRegisterValue(bytecode.getArg2()) + offset;
-		            		
-		            		// TODO debug
-		            		/*System.err.println("LOADW\targ1=" +bytecode.getArg1() + "=" +regs.getRegisterValue(bytecode.getArg1()) +
-		            				"\toffset="+offset + "\targ2=" +bytecode.getArg2()+"="+regs.getRegisterValue(bytecode.getArg2()) );
-		            		System.err.println("LOADW\taddress = " + address ); 
-		            		// fine debug 
-		            		*/
 		            		value = readFromMemory(address);
-		            		
-		            		// TODO debug
-		            		//System.err.println("LOADW\tvalore letto=" +value );
-		            		// fine debug 
-		            		
 		            		regs.setRegisterValue(bytecode.getArg1(), value);
-		            		
-		            		// TODO debug
-		            		//System.err.println("LOADW\tnuovo valore registro = " +regs.getRegisterValue(bytecode.getArg1()) +"\n");
-		            		// fine debug 
-		            		
 			                break;
 		              
 		            	case SVMParser.BRANCH : 
 		            		arg1 = Integer.parseInt( bytecode.getArg1() );
-		            		//System.err.println("BRANCH "+arg1); //TODO
 		            		regs.setIP(arg1);
 			                break;
 		              
@@ -275,27 +245,23 @@ public class ExecuteVM {
 		            		value = regs.getRegisterValue(bytecode.getArg1());
 		            		if( value == regs.getRegisterValue(bytecode.getArg2()) )
 		            			regs.setIP(arg3);
-		            		//System.err.println("BRANCHEQ "+value +"  ==   "+regs.getRegisterValue(bytecode.getArg2())); //TODO
-			                break;
+		            		break;
 		              
 		            	case SVMParser.BRANCHLESSEQ :
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
 		            		value = regs.getRegisterValue(bytecode.getArg1());
 		            		if( value <= regs.getRegisterValue(bytecode.getArg2()) )
 		            			regs.setIP(arg3);
-		            		//System.err.println("BRANCHLESSEQ "+value +"  <=   "+regs.getRegisterValue(bytecode.getArg2())); //TODO
-			                break;
+		            		break;
 		            	
 		            	case SVMParser.JR :
 		            		address = regs.getRegisterValue( bytecode.getArg1() );
-		            		//System.err.println("JR "+address +"    reg "+bytecode.getArg1()); //TODO
 		            		regs.setIP(address);
 			                break;
 			                
 		            	case SVMParser.JAL :
 		            		arg1 = Integer.parseInt( bytecode.getArg1() );
 		            		regs.setRegisterValue("$ra", regs.getIP() );
-		            		//System.err.println("JAL "+arg1); //TODO
 		            		regs.setIP(arg1);
 			                break;
 			                
@@ -352,7 +318,8 @@ public class ExecuteVM {
 			             	
 		            	default:
 		            		System.err.println("Error: invalid instruction "+bytecode.getInstr());
-		    	            return;
+		    	            System.exit(1);
+		            		return;
 		            }
 		            printCPU(bytecode.toString());
 	    		} 
