@@ -7,7 +7,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class IteLNode implements Node{
-//	statement   :	ite					#iteL
+
+	// grammar rule:
+	//	statement   :	ite					
 	
 	private Node ite;
 	

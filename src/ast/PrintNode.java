@@ -8,7 +8,9 @@ import util.SemanticError;
 import util.SimpLanPlusLib;
 
 public class PrintNode implements Node {
-	//	 print	    : 'print' exp;
+	
+	// grammar rule:
+	// print	    : 'print' exp;
 	
 	private Node exp;
 
@@ -18,7 +20,7 @@ public class PrintNode implements Node {
 	
 	@Override
 	public String toPrint(String indent) {
-		return indent + "Print:\n" + this.exp.toPrint(indent +"  ");
+		return indent + "Print:\n" + this.exp.toPrint(indent + "  ");
 	}
 	
 	@Override

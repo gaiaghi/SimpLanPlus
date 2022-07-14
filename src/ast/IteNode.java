@@ -9,7 +9,7 @@ import util.SimpLanPlusLib;
 
 public class IteNode implements Node {
 	
-	//grammar rule
+	//grammar rule:
 	//ite         : 'if' '(' exp ')' statement ('else' statement)?;
 	
 	private Node cond;
@@ -34,12 +34,12 @@ public class IteNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		String str = indent +"If:\n"
-				+cond.toPrint(indent +"  ")
-				+"\n" +indent +"Then:\n" +thenStm.toPrint(indent +"  ");
+		String str = indent + "If:\n"
+				+ cond.toPrint(indent + "  ")
+				+ "\n" + indent + "Then:\n" + thenStm.toPrint(indent + "  ");
 		
 		if( elseStm != null )
-				str = str +"\n" +indent +"Else:\n" +elseStm.toPrint(indent +"  ");
+				str = str + "\n" + indent + "Else:\n" + elseStm.toPrint(indent + "  ");
 		
 		return str;
 	}
@@ -71,21 +71,16 @@ public class IteNode implements Node {
 		String endLabel = SimpLanPlusLib.freshLabel();
 		String thenLabel = SimpLanPlusLib.freshLabel();
 		
-		//code = code + "-------------------- IF.cond\n";
-		
-		code = code + cond.codeGeneration(); //$a0 = risultato della condizione
-		code = code + "li $t1 1\n"; //true per il confronto
+		code = code + cond.codeGeneration(); 				// $a0 = risultato della condizione
+		code = code + "li $t1 1\n"; 						// true per il confronto
 		code = code + "beq $a0 $t1 " + thenLabel +"\n";
-		//code = code + "-------------------- IF.else\n";
 		
 		if (elseStm != null)
 			code = code + elseStm.codeGeneration();
 		
 		code = code + "b " + endLabel +"\n";
-		//code = code + "-------------------- IF.then\n";
 		code = code + thenLabel + ":\n";
 		code = code + thenStm.codeGeneration();
-		//code = code + "-------------------- IF.end\n";
 		code = code + endLabel + ":\n";
 		
 		return code;
@@ -96,6 +91,7 @@ public class IteNode implements Node {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		res.addAll(cond.checkSemantics(env));
 		res.addAll(thenStm.checkSemantics(env));
+		
 		if (elseStm != null)
 			res.addAll(elseStm.checkSemantics(env));
 		
@@ -110,8 +106,10 @@ public class IteNode implements Node {
         if (elseStm != null) {
         	Environment thenEnv = new Environment(env);
         	Environment elseEnv = new Environment(env);
+        	
         	/* calcolo l'ambiente relativo al branch then */
         	errors.addAll(thenStm.checkEffects(thenEnv));
+        	
         	/* calcolo l'ambiente relativo al branch else*/
         	errors.addAll(elseStm.checkEffects(elseEnv));
         	
@@ -153,6 +151,7 @@ public class IteNode implements Node {
 	public boolean isIfThenElse() {
 		if( elseStm != null )
 			return true;
+		
 		return false;
 	}
 	
@@ -205,9 +204,6 @@ public class IteNode implements Node {
 			else if ( elseStm instanceof BlockLNode ) 
 				((BlockLNode) elseStm).setFunEndLabel(label);
 		}
-		
-
-		
 	}
 	
 

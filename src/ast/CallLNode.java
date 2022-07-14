@@ -7,7 +7,10 @@ import util.Environment;
 import util.SemanticError;
 
 public class CallLNode implements Node {
-//	statement   :	call ';'				#callL
+	
+	// grammar rule:
+	// statement   :	call ';'		
+	
 	private Node call;
 	
 	public CallLNode (Node call) {

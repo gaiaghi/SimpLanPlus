@@ -15,11 +15,10 @@ import util.Cell;
 import util.Instruction;
 import util.Registers;
 
-public class ExecuteVM {
+public class ExecuteVM2 {
     
 	private boolean debug;
 	BufferedWriter out = null;
-	
 	// stack utilizzata per stampare una riga bianca tra un AR e l'altro.
 	// stack[i] = true 		indica che sta iniziando un nuovo AR quindi devo lasciare una riga bianca
 	private ArrayList<Boolean> stack;
@@ -35,13 +34,14 @@ public class ExecuteVM {
     
     private Registers regs;
     
-    public ExecuteVM(ArrayList<Instruction> c, int sizeCodeArea, int sizeOtherSpace, boolean d) throws SmallCodeAreaCException, MemoryException {
+    public ExecuteVM2(ArrayList<Instruction> c, int sizeCodeArea, int sizeOtherSpace, boolean d) throws SmallCodeAreaCException, MemoryException {
       code = c;
       debug = d;
       CODESIZE = sizeCodeArea;
       MEMSIZE = sizeOtherSpace;
       memory = new ArrayList<Cell>(CODESIZE + MEMSIZE);
       
+      //TODO setta valori iniziali registri, 	 hp=CODESIZE ??? è corretto?
       regs = new Registers(0,           // $a0
     		  0,						// $t1
     		  CODESIZE + MEMSIZE,		// $sp
@@ -73,13 +73,19 @@ public class ExecuteVM {
     	  for(int i = 0; i < code.size(); i ++) 
     		  memory.get(i).setInstruction(code.get(i));
     	
-    
+      //TODO cancellare??
+      /*System.out.println("Dimensione Code Area = "+CODESIZE +
+    		  "\nDimensione stack/heap = "+MEMSIZE +
+    		  "\nDimensione totale memoria = "+(CODESIZE+MEMSIZE) +"\n");
+      */
+      
+      
       stack = new ArrayList<Boolean>();
       for(int i = 0; i < CODESIZE+MEMSIZE; i ++) 
     	  stack.add(false);
-      
+
       if( debug ) 
-    		out = openDebugFile();
+  		out = openDebugFile();
     }
     
     
@@ -87,8 +93,10 @@ public class ExecuteVM {
     
     public void cpu(){
     	Instruction bytecode = null;
+    	
     	try {
     		
+    		//TODO cancellare?
     		printCPU("INIT");
     		
 	    	while ( true ) {
@@ -182,11 +190,12 @@ public class ExecuteVM {
 		            		
 			                break;
 		            	
-		            	case SVMParser.SUBI :
+		            	/* SUBI non utilizzato
+		            	 * case SVMParser.SUBI :
 		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2 - arg3);
-			                break;
+			                break;*/
 		              
 		            	case SVMParser.MULTI :
 		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
@@ -194,23 +203,25 @@ public class ExecuteVM {
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2 * arg3);
 			                break;
 		              
-		            	case SVMParser.DIVI :
+		            	/* DIVI non utilizzato
+		            	 * case SVMParser.DIVI :
 		            		arg2 = regs.getRegisterValue(bytecode.getArg2());
 		            		arg3 = Integer.parseInt( bytecode.getArg3() );
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2 / arg3);
-			                break;  
+			                break;  */
 			            
 		            	case SVMParser.LI :
 		            		arg2 = Integer.parseInt( bytecode.getArg2() );
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2);
 			                break; 
 		                
-		            	case SVMParser.LB :
+		            	/* LB non utilizzato
+		            	 * case SVMParser.LB :
 		            		arg2 = Integer.parseInt( bytecode.getArg2() );
 		            		regs.setRegisterValue(bytecode.getArg1(), arg2);
-			                break; 
+			                break; */
 		              
-		            	case SVMParser.STOREW :   
+		            	case SVMParser.STOREW :   //TODO da rivedere, nel caso heap?
 		            		offset = bytecode.getOffset();
 		            		address = regs.getRegisterValue(bytecode.getArg2()) + offset;
 		            		value = regs.getRegisterValue(bytecode.getArg1());
@@ -259,17 +270,21 @@ public class ExecuteVM {
 		            		regs.setRegisterValue(bytecode.getArg1(), value);
 			                break;
 			                
-		            	case SVMParser.PRINT :		
-	            			arg1 = regs.getRegisterValue(bytecode.getArg1());
-	            			arg2 = Integer.parseInt( bytecode.getArg2() );
-	            			if( arg2 == 1 )
-	            				System.out.println( "-> " + arg1 );
-	            			else {
-	            				if( arg1 == 1 )
-	            					System.out.println( "-> true");
-	            				else
-	            					System.out.println( "-> false");
-	            			}
+		            	case SVMParser.PRINT :		//TODO da rivedere
+		            		if( regs.getSP() <= MEMSIZE + CODESIZE ) {
+		            			arg1 = regs.getRegisterValue(bytecode.getArg1());
+		            			arg2 = Integer.parseInt( bytecode.getArg2() );
+		            			if( arg2 == 1 )
+		            				System.out.println( "-> " + arg1 );
+		            			else {
+		            				if( arg1 == 1 )
+		            					System.out.println( "-> true");
+		            				else
+		            					System.out.println( "-> false");
+		            			}
+		            		}
+		            		else		//TODO questo ramo else forse non serve perchè non prendo il valore da stampare dallo stack
+		            			System.out.println("Empty stack!");
 		            		
 			                break;
 			                
@@ -307,7 +322,6 @@ public class ExecuteVM {
 		            		System.err.println("Error: invalid instruction "+bytecode.getInstr());
 		            		if( debug )
 		            			closeDebugFile(out);
-		            		System.exit(1);
 		            		return;
 		            }
 		            printCPU(bytecode.toString());
@@ -320,7 +334,7 @@ public class ExecuteVM {
     		System.err.println("\n\nError during execution:");
     		System.err.println(e.getMessage());
     		System.err.println("Instruction: " + bytecode.getInstr());
-    	
+    		
     		if( debug )
     			closeDebugFile(out);
     	}
@@ -377,6 +391,30 @@ public class ExecuteVM {
     }
     
     
+    
+    private int getFreeHeapCell() {
+    	int indexCell = CODESIZE + MEMSIZE - 1;
+    	
+    	for(int i = CODESIZE; i < regs.getHP(); i ++)
+    		if( memory.get(i).isFree() )
+    			indexCell = i;
+    	
+    	// SERVE QUESTA COSA??
+    	// controllo che $hp punti ad una cella occupata
+    	// se punta ad una cella libera modifico il valore di $hp 
+    	// facendolo puntare alla prima cella occupata
+    	for(int i = regs.getHP(); i >= CODESIZE; i --) {
+    		if( memory.get(i).isFree() )
+    			continue;
+    		else {
+    			regs.setHP(i);
+    			break;
+    		}
+    	}
+    	
+    	return indexCell;
+    }
+    
     private int and(int x, int y) {
     	if( x+y == 2 )
     		return 1;
@@ -420,13 +458,16 @@ public class ExecuteVM {
 	    	stringToPrint = stringToPrint + "\n------------------------------------------";
 	    	
 	    	stringToPrint = stringToPrint + "\n  Heap:";
-	    	for(int i = CODESIZE; i < regs.getHP(); i ++) {
+	    	for(int i = CODESIZE; i <= regs.getHP(); i ++) {
 	    		if( !memory.get(i).isFree() ) {
 		    		String str = "[" + i + "]\t" + memory.get(i);
+		    		
+		    		// "<--  $hp" non verrà stampata mai perchè $hp dovrebbe puntare sempre ad una cella libera
+		    		if( regs.getHP() == i ) str = str + "\t<--  $hp";
+		    		
 		    		stringToPrint = stringToPrint + "\n  " + str;
 	    		}	
 	    	}
-	    	stringToPrint = stringToPrint + "\n  " + "[" + regs.getHP() + "]\t" +"\t<--  $hp";
 	    	
 	    	stringToPrint = stringToPrint + "\n  Stack:";
 	    	for(int i = regs.getHP()+1; i <= CODESIZE+MEMSIZE-1; i ++) {
@@ -450,6 +491,8 @@ public class ExecuteVM {
 	    	writeDebugFile(out, stringToPrint);
     	}
     }
+    
+    
     
     void clearHeap() {
     	for(int i = CODESIZE; i <= CODESIZE+MEMSIZE-1; i ++) 

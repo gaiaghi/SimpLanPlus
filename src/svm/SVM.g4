@@ -53,9 +53,6 @@ instruction:
 	  | AND		res=REGISTER 	term1=REGISTER 		term2=REGISTER
 	  | OR		res=REGISTER 	term1=REGISTER 		term2=REGISTER
 	  | NOT		res=REGISTER 	term1=REGISTER 
-	  | ANDB	res=REGISTER 	term1=REGISTER 		term2=BOOL
-	  | ORB		res=REGISTER 	term1=REGISTER 		term2=BOOL
-	  | NOTB 	res=REGISTER 	term1=BOOL
 	   
 	  | HALT
 	  ) ;
@@ -71,11 +68,11 @@ SUB	 	: 'sub' ;
 MULT	: 'mult' ;  	
 DIV	 	: 'div' ;	
 ADDI	: 'addi' ;  	
-SUBI	: 'subi' ;	//non utilizzato
+SUBI	: 'subi' ;	
 MULTI	: 'multi' ;  	
-DIVI	: 'divi' ;	//non utilizzato
+DIVI	: 'divi' ;	
 LI 		: 'li';
-LB 		: 'lb';		//non utilizzato
+LB 		: 'lb';		
 STOREW	: 'sw' ; 			
 LOADW	: 'lw' ;			
 BRANCH	: 'b' ;				
@@ -89,9 +86,6 @@ MOVE 	: 'mv';
 AND 	: 'and';
 OR		: 'or';
 NOT 	: 'not';
-ANDB 	: 'andb';	//non utilizzato
-ORB 	: 'orb';	//non utilizzato
-NOTB 	: 'notb';	//non utilizzato
 HALT	: 'halt' ;	
 
 

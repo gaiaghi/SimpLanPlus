@@ -1,7 +1,6 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import exception.MissingDecException;
@@ -14,7 +13,9 @@ import util.SemanticError;
 import util.SimpLanPlusLib;
 
 public class DecFunNode implements Node {
-//   decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
+	
+	// grammar rule:
+	// decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
 
 	private Node type;
 	private IdNode id;
@@ -33,34 +34,33 @@ public class DecFunNode implements Node {
 	public String toPrint(String indent) {
 		String argList = "";
 		String status = "";
+		
 		if( args.size() > 0 )
 		{
-			//argList = "\n";
-			for (int i = 0; i<  this.args.size(); i++)
-				argList = argList +"\n" +this.args.get(i).toPrint(indent +"  ");
-			status = "\n  " + indent +"STEntry: Arg Status = " + this.id.getSTEntry().getParEffectList();
+			for (int i = 0; i < this.args.size(); i ++)
+				argList = argList + "\n" + this.args.get(i).toPrint(indent + "  ");
+			
+			status = "\n  " + indent + "STEntry: Arg Status = " + this.id.getSTEntry().getParEffectList();
 		}
 		
 		String dec = "";
 		if( block.getDeclarationsSize() > 0 )
 		{
-			//dec = "\n";
 			ArrayList<Node> decs = block.getDeclarations();
-			for (int i = 0; i<  block.getDeclarationsSize(); i++)
-				dec = dec + "\n" + decs.get(i).toPrint(indent +"  ");
+			for (int i = 0; i < block.getDeclarationsSize(); i ++)
+				dec = dec + "\n" + decs.get(i).toPrint(indent + "  ");
 		}
 		
 		String body = "";
 		if( block.getStatementsSize() > 0 )
 		{
-			//body = "\n";
 			ArrayList<Node> stms = block.getStatements();
-			for (int i = 0; i<  block.getStatementsSize(); i++)
-				body = body + "\n" + stms.get(i).toPrint(indent +"  ");
+			for (int i = 0; i < block.getStatementsSize(); i ++)
+				body = body + "\n" + stms.get(i).toPrint(indent + "  ");
 		}
 		
-		return indent +"Fun: " +id.getId() +"\n" 
-			+type.toPrint(indent +"  ") +argList +status +dec +body;
+		return indent + "Fun: " + id.getId() + "\n" 
+			+ type.toPrint(indent + "  ") + argList + status + dec + body;
 	}
 	
 	@Override
@@ -71,11 +71,12 @@ public class DecFunNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException{
 		Node bodyType = block.typeCheck();
-		if (type instanceof PointerTypeNode)
-			throw new TypeErrorException("function "+id.getId()+" cannot be of type pointer.");
+		
+		if ( type instanceof PointerTypeNode )
+			throw new TypeErrorException("function " + id.getId() + " cannot be of type pointer.");
 		
 		if( ! SimpLanPlusLib.isEquals(bodyType, type) )
-			throw new TypeErrorException("wrong return type for function "+ id.getId());
+			throw new TypeErrorException("wrong return type for function " + id.getId());
 		
 		return null; //valore di ritorno non usato
 	}
@@ -98,8 +99,6 @@ public class DecFunNode implements Node {
 		String code = "";
 		int n = args.size();
 		
-		//code = code + "-------------------- inizio decFun\n";
-		
 		String label = SimpLanPlusLib.freshLabel();
 		code = code + "b " + label + "\n";
 				
@@ -108,20 +107,18 @@ public class DecFunNode implements Node {
 		code = code + "push $ra\n";
 		block.setFunEndLabel(id.getSTEntry().getFunEndLabel());
 		
-		//code = code + "-------------------- inizio decFun.block\n";
 		code = code + block.codeGeneration(); 
 		
-		//code = code + "-------------------- pulizia decFun\n";
 		code = code + id.getSTEntry().getFunEndLabel() + ":\n";
-		code = code + "lw $ra 0($sp)\n"; //$ra <- top
-		code = code + "addi $sp $sp "+(n+2)+"\n"; //pop di parametri formali + ra + al
+		code = code + "lw $ra 0($sp)\n"; 			// $ra <- top
+		code = code + "addi $sp $sp "+(n+2)+"\n"; 	// pop di parametri formali + ra + al
 		code = code + "lw $fp 0($sp)\n";
-		code = code + "pop\n"; //pop di OldFP
-		code = code + "li $ret 0\n";	//ripristino il valore di $ret
+		code = code + "pop\n"; 						// pop di OldFP
+		code = code + "li $ret 0\n";				// ripristino il valore di $ret
 		code = code + "jr $ra\n";
 		
 		code = code + label + ":\n";
-		//code = code + "-------------------- fine decFun\n";
+		
 		return code;
 	}
 
@@ -130,10 +127,6 @@ public class DecFunNode implements Node {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
-		//TODO env.offset = -2;
-  		//PROF: STentry entry = new STentry(env.nestingLevel, env.offset--);
-		//dovo decrementare l'offset dopo aver creato una nuova entry?
-  		//controlla offset passato come parametro
 		STEntry entry = new STEntry(env.getNestingLevel(), env.getAndUpdateOffset() ); 
   
         try {
@@ -142,36 +135,38 @@ public class DecFunNode implements Node {
         	id.setSTEntry(entry);
         	
         	env.addScope();
-        	//aggiungo la dichiarazione della fun anche nel nuovo
-        	//scope per evitare che vengano dichiarate altre funzioni
-        	//o variabili con lo stesso nome
+        	/* aggiungo la dichiarazione della fun anche nel nuovo
+        	   scope per evitare che vengano dichiarate altre funzioni
+        	   o variabili con lo stesso nome */
         	env.addEntry(id.getId(), entry);
         	
         	ArrayList<Node> parTypes = new ArrayList<Node>();
-			int paroffset=1;
-			//check args
+			int paroffset = 1;
+			// check args
 			for(Node a : args){
 				ArgNode arg = (ArgNode) a;
-				parTypes.add(arg.getType());
+				Node argType = arg.getType();
+				if( argType  instanceof PointerTypeNode )
+					 ((PointerTypeNode) argType).setDerNum(argType.getDereferenceNum(), 0, arg.getId().getId()); 
+				parTypes.add(argType);
 				try {
 					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++); 
 					env.addEntry(arg.getId().getId(), parEntry);
 					arg.getId().setSTEntry(parEntry);
 				}catch(MultipleDecException e) {
-					res.add(new SemanticError("Parameter id "+arg.getId().getId()+" already declared"));
+					res.add(new SemanticError("Parameter id " + arg.getId().getId() + " already declared"));
 					return res;
 				}		
 			}
         	
-			//set func type
+			// set func type
 			entry.setType( new ArrowTypeNode(parTypes, type) );
 			
 			block.setIsFunBody(true); 
 			
-			
-			// creo un nuovo ambiente in cui valutare il corpo della funzione.
-			// il nuovo ambiente contiene solo le dichiarazioni di funzione precedenti.
-			// nel corpo della funzione non si può accedere alle variabili globali.
+			/* creo un nuovo ambiente in cui valutare il corpo della funzione.
+			   il nuovo ambiente contiene solo le dichiarazioni di funzione precedenti.
+			   nel corpo della funzione non si può accedere alle variabili globali. */
 			Environment env_0 = null;
 			try {
 				env_0 = env.envFunc();
@@ -184,7 +179,7 @@ public class DecFunNode implements Node {
 					try {
 						env_0.addEntry(arg.getId(), newArgEntry);
 					} catch (MultipleDecException e) {
-						res.add(new SemanticError("Arg id "+arg.getId() +" already declared"));
+						res.add(new SemanticError("Arg id " + arg.getId() + " already declared"));
 						return res;
 					}
 				}
@@ -197,7 +192,7 @@ public class DecFunNode implements Node {
 			env.removeScope();
 			
         }catch(MultipleDecException e) {
-        	res.add(new SemanticError("Fun id "+id.getId() +" already declared"));
+        	res.add(new SemanticError("Fun id " + id.getId() + " already declared"));
         }
         
         return res;		
@@ -224,7 +219,7 @@ public class DecFunNode implements Node {
 		try {
 			env.addEntry(id.getId(), id.getSTEntry());
 		} catch (MultipleDecException e) {
-			errors.add(new SemanticError("Fun id "+id.getId() +" already declared"));
+			errors.add(new SemanticError("Fun id " + id.getId() + " already declared"));
 			return errors;
 		}
 		
@@ -259,9 +254,10 @@ public class DecFunNode implements Node {
 			}
 			
 			List<Effect> argEffects = new ArrayList<Effect>();
-			for(int i=0; i<newArgEntry.getSizeVarEffects(); i++) {
-				argEffects.add(new Effect(Effect.READ_WRITE));		//Effect.INITIALIZED oppure Effect.RW??
+			for(int i = 0; i < newArgEntry.getSizeVarEffects(); i ++) {
+				argEffects.add(new Effect(Effect.READ_WRITE));	
 			}
+			
 			newArgEntry.setVarEffectList(argEffects);
 			sigma_0.add(argEffects);
 		}
@@ -274,7 +270,7 @@ public class DecFunNode implements Node {
 			newFunEntry.setParEffectList(sigma_0);
 			env_0.addEntry(id.getId(), newFunEntry);
 		} catch (MultipleDecException e) {
-			errors.add(new SemanticError("Fun id "+id.getId() +" already declared"));
+			errors.add(new SemanticError("Fun id " + id.getId() + " already declared"));
 			return errors;
 		}
 		
@@ -290,26 +286,10 @@ public class DecFunNode implements Node {
 		
 		boolean stop = false;
 		while( !stop ) {
-						
-			//TEST
-			/*System.out.println("\nINIZIO ciclo punto fisso -------------------------------------");
-			System.out.println("	Sigma_1 prec: "+prec_sigma_1);
-			System.out.println("	Sigma_1: "+sigma_1);
-			try {
-				System.out.println("	Tipo di f: "+env_0.lookup(id.getId()).getParEffectList());
-			} catch (MissingDecException e1) {
-				errors.add(new SemanticError("DecFunNode: Missing declaration: "+id.getId()));
-				return errors;
-			}
-			*/
-			
-			
+		
 			// valuto gli effetti nel corpo della funzione
-			//errors.addAll(block.checkEffects(env_0));
 			errorsPuntoFisso.clear();
 			errorsPuntoFisso.addAll(block.checkEffects(env_0));
-			//System.err.println(errorsPuntoFisso);
-			//errors.addAll(errorsPuntoFisso);
 			
 			// ricavo gli effetti ottenuti dopo la valutazione del corpo della funzione
 			String argId = null;
@@ -323,11 +303,9 @@ public class DecFunNode implements Node {
 				env_0.lookup(id.getId()).setParEffectList(sigma_1);
 				
 			} catch (MissingDecException e) {
-				errors.add(new SemanticError("DecFunNode: Missing declaration: "+argId));
+				errors.add(new SemanticError("Missing declaration: " + argId));
 				return errors;
 			}
-			
-			
 			
 			// controllo terminazione punto fisso (prec_sigma_1 == sigma_1)
 			if( prec_sigma_1.equals(sigma_1) )
@@ -341,28 +319,15 @@ public class DecFunNode implements Node {
 					try {
 						argEntry = env_0.lookup(arg.getId());
 					} catch (MissingDecException e) {
-						errors.add(new SemanticError("DecFunNode: Missing declaration: "+arg.getId()));
+						errors.add(new SemanticError("Missing declaration: " + arg.getId()));
 						return errors;
 					}
 					
-					for(int i=0; i<argEntry.getSizeVarEffects(); i++) {
+					for(int i = 0; i < argEntry.getSizeVarEffects(); i ++) {
 						argEntry.setVarEffect(i, new Effect(Effect.READ_WRITE));
 					}
 				}
 			}
-			
-			//TEST
-			/*System.err.println("............. valutazione corpo funzione ............. ");
-			System.out.println("	prec_Sigma_1: "+prec_sigma_1);
-			System.out.println("	Sigma_1: "+sigma_1);
-			try {
-				System.out.println("	Tipo di f: "+env_0.lookup(id.getId()).getParEffectList());
-			} catch (MissingDecException e1) {
-				errors.add(new SemanticError("DecFunNode: Missing declaration: "+id.getId()));
-				return errors;
-			}
-			System.out.println("FINE ciclo punto fisso -------------------------------------\n");
-			*/
 		}
 		
 		errors.addAll(errorsPuntoFisso);
@@ -370,12 +335,11 @@ public class DecFunNode implements Node {
 		// chiudi lo scope dopo il calcolo del punto fisso
 		env_0.removeScope();
 		
-		
 		// setto gli effetti della funzione nell'ambiente originale
 		try {
 			env.lookup(id.getId()).setParEffectList(sigma_1);
 		} catch (MissingDecException e) {
-			errors.add(new SemanticError("DecFunNode: Missing declaration: "+id.getId()));
+			errors.add(new SemanticError("Missing declaration: "+id.getId()));
 			return errors;
 		}
 		

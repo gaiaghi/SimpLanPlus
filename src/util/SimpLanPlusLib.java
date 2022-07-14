@@ -6,11 +6,11 @@ import exception.TypeErrorException;
 public class SimpLanPlusLib {
 	
   
-	private static int labCount=0; 
+	private static int labCount = 0; 
   
-	private static int funLabCount=0; 
+	private static int funLabCount = 0; 
 
-	private static String funCode=""; 
+	private static String funCode = ""; 
 
 	
 	public static boolean isEquals (Node a, Node b) {
@@ -29,17 +29,18 @@ public class SimpLanPlusLib {
   
 	
 	public static String freshLabel() { 
-		return "label_"+(labCount++);
+		return "label_" + (labCount ++);
 	} 
 
 	
 	public static String freshFunLabel() { 
-		return "function_"+(funLabCount++);
+		return "function_" + (funLabCount ++);
 	} 
   
   
-	public static void putCode(String c) { 
-		funCode+="\n"+c; //aggiunge una linea vuota di separazione prima di funzione
+	public static void putCode(String c) {
+		// aggiunge una linea vuota di separazione prima di funzione
+		funCode += "\n" + c; 
 	} 
   
   

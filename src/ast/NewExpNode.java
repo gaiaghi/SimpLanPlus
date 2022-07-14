@@ -18,7 +18,7 @@ public class NewExpNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +"New:\n" +type.toPrint(indent);
+		return indent + "New:\n" + type.toPrint(indent);
 	}
 
 	@Override
@@ -32,8 +32,8 @@ public class NewExpNode implements Node {
 	public String codeGeneration() {
 		String code = "li $t1 -1\n";
 		code = code + "sw $t1 0($hp)\n";
-		code = code + "addi $a0 $hp 0\n"; // copio l'indirizzo puntato da $hp in $a0
-		code = code + "addi $hp $hp 1\n"; // incremento $hp
+		code = code + "addi $a0 $hp 0\n"; 	// copio l'indirizzo puntato da $hp in $a0
+		code = code + "addi $hp $hp 1\n"; 	// incremento $hp
 		return code;
 	}
 

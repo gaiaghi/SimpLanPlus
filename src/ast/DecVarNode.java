@@ -13,8 +13,10 @@ import util.SemanticError;
 import util.SimpLanPlusLib;
 
 
-//decVar      : type ID ('=' exp)? ';' ;
 public class DecVarNode implements Node{
+
+	// grammar rule:
+	// decVar      : type ID ('=' exp)? ';' ;
 	
 	private Node type;
 	private IdNode id;
@@ -31,13 +33,13 @@ public class DecVarNode implements Node{
 	public String toPrint(String indent) {
 		String expString;
 		if (exp != null)
-			expString = "\n" +exp.toPrint(indent +"  ");
+			expString = "\n" + exp.toPrint(indent + "  ");
 		else
 			expString = "";
 		
-		return indent +"Var: " +id.getId()
-		+"\n" +type.toPrint(indent +"  ")
-		+ expString;
+		return indent + "Var: " + id.getId()
+				+ "\n" + type.toPrint(indent + "  ")
+				+ expString;
 	}
 	
 	@Override
@@ -60,9 +62,9 @@ public class DecVarNode implements Node{
 
 			if( derNumRightDec != derNumExpDec )
 
-				throw new TypeErrorException("not valid assignment between pointer "+
-						((PointerTypeNode)decType).getErrorMsg() +" and " +((PointerTypeNode)expType).getErrorMsg());
-			
+				throw new TypeErrorException("not valid assignment between pointer "
+						+ ((PointerTypeNode)decType).getErrorMsg() + " and " 
+						+ ((PointerTypeNode)expType).getErrorMsg());
 			
 			decType = ((PointerTypeNode) decType).getPointedType();
 			expType = ((PointerTypeNode) expType).getPointedType();
@@ -71,11 +73,10 @@ public class DecVarNode implements Node{
 		else 
 			expType = util.SimpLanPlusLib.getNodeIfPointer(expType);
 
-
-		
-		if (! SimpLanPlusLib.isEquals(expType, decType))
+		if (! SimpLanPlusLib.isEquals(expType, decType) )
 			 throw new TypeErrorException("wrong usage of expression "
-		+exp.toString().substring(exp.toString().indexOf(".")+1, exp.toString().indexOf("@"))+" with variable "+id.getId());
+					 + exp.toString().substring(exp.toString().indexOf(".")+1, exp.toString().indexOf("@"))
+					 + " with variable " + id.getId() );
 		
 		return null; 
 	}
@@ -107,7 +108,7 @@ public class DecVarNode implements Node{
         	env.addEntry(id.getId(), entry);
         	id.setSTEntry(entry);
         }catch(MultipleDecException e) {
-        	res.add(new SemanticError("Var id "+id.getId() +" already declared"));
+        	res.add(new SemanticError("Var id " + id.getId() + " already declared"));
         }
         
         if (exp != null)
@@ -130,7 +131,7 @@ public class DecVarNode implements Node{
 		try {
 			env.addEntry(id.getId(), entry);
 		} catch (MultipleDecException e) {
-			System.out.println("catch 4");
+			res.add(new SemanticError("Var id " + id.getId() + " already declared"));
 		}
 		
 		return res;

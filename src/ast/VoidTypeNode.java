@@ -7,9 +7,7 @@ import util.SemanticError;
 
 public class VoidTypeNode implements Node {
 
-	public VoidTypeNode() {
-	
-	}
+	public VoidTypeNode() {}
 
 	@Override
 	public String toPrint(String indent) {
@@ -23,7 +21,6 @@ public class VoidTypeNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

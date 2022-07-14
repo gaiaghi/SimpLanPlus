@@ -7,8 +7,8 @@ import util.SemanticError;
 
 public class PointerTypeNode implements Node {
 
-	//grammar rule:
-	//type	    : '^' type
+	// grammar rule:
+	// type	    : '^' type
 	
 	private Node type;
 	
@@ -25,7 +25,7 @@ public class PointerTypeNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +"PointerType";
+		return indent + "PointerType";
 	}
 
 	@Override

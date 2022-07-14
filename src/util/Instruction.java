@@ -95,8 +95,10 @@ public class Instruction {
 		
 		if( arg2 != null )
 			str = str + arg2 + " ";
+		
 		if( arg3 != null )
 			str = str + arg3 + " ";
+		
 		return str;
 	}
 	
@@ -154,12 +156,6 @@ public class Instruction {
 			case 27:
 				return "NOT";
 			case 28:
-				return "ANDB";
-			case 29:
-				return "ORB";
-			case 30:
-				return "NOTB";
-			case 31:
 				return "HALT";
 			default: 
 				return "no name instruction";

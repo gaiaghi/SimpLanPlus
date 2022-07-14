@@ -10,13 +10,11 @@ public class IntTypeNode implements Node {
 	//grammar rule:
 	//type	    : 'int'
 	
-	public IntTypeNode() {
-		// TODO Auto-generated constructor stub
-	}
+	public IntTypeNode() {}
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +"IntType";
+		return indent + "IntType";
 	}
 
 	@Override

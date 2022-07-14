@@ -6,7 +6,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class ArgNode implements Node {
-//	arg         : type ID;
+	
+	// grammar rule:
+	//	arg : type ID;
 	
 	private Node type;
 	private IdNode id;
@@ -26,8 +28,8 @@ public class ArgNode implements Node {
 	
 	@Override
 	public String toPrint(String indent) {
-		return indent + "Arg: " +this.id.getId() +"\n" +this.type.toPrint(indent +"  ")
-		+"\n" +this.id.getSTEntry().toPrint(indent +"  ");
+		return indent + "Arg: " +this.id.getId() + "\n" + this.type.toPrint(indent + "  ")
+		+ "\n" + this.id.getSTEntry().toPrint(indent + "  ");
 	}
 
 	@Override

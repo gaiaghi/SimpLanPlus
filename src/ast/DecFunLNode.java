@@ -7,7 +7,10 @@ import util.Environment;
 import util.SemanticError;
 
 public class DecFunLNode implements Node {
-
+	
+	// grammar rule:
+	// declaration : decFun
+	
 	private Node decFun;
 	
 	public DecFunLNode(Node decFun) {

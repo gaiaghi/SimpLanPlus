@@ -6,8 +6,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class BoolNode implements Node {
-	//grammar rule:
-	//exp	    : BOOL
+	
+	// grammar rule:
+	// exp	    : BOOL
 	
 	private Boolean val;
 	
@@ -17,7 +18,7 @@ public class BoolNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +"Bool: " +val;
+		return indent + "Bool: " + val;
 	}
 
 	@Override

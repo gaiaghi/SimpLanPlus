@@ -11,9 +11,12 @@ import util.SemanticError;
 
 public class IdNode implements Node {
 	
+	// grammar rule:
+	// ID          : CHAR (CHAR | DIGIT)* ;
+	
 	private String id;
 	private STEntry entry;
-	private int nestingLvl; //nesting level corrente
+	private int nestingLvl; 
 	private int derNum;
 	private boolean isInDeletionNode;
 	
@@ -39,12 +42,9 @@ public class IdNode implements Node {
 		return this.nestingLvl;
 	}
 	
-	
-	
-	
 	@Override
 	public String toPrint(String indent) {
-		return indent + "Id: " +id +"\n" +entry.toPrint(indent +"  ");
+		return indent + "Id: " + id + "\n" + entry.toPrint(indent + "  ");
 	}
 	
 	@Override
@@ -55,8 +55,9 @@ public class IdNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException{
 		Node idType = entry.getType();
+		
 		if (idType instanceof ArrowTypeNode) {
-			throw new TypeErrorException("wrong usage of function identifier "+ id);
+			throw new TypeErrorException("wrong usage of function identifier " + id);
 		}
 		
 		if( idType instanceof PointerTypeNode ) {
@@ -64,7 +65,7 @@ public class IdNode implements Node {
 			pointer.setDerNum(getDerNumDec(), getDerNumLhs(), id);
 			
 			if( pointer.getDerNumStm() > pointer.getDerNumDec() )
-				throw new TypeErrorException("too many dereference operations at pointer " +id);
+				throw new TypeErrorException("too many dereference operations at pointer " + id);
 		}
 			  
 		return idType;
@@ -74,7 +75,6 @@ public class IdNode implements Node {
 	public String codeGeneration() {
 		String code = "";
 		
-		//code = code + "lw $al 0($fp)\n";
 		code = code + "mv $al $fp\n";
 		
 		for(int i = 0; i < nestingLvl - entry.getNestingLevel(); i ++ ) {
@@ -97,7 +97,8 @@ public class IdNode implements Node {
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
-		try { //declared id
+		try { 
+			// declared id
 			this.entry = env.lookup(this.id);
 			this.nestingLvl = env.getNestingLevel();
 		} catch (MissingDecException e) { 
@@ -115,7 +116,7 @@ public class IdNode implements Node {
 		try {
 			entry = env.lookup(id);
 		} catch (MissingDecException e) {
-			errors.add(new SemanticError("IdNode 1: Missing declaration: "+id));
+			errors.add(new SemanticError("Missing declaration: " + id));
 			return errors;
 		}
 		

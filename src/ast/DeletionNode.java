@@ -11,6 +11,9 @@ import util.SemanticError;
 
 public class DeletionNode implements Node{
 
+	// grammar rule:
+	// deletion    : 'delete' ID;
+	
 	private IdNode id;
 
 	public DeletionNode(IdNode id) {
@@ -19,7 +22,7 @@ public class DeletionNode implements Node{
 	
 	@Override
 	public String toPrint(String indent) {
-		return indent + "Delete: \n" + this.id.toPrint(indent +"  ");
+		return indent + "Delete: \n" + this.id.toPrint(indent + "  ");
 	}
 
 	@Override
@@ -53,18 +56,21 @@ public class DeletionNode implements Node{
 		
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
-		
-		
 		res.addAll(id.checkEffects(env));
+		try {
+			STEntry idEntry = env.lookup(id.getId()); 
+			int derNumDec = id.getDerNumDec();
+			Effect seqEffect = Effect.seq(idEntry.getVarEffect(derNumDec), Effect.DELETED);
+			idEntry.getVarEffect(derNumDec).setEffect(seqEffect);
 			
-		int derNumDec = id.getDerNumDec();
-		Effect seqEffect = Effect.seq(id.getSTEntry().getVarEffect(derNumDec), Effect.DELETED);
-		id.getSTEntry().getVarEffect(derNumDec).setEffect(seqEffect);
+			
+			if ( idEntry.getVarEffect(derNumDec).equals(Effect.ERROR) )
+				res.add(new SemanticError("Variable " + id.getId() + " was already deleted."));
 		
-		
-		if (id.getSTEntry().getVarEffect(derNumDec).equals(Effect.ERROR) )
-			res.add(new SemanticError("Variable "+ id.getId() +" was already deleted.  Deletion"));
-		
+			id.setSTEntry(new STEntry( env.lookup(id.getId())) );
+		} catch (MissingDecException e1) {
+			res.add(new SemanticError("MissingDecException: " + id.getId()));
+		}
 		
 		return res;
 	}

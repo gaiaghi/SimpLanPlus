@@ -7,8 +7,8 @@ import util.SemanticError;
 
 public class BoolTypeNode implements Node {
 	
-	//grammar rule:
-	//type	    : 'bool'
+	// grammar rule:
+	// type	    : 'bool'
 	
 	public BoolTypeNode() {
 		
@@ -16,7 +16,7 @@ public class BoolTypeNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +"BoolType";
+		return indent + "BoolType";
 	}
 
 	@Override

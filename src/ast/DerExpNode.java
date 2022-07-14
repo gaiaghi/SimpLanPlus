@@ -12,8 +12,8 @@ import util.Effect;
 
 public class DerExpNode implements Node {
 
-	//grammar rule:
-	//exp	    : lhs
+	// grammar rule:
+	// exp	    : lhs
 	
 	private LhsNode lhs;
 	
@@ -48,7 +48,7 @@ public class DerExpNode implements Node {
         errors.addAll(lhs.checkEffects(env));
         	
         if (lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
-            errors.add(new SemanticError(lhs.getId().getId() + " not initialized.   DerExp"));
+            errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
             return errors;
         }
         

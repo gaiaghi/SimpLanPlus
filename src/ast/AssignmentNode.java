@@ -3,7 +3,6 @@ package ast;
 import java.util.ArrayList;
 
 import exception.MissingDecException;
-import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Effect;
 import util.Environment;
@@ -13,11 +12,11 @@ import util.SimpLanPlusLib;
 
 public class AssignmentNode implements Node {
 
-//	assignment  : lhs '=' exp ;
+	// grammar rule:
+	//	assignment  : lhs '=' exp ;
 	
 	private Node exp;
 	private LhsNode lhs;
-	
 	
 	public AssignmentNode(LhsNode lhs, Node exp) {
 		this.exp = exp;
@@ -26,7 +25,8 @@ public class AssignmentNode implements Node {
 	
 	@Override
 	public String toPrint(String indent) {
-		return indent + "Assignment:\n" + this.lhs.toPrint(indent +"  ") +"\n" + this.exp.toPrint(indent +"  ");
+		return indent + "Assignment:\n" + this.lhs.toPrint(indent + "  ") 
+			+ "\n" + this.exp.toPrint(indent + "  ");
 	}
 
 	@Override
@@ -52,8 +52,8 @@ public class AssignmentNode implements Node {
 			int derNumExp = pointerExp.getDerNumStm();
 			
 			if( (derNumLhsDec - derNumLhs) != (derNumExpDec - derNumExp) ) 
-				throw new TypeErrorException("not valid assignment between pointer "+
-						pointerLhs.getErrorMsg() +" and " +pointerExp.getErrorMsg());
+				throw new TypeErrorException("not valid assignment between pointer " 
+						+ pointerLhs.getErrorMsg() + " and " + pointerExp.getErrorMsg());
 			
 			lhsType = pointerLhs.getPointedType();
 			expType = pointerExp.getPointedType();
@@ -61,8 +61,8 @@ public class AssignmentNode implements Node {
 		
 		
 		if (! SimpLanPlusLib.isEquals(lhsType, expType))
-			throw new TypeErrorException("cannot assign "+expType.toPrint("") +
-					" value for variable " + lhs.getId().getId() + " of type " + lhsType.toPrint(""));
+			throw new TypeErrorException("cannot assign "+expType.toPrint("") 
+				+ " value for variable " + lhs.getId().getId() + " of type " + lhsType.toPrint(""));
 		
 		return null;
 	}
@@ -72,11 +72,10 @@ public class AssignmentNode implements Node {
 		String code = "";
 		code = code + exp.codeGeneration();
 		code = code + "push $a0\n";
-		//lhs.setLeftSide(true);
 		code = code + lhs.codeGeneration(); 
-		code = code + "lw $t1 0($sp)\n"; //risultato di exp
-		code = code +"pop\n";
-		code = code +"sw $t1 0($a0)\n"; //lasciamo il calcolo di al al LhsNode?
+		code = code + "lw $t1 0($sp)\n"; 	//risultato di exp
+		code = code + "pop\n";
+		code = code + "sw $t1 0($a0)\n"; 
 		
 		return code;
 	}
@@ -102,22 +101,22 @@ public class AssignmentNode implements Node {
 		try {
 			lhsEntry = env.lookup(lhs.getId().getId());
 		} catch (MissingDecException e1) {
-			res.add(new SemanticError("AssignmentNode: MissingDecException "+lhs.getId().getId()));
+			res.add(new SemanticError("MissingDecException " + lhs.getId().getId() ));
 			return res;
 		}
 		
 		//env seq[lhs = RW]
 		if( lhs.isPointer() 
 				&& lhs.getId().getDerNumLhs() == lhs.getId().getDerNumDec() 
-				&& lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.DELETED)) {
+				&& lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.DELETED) ) {
 			lhsEntry.setVarEffect(lhs.getDereferenceNum(), Effect.READ_WRITE);
 		}
 		
 		// controllo che la catena del puntatore non sia a INIT
-		if(lhs.isPointer()) {
+		if( lhs.isPointer() ) {
 			for(int i = 0; i < lhs.getDereferenceNum(); i ++)
 				if ( ! lhsEntry.getVarEffect(i).equals(Effect.READ_WRITE) ) {
-		            res.add(new SemanticError(lhs.getId().getId() + " has not status RW. AssignmentNode2"));
+		            res.add(new SemanticError(lhs.getId().getId() + " has not status RW."));
 		            return res;
 				}
 		}
@@ -143,7 +142,17 @@ public class AssignmentNode implements Node {
 				Effect expEffect = derNode.getLhs().getId().getSTEntry().getVarEffect(j); 
 				lhs.getId().getSTEntry().setVarEffect(i, expEffect);
 			}
+			
 		}
+		
+		
+		try {
+			lhs.getId().setSTEntry(new STEntry( env.lookup(lhs.getId().getId()) ));
+		} catch (MissingDecException e1) {
+			res.add(new SemanticError("MissingDecException " + lhs.getId().getId() ));
+			return res;
+		}
+		
 		
 		
 		return res;

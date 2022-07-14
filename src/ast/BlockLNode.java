@@ -7,7 +7,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class BlockLNode implements Node {
-//	statement   :	block					#blockL;
+
+	// grammar rule:
+	//	statement   :	block ;
 	
 	private Node block;
 	

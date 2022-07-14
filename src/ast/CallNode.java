@@ -13,8 +13,8 @@ import util.STEntry;
 
 public class CallNode implements Node {
 	
-	//grammar rule:
-	//call        : ID '(' (exp(',' exp)*)? ')';
+	// grammar rule:
+	// call        : ID '(' (exp(',' exp)*)? ')';
 	
 	private IdNode id;
 	private STEntry entry; 
@@ -28,61 +28,55 @@ public class CallNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		String str = "Call: " +id.getId() 
-					+"\n" +id.getSTEntry().toPrint(indent +"  ");
+		String str = "Call: " + id.getId() 
+					+ "\n" +id.getSTEntry().toPrint(indent + "  ");
 		
-		for(int i=0; i<parlist.size(); i++)
-			str = str+"\n" + parlist.get(i).toPrint(indent +"  ");
+		for(int i = 0; i < parlist.size(); i ++)
+			str = str + "\n" + parlist.get(i).toPrint(indent + "  ");
 		
-		return indent +str;
+		return indent + str;
 	}
 
 	@Override
 	public Node typeCheck() throws TypeErrorException {
-		//controllo che l'id corrisponda ad una funzione
-//		ArrowTypeNode funType = (ArrowTypeNode) entry.getType();
+		// controllo che l'id corrisponda ad una funzione
 		ArrowTypeNode funType = (ArrowTypeNode) id.getSTEntry().getType();
 		if( !(funType instanceof ArrowTypeNode) )
 			throw new TypeErrorException("invocation of a non-function " +id);
 		
-		//controllo che la chiamata abbia il numero corretto di parametri
-	     ArrayList<Node> par_formali = funType.getParList();
+		// controllo che la chiamata abbia il numero corretto di parametri
+	    ArrayList<Node> par_formali = funType.getParList();
 	     
-	     if ( !(par_formali.size() == parlist.size()) ) 
-	    	 throw new TypeErrorException("wrong number of parameters in the invocation of " +id.getId());
+		if ( !(par_formali.size() == parlist.size()) ) 
+			throw new TypeErrorException("wrong number of parameters in the invocation of " +id.getId());
 	     
-	     //controllo che il tipo dei parametri sia corretto
-	     for (int i=0; i<parlist.size(); i++) 
-	     {
-	    	 //Node formalParType =  util.SimpLanPlusLib.getNodeIfPointer(par_formali.get(i));		
-	    	 Node formalParType = par_formali.get(i);
-	 		 Node actualParType =  util.SimpLanPlusLib.getNodeIfPointer(parlist.get(i).typeCheck());
+	    // controllo che il tipo dei parametri sia corretto
+	    for (int i = 0; i < parlist.size(); i ++) {	
+	    	Node formalParType = par_formali.get(i);
+	 		Node actualParType = util.SimpLanPlusLib.getNodeIfPointer(parlist.get(i).typeCheck());
 	 		 
-	 		 if( formalParType instanceof PointerTypeNode && actualParType instanceof PointerTypeNode ) {
+	 		if( formalParType instanceof PointerTypeNode && actualParType instanceof PointerTypeNode ) {
 	 			 
-	 			 PointerTypeNode pointerFormal = (PointerTypeNode) formalParType;
-	 			 int derNumFormalDec = pointerFormal.getDerNumDec();
-	 			 int derNumFormal = pointerFormal.getDerNumStm();
+	 			PointerTypeNode pointerFormal = (PointerTypeNode) formalParType;
+	 			int derNumFormalDec = pointerFormal.getDerNumDec();
 				
-	 			 PointerTypeNode pointerActual = (PointerTypeNode) actualParType;
-	 			 int derNumActualDec = pointerActual.getDerNumDec();
-	 			 int derNumActual = pointerActual.getDerNumStm();
-				
-	 			 //if( (derNumFormalDec - derNumFormal) != (derNumActualDec - derNumActual) ) 
-	 			 if( derNumFormalDec != (derNumActualDec - derNumActual) ) 
-	 				 throw new TypeErrorException("not valid pointer parameter "+ 
-							pointerFormal.getErrorMsg() +" and " +pointerActual.getErrorMsg());
+	 			PointerTypeNode pointerActual = (PointerTypeNode) actualParType;
+	 			int derNumActualDec = pointerActual.getDerNumDec();
+	 			int derNumActual = pointerActual.getDerNumStm();
+				 
+	 			if( derNumFormalDec != (derNumActualDec - derNumActual) ) 
+	 				throw new TypeErrorException("not valid pointer parameter " 
+							+ pointerFormal.getErrorMsg() + " and " + pointerActual.getErrorMsg());
 		 		
-	 			 formalParType = pointerFormal.getPointedType();
-	 			 actualParType = pointerActual.getPointedType();
-	 		 }
+	 			formalParType = pointerFormal.getPointedType();
+	 			actualParType = pointerActual.getPointedType();
+	 		}
 	 		 
-		     if ( !(SimpLanPlusLib.isEquals( actualParType, formalParType) ) ) 
-	    		 throw new TypeErrorException("wrong type for "+(i+1)+"-th parameter in the invocation of " +id.getId());
-		     
-	     }
+		    if ( !(SimpLanPlusLib.isEquals( actualParType, formalParType) ) ) 
+	    		throw new TypeErrorException("wrong type for " + (i+1) + "-th parameter in the invocation of " + id.getId() );
+	    }
 	     
-	     return funType.getRet();
+	    return funType.getRet();
 	}
 
 	/*
@@ -98,25 +92,23 @@ public class CallNode implements Node {
 	 * 
 	 * OLD FP
 	 * */
-	/*the stack discipline guarantees that on function exit $sp is the
+	/* the stack discipline guarantees that on function exit $sp is the
 	same as it was on function entry
-	there is no need to store $sp in the AR*/
+	there is no need to store $sp in the AR */
 	
 	@Override
 	public String codeGeneration() {
 		String code = "";
 		
-		//code = code + "-------------------- inizio call\n";
-		
 		code = code + "push $fp\n";
 		
-		//caricamento dei parametri dall'ultimo al primo
-		for (int i = parlist.size()-1; i>=0; i--) {
+		// caricamento dei parametri dall'ultimo al primo
+		for (int i = parlist.size()-1; i >= 0; i --) {
 			code = code + parlist.get(i).codeGeneration();
 			code = code + "push $a0\n";
 		}
 		
-		//Access link
+		// Access link
 		code = code + "mv $al $fp\n";
 		for (int i = 0; i < nestingLvl - id.getNestingLevel(); i++ ) {
 			code = code + "lw $al 0($al)\n";
@@ -125,7 +117,6 @@ public class CallNode implements Node {
 		
 		code = code + "jal " + entry.getFunLabel() + "\n";
 		
-		//code = code + "-------------------- fine call\n";
 		return code;
 	}
 
@@ -133,19 +124,17 @@ public class CallNode implements Node {
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 	
-		//controllo dichiarazione id
+		// controllo dichiarazione id
 		res.addAll(id.checkSemantics(env));
 		
 		if (res.size()==0) {
 			this.nestingLvl = env.getNestingLevel(); 
 			
-			//controllo parametri
+			// controllo parametri
 			for(Node par : parlist)
 				res.addAll(par.checkSemantics(env));
 			
-			
 			entry = id.getSTEntry();
-			
 		}
 		
 		return res;
@@ -182,10 +171,7 @@ public class CallNode implements Node {
 		
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
-		//TODO 
-		//è necessario questo for?
-		// non è detto che serva
-		//controllo parametri
+		// controllo che i parametri siano inizializzati
 		for(Node par : parlist)
 			errors.addAll(par.checkEffects(env));
 		
@@ -203,7 +189,7 @@ public class CallNode implements Node {
 		try {
 			funEntry = env.lookup(id.getId());
 		} catch (MissingDecException e1) {
-			errors.add(new SemanticError("CallNode 3: Missing declaration: "+id.getId()));
+			errors.add(new SemanticError("Missing declaration: " + id.getId() ));
 			return errors;
 		}
 		List< List<Effect> > parEffectList = funEntry.getParEffectList();
@@ -216,8 +202,7 @@ public class CallNode implements Node {
 				if( parEffect.get(j).getEffectValue() > Effect.DELETED.getEffectValue() ) {
 					errors.add(new SemanticError("Formal parameter has error effect"));
 					return errors;
-				}
-					
+				}	
 			}
 		}
 		
@@ -227,7 +212,7 @@ public class CallNode implements Node {
 		ArrayList<LhsNode> vars = new ArrayList<>();
 		for( int i : y_indexes ) {
 			vars.addAll(parlist.get(i).getIDsOfVariables());
-		}// ci possono essere delle variabili duplicate in vars? SI, potresti usare TreeSet
+		}
 		
 		for( LhsNode node: vars ) {
 			String idvar = ((LhsNode) node).getId().getId();
@@ -235,7 +220,7 @@ public class CallNode implements Node {
 			try {
 				idEntry = sigma_2.lookup(idvar);
 			} catch (MissingDecException e) {
-				errors.add(new SemanticError("CallNode 1: Missing declaration: "+idvar));
+				errors.add(new SemanticError("Missing declaration: " + idvar));
 				return errors;
 			}
 			
@@ -272,7 +257,7 @@ public class CallNode implements Node {
 				newEntry = env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
 				effettoParAttuale = newEntry.getVarEffectList();
 			} catch (MissingDecException e) {
-				errors.add(new SemanticError("CallNode 2: Missing declaration: "+((DerExpNode) parlist.get(i)).getLhs().getId().getId()));
+				errors.add(new SemanticError("Missing declaration: " + ((DerExpNode) parlist.get(i)).getLhs().getId().getId()) );
 				return errors;
 			}
 			
@@ -285,14 +270,14 @@ public class CallNode implements Node {
 			for( int j = 0; j < effettoParAttuale.size() - effettoParFormale.size(); j ++ )
 				resultSeq.add( effettoParAttuale.get(j) );
 			
-			for( int j = 0; j < effettoParFormale.size(); j ++ ) {
+			for( int j = 0; j < effettoParFormale.size(); j ++ ) 
 				resultSeq.add( Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );
-			}
 			
 			newEntry.setVarEffectList(resultSeq);
 			tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	
-			
 			envList.add(tmp_env);
+			
+			((DerExpNode) parlist.get(i)).getLhs().getId().setSTEntry( new STEntry( newEntry ));
 		}
 		
 		// faccio la PAR 
@@ -311,7 +296,6 @@ public class CallNode implements Node {
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 
 		env.copyFrom(updEnv);
-		
 		
 		return errors;
 	}

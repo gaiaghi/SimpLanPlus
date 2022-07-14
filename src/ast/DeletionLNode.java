@@ -7,7 +7,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class DeletionLNode implements Node {
-//	statement   : deletion ';'			#deletionL
+	
+	// grammar rule:
+	// statement   : deletion ';'			
 	
 	private Node deletion;
 	

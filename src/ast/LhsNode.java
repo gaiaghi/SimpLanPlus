@@ -9,7 +9,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class LhsNode implements Node {
-//	lhs         : ID | lhs '^' ;
+
+	// grammar rule:
+	//	lhs         : ID | lhs '^' ;
 	
 	private IdNode id;
 	private LhsNode lhs;
@@ -29,25 +31,11 @@ public class LhsNode implements Node {
 	
 	@Override
 	public String toPrint(String indent) {
-		String str = indent +"Id: " +this.id.getId();
-		
+		String str = indent + "Id: " + this.id.getId();
 		
 		for(int i=0; i < this.getDereferenceNum(); i++)
 			str = str + "^";
-		str = str + "\n" +this.id.getSTEntry().toPrint(indent +"  ");
-		
-		/*
-		Node type = id.getSTEntry().getType();
-		if( type instanceof PointerTypeNode ) {
-			PointerTypeNode pointer = (PointerTypeNode) type;
-			
-			System.err.println("LHS print " +id.getId() +"   "+pointer.getDerNumStm());
-			
-			for(int i=0; i < pointer.getDerNumStm(); i++)
-				str = str + "^";
-			str = str + "\n" +this.id.getSTEntry().toPrint(indent +"  ");
-		}
-		*/
+		str = str + "\n" +this.id.getSTEntry().toPrint(indent + "  ");
 		
 		return str;
 	}			
@@ -74,7 +62,6 @@ public class LhsNode implements Node {
 		String code = "";
 		
 		if( leftSide ) {
-			//code = code + "lw $al 0($fp)\n";
 			code = code + "mv $al $fp\n";
 			
 			for(int i = 0; i < id.getNestingLevel() - id.getSTEntry().getNestingLevel(); i ++ ) {
@@ -110,7 +97,6 @@ public class LhsNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
-		
 		if( lhs == null )
 			errors.addAll(id.checkEffects(env));
 		else {
@@ -118,17 +104,16 @@ public class LhsNode implements Node {
 			
 			if( leftSide ) {
 				if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) {
-		            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW.  LhsNode"));
+		            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW."));
 				}
 			}
-			
 		}
 		
 		return errors;
 	}
 	
 	
-	public int getDereferenceNum() { //num di utilizzo
+	public int getDereferenceNum() { 
         if( lhs != null )
         	return lhs.getDereferenceNum() + 1;
         else

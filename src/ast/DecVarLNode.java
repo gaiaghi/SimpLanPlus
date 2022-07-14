@@ -7,8 +7,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class DecVarLNode implements Node{
-//	grammar rule:
-//	declaration:	decVar 			#decVarL;
+
+	//	grammar rule:
+	//	declaration:	decVar 			
 	
 	private Node decVar;
 	

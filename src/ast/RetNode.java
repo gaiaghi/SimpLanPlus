@@ -8,7 +8,8 @@ import util.SemanticError;
 
 public class RetNode implements Node {
 
-//	ret	    : 'return' (exp)?;
+	// grammar rule:
+	// ret	    : 'return' (exp)?;
 
 	private Node exp;
 	private boolean inFunction;
@@ -22,7 +23,7 @@ public class RetNode implements Node {
 	@Override
 	public String toPrint(String indent) {
 		return indent + "Return:\n" 
-				+(this.exp == null ? indent +"  voidType" : this.exp.toPrint(indent +"  "));
+				+ (this.exp == null ? indent + "  voidType" : this.exp.toPrint(indent + "  "));
 	}
 
 	@Override
@@ -49,7 +50,6 @@ public class RetNode implements Node {
 		if( exp != null )
 			code = code + exp.codeGeneration();
 		
-		//code = code + "-------------------- RET\n";
 		code = code + "li $ret 1\n";
 		code = code + "b " + funEndLabel + "\n";
 		

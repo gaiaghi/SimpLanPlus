@@ -7,7 +7,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class RetLNode implements Node{
-//	statement   : ret ';'				#retL
+
+	// grammar rule:
+	// statement   : ret ';'				
 	
 	private Node ret;
 	

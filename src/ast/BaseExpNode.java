@@ -8,8 +8,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class BaseExpNode implements Node {
-	//grammar rule:
-	//exp	    : '(' exp ')'
+	
+	// grammar rule:
+	// exp	    : '(' exp ')'
 	
 	private Node exp;
 	
@@ -42,8 +43,6 @@ public class BaseExpNode implements Node {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(exp.checkEffects(env));
-
-        //errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
 
         return errors;
 	}

@@ -7,7 +7,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class PrintLNode implements Node {
-//	statement   : 	print ';'				#printL
+
+	// grammar rule:
+	// statement   : 	print ';'			
 	
 	private Node print;
 	

@@ -14,22 +14,22 @@ import exception.MultipleDecException;
 public class Environment {
 	
 	private List<HashMap<String, STEntry>> symbolTable;
-	private int nestingLvl; //scope lvl corrente, -1 all'inizio (main block ha livello 0)
+	private int nestingLvl; 	// livello scope corrente, -1 all'inizio (main block ha livello 0)
 	private int offset;
 	
 	
 	public Environment (List<HashMap<String, STEntry>> symbolTable, int nestingLvl, int offset) {
-		this.symbolTable = symbolTable; //gli si passa una lista di hash maps, anche vuota
+		this.symbolTable = symbolTable; 
 		this.nestingLvl = nestingLvl;
 		this.offset = offset;
 	}
 	
-	//costruttore per environment vuoto
+	// costruttore per environment vuoto
 	public Environment() {
 		this( new ArrayList<>(), -1, -2);
 	}
 	
-	//to clone
+	// per clonare un ambiente
 	public Environment(Environment env) {
 		this(new ArrayList<>(), env.nestingLvl, env.offset);
 		
@@ -37,12 +37,13 @@ public class Environment {
 			HashMap<String, STEntry> scopeCopy = new HashMap<>();
 			for (String id: scope.keySet())
 				scopeCopy.put(id, new STEntry(scope.get(id)));
-			//qui di seguito non si deve usare addScope perchè nestingLvl non deve essere incrementato.
+			
+			// qui di seguito non si deve usare addScope perchè nestingLvl non deve essere incrementato.
 			this.symbolTable.add(scopeCopy);   
 		}
 	}
 
-	//ritorna il nesting level corrente
+	
 	public int getNestingLevel() {
 		return this.nestingLvl;
 	}
@@ -77,9 +78,7 @@ public class Environment {
 			HashMap<String, STEntry> scope = symbolTable.get(i);
 			if (scope.containsKey(id))
 				return scope.get(id);
-				//return symbolTable.get(i).get(id);
 		}
-		
 		throw new MissingDecException("Missing declaration: "+id);
 	}
 	
@@ -99,7 +98,6 @@ public class Environment {
 	public void removeScope() {
 		this.symbolTable.remove(nestingLvl);
 		this.nestingLvl--;
-		//modifica offset per codgen? TODO
 	}
 
 
@@ -113,35 +111,38 @@ public class Environment {
 	
 	
 //	---Per l'analisi degli effetti:
-	//seq(env1, env2)
+	
+	// seq(env1, env2)
 	public static Environment seqEnv (Environment env1, Environment env2 ) {
 		
 		Environment envSeq = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		int envLength = env1.symbolTable.size(); 
 		
-		//per ogni scope dell'ambiente
+		// per ogni scope dell'ambiente
 		for (int i = 0; i < envLength; i++) {
 			HashMap<String, STEntry> scopeSeq = new HashMap<>();
 			
 			var scope1 = env1.symbolTable.get(i);
 			var scope2 = env2.symbolTable.get(i);
 			
-			//per ogni variabile nello scope
+			// per ogni variabile nello scope
 			for (String varId : scope1.keySet() ) {
 				STEntry entry1 = scope1.get(varId);
 				STEntry entry2 = scope2.get(varId);
 				
-				if (entry2 == null) //se nel secondo ambiente non Ã¨ presente la variabile
+				if (entry2 == null) 
+					// se nel secondo ambiente non e' presente la variabile
 					scopeSeq.put(varId, entry1);
-				else { //se la variabile Ã¨ presente sia nel primo che nel secondo ambiente
+				else { 
+					// se la variabile e' presente sia nel primo che nel secondo ambiente
 					STEntry entrySeq = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
 					
-					for (int j=0; j<entry1.getVarEffectList().size(); j++) //per ogni effetto della variabile
-						entrySeq.setVarEffect(j, Effect.seq(entry1.getVarEffect(j), entry2.getVarEffect(j) )); //aggiungo l'effetto seq tra i due
+					// per ogni effetto della variabile aggiungo l'effetto seq tra i due
+					for (int j=0; j<entry1.getVarEffectList().size(); j++) 
+						entrySeq.setVarEffect(j, Effect.seq(entry1.getVarEffect(j), entry2.getVarEffect(j) )); 
 					
 					scopeSeq.put(varId, entrySeq);
 				}
-				
 			}
 			envSeq.addScope(scopeSeq);
 		}
@@ -150,52 +151,54 @@ public class Environment {
 	}
 	
 	
-	//max(env1, env2)
+	// max(env1, env2)
 	public static Environment maxEnv (Environment env1, Environment env2 ) {
 		
 		Environment envMax = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		int envLength = env1.symbolTable.size(); 
 		
-		//per ogni scope dell'ambiente
+		// per ogni scope dell'ambiente
 		for (int i = 0; i < envLength; i++) {
 			HashMap<String, STEntry> scopeMax = new HashMap<>();
 			
 			var scope1 = env1.symbolTable.get(i);
 			var scope2 = env2.symbolTable.get(i);
 			
-			//per ogni variabile nello scope
+			// per ogni variabile nello scope
 			for (String varId : scope1.keySet() ) {
 				STEntry entry1 = scope1.get(varId);
 				STEntry entry2 = scope2.get(varId);
 				
-				if (entry2 == null) //se nel secondo ambiente non e' presente la variabile
+				if (entry2 == null) 
+					// se nel secondo ambiente non e' presente la variabile
 					scopeMax.put(varId, entry1);
-				else { //se la variabile e' presente sia nel primo che nel secondo ambiente
+				else { 
+					// se la variabile e' presente sia nel primo che nel secondo ambiente
 					STEntry entryMax = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
 					
-					for (int j=0; j<entry1.getVarEffectList().size(); j++) //per ogni effetto della variabile
-						entryMax.setVarEffect(j, Effect.max(entry1.getVarEffect(j), entry2.getVarEffect(j) )); //aggiungo l'effetto massimo tra i due
+					// per ogni effetto della variabile aggiungo l'effetto massimo tra i due
+					for (int j=0; j<entry1.getVarEffectList().size(); j++) 
+						entryMax.setVarEffect(j, Effect.max(entry1.getVarEffect(j), entry2.getVarEffect(j) )); 
 					
 					scopeMax.put(varId, entryMax);
 				}
-				
 			}
-			envMax.symbolTable.add(scopeMax); //non si deve chiamare addScope perchè nestingLvl non deve essere incrementato (è una copia di env1)
+			// non si deve chiamare addScope perchè nestingLvl non deve essere incrementato (è una copia di env1)
+			envMax.symbolTable.add(scopeMax); 
 		}
-		
 		return envMax;
 	}
 	
 	
+	// par(env1, env2)
 	public static Environment parEnv (Environment env1, Environment env2 ) {
-		//Environment envPar = new Environment(new ArrayList<>(), env1.nestingLvl, env1.offset);
 		Environment envPar = new Environment();
 		envPar.addScope();
 		
 		HashMap<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size() -1);
 		HashMap<String, STEntry> scope2 = env2.symbolTable.get(env2.symbolTable.size() -1);	
 		
-		//env1(x) if x not in env2
+		// env1(x) se x non e' in env2
 		for (var varEntry1: scope1.entrySet()) {
 			if(! scope2.containsKey(varEntry1.getKey())) {
 				STEntry entry = new STEntry(varEntry1.getValue());
@@ -203,7 +206,7 @@ public class Environment {
 			}
 		}
 
-		//env2(x) if x not in env1
+		//env2(x) se x non e' in env1
 		for (var varEntry2: scope2.entrySet()) {
 			if(! scope1.containsKey(varEntry2.getKey())) {
 				STEntry entry = new STEntry(varEntry2.getValue());
@@ -247,32 +250,32 @@ public class Environment {
 		HashMap<String, STEntry> topScope = env1.symbolTable.get(env1.symbolTable.size()-1);
 		HashMap<String, STEntry> env2Scope = env2.symbolTable.get(env2.symbolTable.size()-1);
 		
-		//c
+		// c
 		if (env2Scope.keySet().isEmpty())
 			return new Environment(env1);
 		
 		Entry<String, STEntry> u = env2Scope.entrySet().stream().findFirst().get();
-		env2.removeFirstEntry(u.getKey()); // env''
+		env2.removeFirstEntry(u.getKey()); 	// env''
 				
-		//a
+		// a
 		if (topScope.containsKey(u.getKey())) {
 			topScope.put(u.getKey(), u.getValue());
 			updatedEnv = updateEnv(env1, env2);
 		}
 		
-		//b
+		// b
 		else {
-			//creazione Environment contenente u
+			// creazione Environment contenente u
 			Environment envU = new Environment();
 			envU.addScope();
 			envU.safeAddEntry(u.getKey(), u.getValue());
 			STEntry entryU = envU.symbolTable.get(0).get(u.getKey());
 			
-			//copia degli effetti
+			// copia degli effetti
 			for (int i = 0; i< u.getValue().getVarEffectList().size(); i++)
 				entryU.setVarEffect(i, u.getValue().getVarEffect(i));
 			
-			env1.removeScope(); //env1a
+			env1.removeScope(); // env1a
 			
 			Environment envTemp = updateEnv(env1, envU);
 			envTemp.addScope(topScope); 
@@ -302,16 +305,15 @@ public class Environment {
 				entry.setVarEffect(derNum, result);
 				
 				if( result.equals(Effect.ERROR) ) {
-					errors.add(new SemanticError("Cannot read '"+ id.getId().getId() +"' after its deletion.  Env.checkExpressionEffects"));
+					errors.add(new SemanticError("Cannot read '" + id.getId().getId() + "' after its deletion."));
 					
 					for( int i = 0; i < entry.getSizeVarEffects(); i ++ )
 						entry.setVarEffect(i, result);
 				}
 			}
 			catch(MissingDecException e) {
-				errors.add(new SemanticError("Env.checkExpressionEffects. Missing declaration: "+id.getId().getId()));
+				errors.add(new SemanticError("Missing declaration: " + id.getId().getId() ));
 			}
-			
 		}
 		
 		return errors;
@@ -347,17 +349,6 @@ public class Environment {
 		return errors;
 	}
 	
-	
-	//SOLO PER DEBUG
-	public void printEnv(String str) {
-		System.out.println("\n\nAmbiente "+str +":");
-		for( HashMap<String, STEntry> scope : symbolTable ) {
-			System.out.println("");
-			for( Entry<String,STEntry> entryVar : scope.entrySet() ) {
-				System.out.println(entryVar.getKey() + " " +entryVar.getValue().getVarEffectList());
-			}
-		}
-	}
 	
 	
 	public Environment envFunc() throws MultipleDecException {

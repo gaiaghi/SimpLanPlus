@@ -6,15 +6,16 @@ import java.util.List;
 import ast.ArrowTypeNode;
 import ast.Node;
 
-//entry of the Symbol Table
+// entry of the Symbol Table
+
 public class STEntry {
 	private final int nestingLvl; 
-	private final int offset; // code generation
+	private final int offset; 
 	private Node type;
-	private List<Effect> varEffects; //lista effetti per le variabili
-	private List< List<Effect> > parEffects; //lista effetti per le funzioni
-	private String funLabel; //label delle funzioni per codGen
-	private String funEndLabel; // label fine funzione per il return
+	private List<Effect> varEffects; 			// lista effetti per le variabili
+	private List< List<Effect> > parEffects; 	// lista effetti per le funzioni
+	private String funLabel; 					// label delle funzioni per codGen
+	private String funEndLabel; 				// label fine funzione per il return
 	
 	
 	public STEntry (int nestingLvl, int offset) {
@@ -29,23 +30,25 @@ public class STEntry {
 		this.type = type;
 		
 		if (type instanceof ArrowTypeNode) {
-			for (Node par: ((ArrowTypeNode)type).getParList()) { //per ogni parametro
-				List<Effect> effects = new ArrayList<>();    	//creo la lista dei suoi effetti
-				for (int i=0; i<= par.getDereferenceNum(); i++)  
+			// per ogni parametro creo la lista dei suoi effetti
+			for (Node par: ((ArrowTypeNode)type).getParList()) { 
+				List<Effect> effects = new ArrayList<>();    	
+				for (int i=0; i<= par.getDereferenceNum(); i ++)  
 					effects.add(new Effect(Effect.INITIALIZED));
 				
 				this.parEffects.add(effects);
 			}
 		}
 		else {
-			for (int i = 0; i <= type.getDereferenceNum(); i++)
+			// creo la lista degli effetti della variabile/puntatore
+			for (int i = 0; i <= type.getDereferenceNum(); i ++)
 				this.varEffects.add(new Effect(Effect.INITIALIZED));
 		}
 		
 	}
 
 
-	//to clone.
+	// per clonare una STEntry
 	public STEntry(STEntry entry) {
 		this(entry.nestingLvl, entry.offset);
 		this.type = entry.type;
@@ -58,16 +61,17 @@ public class STEntry {
 			List<Effect> copyEffects = new ArrayList<>();
 			for (Effect e: parEffList)
 				copyEffects.add(e);
+			
 			this.parEffects.add(copyEffects);
 		}
-		
 	}
 	
 	
 	public void setType(Node type) {
 		this.type = type;
 		
-		if (type instanceof ArrowTypeNode ) // init effetti degli argomenti
+		if (type instanceof ArrowTypeNode ) 
+			// inizializzazione effetti dei parametri
 			for (Node par: ((ArrowTypeNode)type).getParList()) {
 				List<Effect> effects = new ArrayList<>();    	
 				for (int i=0; i<= par.getDereferenceNum(); i++)  
@@ -102,7 +106,6 @@ public class STEntry {
 	
 	public void setVarEffect(int level, Effect e) {
 		this.varEffects.set(level, e);
-		//varEffects.get(level).setEffect(e);
 	}
 	
 	public void setParEffect(int index, int level, Effect e) {
@@ -132,26 +135,23 @@ public class STEntry {
 	
 	
 	
-	//sempre per la stampa dell'ast (anche in simplan)
 	public String toPrint(String indent) {
-		//da aggiungere stato degli effetti
 		
 		String status = "";
-		String str = indent + "STEntry: Nesting Level = " +this.nestingLvl +"\n";
+		String str = indent + "STEntry: Nesting Level = " + this.nestingLvl + "\n";
 		if(type instanceof ArrowTypeNode)
-			str = str +indent +"STEntry: Type = \n" +this.type.toPrint(indent +"  ");
+			str = str + indent + "STEntry: Type = \n" + this.type.toPrint(indent + "  ");
 		else {
-			str = str +indent +"STEntry: Type = " +this.type.toPrint("");
-			status = "\n" +indent +"STEntry: Status = "+ this.varEffects; 
+			str = str + indent + "STEntry: Type = " + this.type.toPrint("");
+			status = "\n" + indent + "STEntry: Status = " + this.varEffects; 
 		}
 			
-		str = str +"\n" +indent +"STEntry: Offset = " +this.offset + status;
+		str = str + "\n" + indent + "STEntry: Offset = " + this.offset + status;
 				  
-		
 		return str;
 	}
 	
-	//stampa del singolo entry
+	
 	public String toString(){
 		return toPrint("");
 	}
@@ -173,16 +173,11 @@ public class STEntry {
 				}
 			}
 			if( error )
-				errors.add(new SemanticError(id +" has error effect. Status: " +varEffects));
+				errors.add(new SemanticError(id + " has error effect. Status: " + varEffects));
 		}
 		
 		return errors;
 	}
-
-	//da aggiungere?
-//	public boolean equals() {
-//		return true;
-//	}
 
 	
 }

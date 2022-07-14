@@ -21,16 +21,6 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
     public Void visitAssembly(SVMParser.AssemblyContext ctx) { 
     	visitChildren(ctx);
     	
-    	/*
-    	System.err.println("\n\n\n");
-    	for (Map.Entry<Integer, String> ref: labelRef.entrySet())
-    		System.err.println("labelRef "+ref.getKey()+ "  "+ref.getValue());
-    	System.err.println("\n\n\n");
-    	for (Map.Entry<String, Integer> ref: labelAdd.entrySet())
-    		System.err.println("labelAdd "+ref.getKey()+ "  "+ref.getValue());
-    	System.err.println("\n\n\n");
-    	*/
-    	
     	for (Map.Entry<Integer, String> ref: labelRef.entrySet()) {
     		// recupero il valore della label
     		String label = ref.getValue();
@@ -51,13 +41,6 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
     		// setto la nuova istruzione al posto della vecchia
     		code.set(ref.getKey(), newInstr);
     	}
-    	
-    	/*
-    	System.out.println("\n\nCODE:");
-    	int j=1;
-    	for(Instruction i : code)
-    		System.out.println((j++)+" "+i.toString());
-    	*/
     	
     	return null;
     }
@@ -175,25 +158,13 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 				code.add(new Instruction(SVMParser.NOT, ctx.res.getText(), ctx.term1.getText()));
 				break;
 				
-			case SVMLexer.ANDB:
-				code.add(new Instruction(SVMParser.ANDB, ctx.res.getText(), ctx.term1.getText(), ctx.term2.getText()));
-				break;
-				
-			case SVMLexer.ORB:
-				code.add(new Instruction(SVMParser.ORB, ctx.res.getText(), ctx.term1.getText(), ctx.term2.getText()));
-				break;
-				
-			case SVMLexer.NOTB:
-				code.add(new Instruction(SVMParser.NOTB, ctx.res.getText(), ctx.term1.getText()));
-				break;
-				
 			case SVMLexer.HALT:
 				code.add(new Instruction(SVMParser.HALT));
 				break;
 				
 			default:
-				//System.out.println("default "+ctx.getStart().toString());
-	            break;	// Invalid instruction
+				// Invalid instruction
+	            break;	
     	}
     	return null;
     }

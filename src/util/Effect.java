@@ -50,7 +50,8 @@ public class Effect {
 	}
 	
 	public static Effect par(final Effect e1, final Effect e2) {
-		//par(a,b) = max( seq(a,b), seq(b,a) ) questa è una definizione equivalente alla definizione di par
+		// definizione equivalente alla definizione di par
+		// par(a,b) = max( seq(a,b), seq(b,a) ) 
 		return max(seq(e1, e2), seq(e2, e1));
 	}		
 	

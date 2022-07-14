@@ -8,8 +8,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class NegExpNode implements Node {
-	//grammar rule:
-	//exp	    : '-' exp
+	
+	// grammar rule:
+	// exp	    : '-' exp
 	
 	private Node exp;
 	
@@ -19,7 +20,7 @@ public class NegExpNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +"Neg:\n" +exp.toPrint(indent +"  ");
+		return indent + "Neg:\n" + exp.toPrint(indent + "  ");
 	}
 
 	@Override
@@ -47,8 +48,6 @@ public class NegExpNode implements Node {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(exp.checkEffects(env));
-
-        //errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
 
         return errors;
 	}

@@ -9,8 +9,8 @@ import util.SemanticError;
 
 public class CallExpNode implements Node {
 	
-	//gramma rule:
-	//exp	    : call
+	// grammar rule:
+	// exp	    : call
 	
 	private CallNode call;
 	

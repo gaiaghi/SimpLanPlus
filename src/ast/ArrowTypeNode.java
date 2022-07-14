@@ -12,16 +12,16 @@ public class ArrowTypeNode implements Node {
 	  
 	
 	public ArrowTypeNode (ArrayList<Node> p, Node r) {
-		parlist=p;
-	    ret=r;
+		parlist = p;
+	    ret = r;
 	}
 	  
 	
 	public String toPrint(String indent) { 
-		String parlstr="";
+		String parlstr = "";
 	    for (Node par : parlist)
-	    	parlstr += par.toPrint(indent +"  ") +"\n";
-		return indent +"ArrowType\n"  +parlstr +ret.toPrint(indent +"  ->") ; 
+	    	parlstr += par.toPrint(indent + "  ") + "\n";
+		return indent + "ArrowType\n"  + parlstr + ret.toPrint(indent + "  ->") ; 
 	}
 	  
 	

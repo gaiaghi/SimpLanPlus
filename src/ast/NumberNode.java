@@ -6,8 +6,9 @@ import util.Environment;
 import util.SemanticError;
 
 public class NumberNode implements Node {
-	//grammar rule:
-	//exp	    : NUMBER
+	
+	// grammar rule:
+	// exp	    : NUMBER
 	
 	private int val;
 	
@@ -17,7 +18,7 @@ public class NumberNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +"Number: " +val;
+		return indent + "Number: " + val;
 	}
 
 	@Override
@@ -27,7 +28,7 @@ public class NumberNode implements Node {
 
 	@Override
 	public String codeGeneration() {
-		return "li $a0 " +val +"\n";
+		return "li $a0 " + val + "\n";
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import exception.MemoryException;
 import exception.SmallCodeAreaCException;
 import exception.TypeErrorException;
 import interpreter.ExecuteVM;
+import interpreter.ExecuteVM2;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
 import svm.SVMLexer;
@@ -66,6 +67,7 @@ public class SimpLanPlus{
 			    	break;
 			    	
 			    default:
+			    	// il programma viene eseguito con più di un parametro
 			    	if( checkInputFileName(args[0]) )
 			    		fileName = args[0];
 			    	else {
@@ -126,10 +128,8 @@ public class SimpLanPlus{
 	    }
 	    
 	    	
-		
+	    //open code file
 		CharStream inputCode = null;
-		
-		//open code file
 		try {
 			inputCode = CharStreams.fromFileName(fileName);
 		} 
@@ -153,7 +153,7 @@ public class SimpLanPlus{
 		}
 		
 		
-		//Tree visitor
+		// Tree visitor
 		SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
 		Node ast = null;
 		try {
@@ -163,7 +163,7 @@ public class SimpLanPlus{
 			System.exit(1);
 		}
 		
-		//checking lexical errors
+		// checking lexical errors
 		if ( lexer.errorCount() > 0 ) {
 			ArrayList lxErrors = lexer.getErrors();
 			for (int i = 0; i < lexer.errorCount(); i ++)
@@ -206,10 +206,10 @@ public class SimpLanPlus{
 		
 		
 		
-		// type-checking 
+		// checking type errors
 		try {
 			Node type = ast.typeCheck(); 
-			System.out.println("Type checking ok! Type of the program is: void.");
+			System.out.println("Type checking ok!");
 		}catch(TypeErrorException e){
 			System.err.println("Type error: " + e.getMessage());
 			System.exit(1);
@@ -221,7 +221,7 @@ public class SimpLanPlus{
 	
 		
 		
-		//checking effect errors
+		// checking effect errors
 		try {
 			ArrayList<SemanticError> effectsErrors = ast.checkEffects(env);
 			if( effectsErrors.size() > 0 ){

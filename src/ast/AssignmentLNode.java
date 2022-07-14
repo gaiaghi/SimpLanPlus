@@ -8,6 +8,9 @@ import util.SemanticError;
 
 public class AssignmentLNode implements Node {
 	
+	// grammar rule:
+	// statement   : assignment ';'
+	
 	private Node assignNode;
 	
 	public AssignmentLNode(Node visitAssignment) {

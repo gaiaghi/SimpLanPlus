@@ -1,19 +1,13 @@
-//60
-{
-	void h(^int x, ^int y){ 
-		if (y^==0) {
-			print x^;  
-			delete x;
-		}  
-		else { 
-			x^ = x^ - 1; 
-			h(y,x); 
-		} 
-	} 
 
-	^int a=new int; 
-	^int b=new int; 
-	a^=1; 
-	b^=4; 
-	h(a,b);
+{
+  void f(^int a){  print 1; }
+  int x;
+  ^int y;
+  y=new int;
+  y^=5;
+  x=6;
+  
+  f(y);
+  
+  
 }

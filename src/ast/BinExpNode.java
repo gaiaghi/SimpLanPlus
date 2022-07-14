@@ -10,6 +10,7 @@ import util.SemanticError;
 import util.SimpLanPlusLib;
 
 public class BinExpNode implements Node {
+	
 	/* grammar rule:
 	   exp	    :
 	    	| left=exp op=('*' | '/')               right=exp   
@@ -32,7 +33,8 @@ public class BinExpNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent +op + "\n" +leftExp.toPrint(indent +"  ") + "\n" +rightExp.toPrint(indent +"  ");
+		return indent + op + "\n" + leftExp.toPrint(indent + "  ") + "\n" 
+				+ rightExp.toPrint(indent + "  ");
 	}
 
 	@Override
@@ -43,7 +45,6 @@ public class BinExpNode implements Node {
 		
 		leftType = util.SimpLanPlusLib.getNodeIfPointer(leftType);
 		rightType = util.SimpLanPlusLib.getNodeIfPointer(rightType);
-		
 		
 		switch( op ) {
 			case "*":
@@ -57,7 +58,7 @@ public class BinExpNode implements Node {
 			case "&&":
 			case "||":
 				if( !(leftType instanceof BoolTypeNode && rightType instanceof BoolTypeNode) )
-					throw new TypeErrorException("the " +op +" operator require 2 bool type expressions.");
+					throw new TypeErrorException("the " + op + " operator require 2 bool type expressions.");
 				return new BoolTypeNode();
 				
 			case "<":
@@ -65,13 +66,13 @@ public class BinExpNode implements Node {
 			case ">":
 			case ">=":
 				if( !(leftType instanceof IntTypeNode && rightType instanceof IntTypeNode) )
-					throw new TypeErrorException("the " +op +" operator require 2 int type expressions.");
+					throw new TypeErrorException("the " + op + " operator require 2 int type expressions.");
 				return new BoolTypeNode();
 				
 			case "==":
 			case "!=":
 				if( !SimpLanPlusLib.isEquals(leftType, rightType) )
-					throw new TypeErrorException("the " +op +" operator require 2 int type expressions or 2 bool type expressions.");
+					throw new TypeErrorException("the " + op + " operator require 2 int type expressions or 2 bool type expressions.");
 				return new BoolTypeNode();
 		}
 		
@@ -84,8 +85,8 @@ public class BinExpNode implements Node {
 		
 		code = code + leftExp.codeGeneration();
 		code = code + "push $a0\n";
-		code = code + rightExp.codeGeneration();			// $a0 = rightExp
-		code = code + "lw $t1 0($sp)\n";  // $t1 <- top		$t1 = leftExp
+		code = code + rightExp.codeGeneration();	// $a0 = rightExp
+		code = code + "lw $t1 0($sp)\n";  			// $t1 <- top		$t1 = leftExp
 		
 		String trueLabel_1;
 		String endIfLabel_1;
@@ -327,8 +328,6 @@ public class BinExpNode implements Node {
 		
         errors.addAll(leftExp.checkEffects(env));
         errors.addAll(rightExp.checkEffects(env));
-
-        //errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));
 
         return errors;
 	}
