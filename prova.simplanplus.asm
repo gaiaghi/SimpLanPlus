@@ -5,7 +5,7 @@ mv $fp $sp
 li $t1 0
 push $t1
 b label_155
-function_108:
+function_110:
 mv $fp $sp
 push $ra
 mv $al $fp
@@ -52,7 +52,7 @@ pop
 push $a0
 mv $al $fp
 push $al
-jal function_108
+jal function_110
 label_158:
 addi $sp $sp 1
 pop
@@ -118,9 +118,9 @@ b label_168
 label_167:
 lw $a0 0($sp)
 pop
-b function_109
+b function_111
 label_168:
-function_109:
+function_111:
 lw $ra 0($sp)
 addi $sp $sp 4
 lw $fp 0($sp)
@@ -135,7 +135,7 @@ li $a0 4
 push $a0
 mv $al $fp
 push $al
-jal function_108
+jal function_110
 addi $sp $sp 0
 pop
 pop

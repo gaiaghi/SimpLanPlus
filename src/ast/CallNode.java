@@ -264,6 +264,50 @@ public class CallNode implements Node {
 		ArrayList<Environment> envList = new ArrayList<Environment>();
 		for( int i : x_indexes ) {
 			
+			
+			
+//--------------------------------------------------------------------------------------------------------------
+			for (int j: x_indexes) {
+				if (i != j && parEffectList.get(i).size()>=parEffectList.get(j).size()) {
+					List<Effect> bigPar = parEffectList.get(i);
+					List<Effect> smallPar = parEffectList.get(j);
+					int differ = bigPar.size() - smallPar.size();
+					for(int k=0; k < bigPar.size()-differ; k++) {
+						if ( bigPar.get(k+differ).hashCode() == smallPar.get(k).hashCode()) {
+							System.err.println("Sono uguali");	
+
+							
+							STEntry newEntry;
+							try {
+								newEntry = env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
+							} catch (MissingDecException e) {
+								errors.add(new SemanticError("Missing declaration: " + ((DerExpNode) parlist.get(i)).getLhs().getId().getId()) );
+								return errors;
+							}
+							
+							List<Effect> smallParAttuale;
+							STEntry smallEntry;
+							try {
+								smallEntry= env.lookup(((DerExpNode) parlist.get(j)).getLhs().getId().getId());
+								smallParAttuale = smallEntry.getVarEffectList();
+							} catch (MissingDecException e) {
+								errors.add(new SemanticError("Missing declaration: " + ((DerExpNode) parlist.get(j)).getLhs().getId().getId()) );
+								return errors;
+							}
+//							System.out.println(hashEffect(smallEntry.getVarEffectList()));
+//							System.out.println(hashEffect(newEntry.getVarEffectList()));
+							newEntry.setVarEffect(k+differ, smallEntry.getVarEffect(k));
+
+//							System.out.println("dopo: \n"+hashEffect(smallEntry.getVarEffectList()));
+//							System.out.println(hashEffect(newEntry.getVarEffectList()));
+							
+						}			
+					}
+				}
+			}
+//--------------------------------------------------------------------------------------------------------------
+			
+			
 			Environment tmp_env = new Environment();
 			tmp_env.addScope();
 			
@@ -298,15 +342,16 @@ public class CallNode implements Node {
 			
 			for( int j = 0; j < effettoParFormale.size(); j ++ ) {
 				resultSeq.add( Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );
+				
 				/*System.err.println("-------- "+effettoParAttuale.get(j+diff)+"   seq   "+effettoParFormale.get(j)
 						+"   =   "+Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );*/
 			}
 			
+			
 			//newEntry.setVarEffectList(resultSeq);
 			for( int j = 0; j < resultSeq.size(); j ++)
 				newEntry.getVarEffect(j).setEffect(resultSeq.get(j));
-			
-			
+
 			/*System.err.println("\n\n call 0");
 			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
 					+"  " +hashEffect(newEntry.getVarEffectList()) );*/
@@ -337,6 +382,17 @@ public class CallNode implements Node {
 			}
 		}
 		
+		/*System.out.println("\n PAR ENV dopo: \n" );
+		for (Environment envi: envList) {
+			for(STEntry scope: envi.getCurrentScope().values())
+			System.out.println(hashEffect(scope.getVarEffectList()));
+		}
+		
+		System.out.println("\n PAR ENV dopo: \n" );
+		for (STEntry scope: sigma_3.getCurrentScope().values()) {
+			System.out.println(hashEffect(scope.getVarEffectList()));
+		}*/
+		
 		/*try {
 			STEntry en = sigma_3.lookup("x");
 			List<Effect> effParAttuale = en.getVarEffectList();
@@ -350,7 +406,8 @@ public class CallNode implements Node {
 
 		// (6) update(Sigma_2, Sigma_3)
 		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);	
-		
+
+//		System.out.println("\n UPD ENV dopo: \n"+ updEnv.getCurrentScope());
 		/*try {
 			STEntry en = updEnv.lookup("x");
 			List<Effect> effParAttuale = en.getVarEffectList();
@@ -367,7 +424,8 @@ public class CallNode implements Node {
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 
 		env.copyFrom(updEnv);
-		
+
+//		System.out.println("\n  ENV dopo: \n"+ env.getCurrentScope());
 		
 		/*try {
 			STEntry en = env.lookup("x");

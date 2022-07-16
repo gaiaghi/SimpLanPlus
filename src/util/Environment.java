@@ -249,7 +249,8 @@ public class Environment {
 		// env1(x) se x non e' in env2
 		for (var varEntry1: scope1.entrySet()) {
 			if(! scope2.containsKey(varEntry1.getKey())) {
-				STEntry entry = new STEntry(varEntry1.getValue());
+//				STEntry entry = new STEntry(varEntry1.getValue());
+				STEntry entry = STEntry.cloneSTEntryWithoutEffects(varEntry1.getValue());
 				envPar.safeAddEntry(varEntry1.getKey(), entry);
 			}
 		}
@@ -262,7 +263,8 @@ public class Environment {
 		//env2(x) se x non e' in env1
 		for (var varEntry2: scope2.entrySet()) {
 			if(! scope1.containsKey(varEntry2.getKey())) {
-				STEntry entry = new STEntry(varEntry2.getValue());
+//				STEntry entry = new STEntry(varEntry2.getValue());
+				STEntry entry = STEntry.cloneSTEntryWithoutEffects(varEntry2.getValue());
 				envPar.safeAddEntry(varEntry2.getKey(), entry);
 			}
 		}
