@@ -194,6 +194,7 @@ public class CallNode implements Node {
 		}
 		List< List<Effect> > parEffectList = funEntry.getParEffectList();
 		
+		
 		// (3) i parametri formali y non devono avere effetto <= d
 		for( int i : y_indexes ) {
 			List<Effect> parEffect = parEffectList.get(i);
@@ -210,7 +211,7 @@ public class CallNode implements Node {
 		//Environment sigma_2 = new Environment(env);
 		Environment sigma_2 = Environment.cloneEnvWithoutEffects(env);
 		
-		try {
+		/*try {
 			STEntry en = sigma_2.lookup("x");
 			List<Effect> effParAttuale = en.getVarEffectList();
 			
@@ -220,7 +221,7 @@ public class CallNode implements Node {
 		} catch (MissingDecException e) {
 			System.err.println("------------ERRORE-----------");
 		}
-		
+		*/
 		
 		ArrayList<LhsNode> vars = new ArrayList<>();
 		for( int i : y_indexes ) {
@@ -282,9 +283,9 @@ public class CallNode implements Node {
 			}
 			
 			
-			System.err.println("\n\nPRIMA call");
+			/*System.err.println("\n\nPRIMA call");
 			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
-					+"  " +hashEffect(effettoParAttuale) );
+					+"  " +hashEffect(effettoParAttuale) );*/
 			
 			/* copio gli effetti del parametro attuale nel parametro formale.
 			 * devo considerare il caso in cui il parametro attuale sia un 
@@ -295,32 +296,35 @@ public class CallNode implements Node {
 			for( int j = 0; j < effettoParAttuale.size() - effettoParFormale.size(); j ++ )
 				resultSeq.add( effettoParAttuale.get(j) );
 			
-			for( int j = 0; j < effettoParFormale.size(); j ++ ) 
+			for( int j = 0; j < effettoParFormale.size(); j ++ ) {
 				resultSeq.add( Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );
+				/*System.err.println("-------- "+effettoParAttuale.get(j+diff)+"   seq   "+effettoParFormale.get(j)
+						+"   =   "+Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );*/
+			}
 			
 			//newEntry.setVarEffectList(resultSeq);
 			for( int j = 0; j < resultSeq.size(); j ++)
 				newEntry.getVarEffect(j).setEffect(resultSeq.get(j));
 			
 			
-			System.err.println("\n\n call 0");
+			/*System.err.println("\n\n call 0");
 			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
-					+"  " +hashEffect(newEntry.getVarEffectList()) );
+					+"  " +hashEffect(newEntry.getVarEffectList()) );*/
 			
 			tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	
 			envList.add(tmp_env);
 			
-			System.err.println("\n\n call 1");
+			/*System.err.println("\n\n call 1");
 			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
-					+"  " +hashEffect(effettoParAttuale) );
+					+"  " +hashEffect(effettoParAttuale) );*/
 			
 			
 			((DerExpNode) parlist.get(i)).getLhs().getId().setSTEntry( new STEntry( newEntry ));
 			
 			
-			System.err.println("\n\n call 2");
+			/*System.err.println("\n\n call 2");
 			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
-					+"  " +hashEffect(effettoParAttuale) );
+					+"  " +hashEffect(effettoParAttuale) );*/
 			
 		}
 		
@@ -333,7 +337,7 @@ public class CallNode implements Node {
 			}
 		}
 		
-		try {
+		/*try {
 			STEntry en = sigma_3.lookup("x");
 			List<Effect> effParAttuale = en.getVarEffectList();
 			
@@ -342,12 +346,12 @@ public class CallNode implements Node {
 					+"  " +hashEffect(effParAttuale) );
 		} catch (MissingDecException e) {
 			System.err.println("------------ERRORE-----------");
-		}
+		}*/
 
 		// (6) update(Sigma_2, Sigma_3)
 		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);	
 		
-		try {
+		/*try {
 			STEntry en = updEnv.lookup("x");
 			List<Effect> effParAttuale = en.getVarEffectList();
 			
@@ -356,7 +360,7 @@ public class CallNode implements Node {
 					+"  " +hashEffect(effParAttuale) );
 		} catch (MissingDecException e) {
 			System.err.println("------------ERRORE-----------");
-		}
+		}*/
 		
 		
 		// controllo se ci sono errori nell'ambiente ottenuta dalla update
@@ -365,7 +369,7 @@ public class CallNode implements Node {
 		env.copyFrom(updEnv);
 		
 		
-		try {
+		/*try {
 			STEntry en = env.lookup("x");
 			List<Effect> effParAttuale = en.getVarEffectList();
 			
@@ -374,7 +378,7 @@ public class CallNode implements Node {
 					+"  " +hashEffect(effParAttuale) );
 		} catch (MissingDecException e) {
 			System.err.println("------------ERRORE-----------");
-		}
+		}*/
 		
 		
 		return errors;

@@ -275,18 +275,58 @@ public class DecFunNode implements Node {
 		}
 		
 		
+		
+		
+		
+		
+		/*System.out.println("\n-----------------------------sigma_0");
+		for( int j = 0; j < sigma_0.size(); j ++)
+			System.err.println("EFFETTI sigma_0 "
+					+"    "+hashEffect(sigma_0.get(j)));
+		*/
+		
+		
 		/*
 		 * Calcolo del punto fisso
 		 * */
 		// Effetti dei parametri dopo una valutazione del corpo della funzione
-		List<List<Effect>> sigma_1 = new ArrayList<List<Effect>>(sigma_0);
+		List<List<Effect>> sigma_1 = new ArrayList<List<Effect>>(/*sigma_0*/);
+		
+		
+	
+		
+		
 		// Lista che serve a mantenere una copia di sigma_1.
 		// prec_sigma_1 usata per fare il controllo di terminazione del punto fisso.
-		List<List<Effect>> prec_sigma_1 = new ArrayList<List<Effect>>(sigma_0);
+		List<List<Effect>> prec_sigma_1 = new ArrayList<List<Effect>>(/*sigma_0*/);
 		
+		for( int j = 0; j < sigma_0.size(); j ++) {
+			sigma_1.add(new ArrayList<Effect>());
+			prec_sigma_1.add(new ArrayList<Effect>());
+			for( int i = 0; i < sigma_0.get(j).size(); i ++) {
+				sigma_1.get(j).add(new Effect( sigma_0.get(j).get(i) ));
+				prec_sigma_1.get(j).add(new Effect( sigma_0.get(j).get(i) ));
+			}
+				
+		}
+		
+		
+		/*System.out.println("\n-----------------------------sigma_1");
+		for( int j = 0; j < sigma_1.size(); j ++)
+			System.err.println("EFFETTI sigma_1 "
+					+"    "+hashEffect(sigma_1.get(j))
+					+"    "+hashEffect(prec_sigma_1.get(j)));
+		*/
 		boolean stop = false;
 		while( !stop ) {
 		
+			/*System.out.println("\nPUNTO FISSO    -------- inizio ");
+			for( int j = 0; j < sigma_1.size(); j ++)
+				System.err.println("EFFETTI sigma_1 "
+						+"    "+hashEffect(sigma_1.get(j)));
+			*/
+			
+			
 			// valuto gli effetti nel corpo della funzione
 			errorsPuntoFisso.clear();
 			errorsPuntoFisso.addAll(block.checkEffects(env_0));
@@ -306,6 +346,18 @@ public class DecFunNode implements Node {
 				errors.add(new SemanticError("Missing declaration: " + argId));
 				return errors;
 			}
+			
+			
+			/*System.out.println("\nPUNTO FISSO     -------- fine ");
+			for( int j = 0; j < sigma_1.size(); j ++)
+				System.err.println("EFFETTI sigma_1 "
+						+"    "+hashEffect(sigma_1.get(j)));
+			System.out.println("\nPUNTO FISSO     -------- fine prec ");
+			for( int j = 0; j < prec_sigma_1.size(); j ++)
+				System.err.println("EFFETTI sigma_1_prec "
+						+"    "+hashEffect(prec_sigma_1.get(j)));
+			*/
+			
 			
 			// controllo terminazione punto fisso (prec_sigma_1 == sigma_1)
 			if( prec_sigma_1.equals(sigma_1) )
@@ -338,6 +390,13 @@ public class DecFunNode implements Node {
 		// setto gli effetti della funzione nell'ambiente originale
 		try {
 			env.lookup(id.getId()).setParEffectList(sigma_1);
+			
+			
+			/*for( int j = 0; j < sigma_1.size(); j ++)
+				System.err.println("EFFETTI FUN "
+						+"    "+hashEffect(sigma_1.get(j)));
+			*/
+			
 		} catch (MissingDecException e) {
 			errors.add(new SemanticError("Missing declaration: "+id.getId()));
 			return errors;
@@ -346,5 +405,16 @@ public class DecFunNode implements Node {
 		return errors;
 	}
 	
+	
+	
+	private String hashEffect(List<Effect> list) {
+		String str="[";
+		for(Effect e : list)
+			str = str + e + ",";
+		str=str+"]        [";
+		for(Effect e : list)
+			str = str + e.hashCode() + ",";
+		return str+"]";
+	}
 
 }

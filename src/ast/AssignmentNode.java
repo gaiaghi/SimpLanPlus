@@ -106,7 +106,7 @@ public class AssignmentNode implements Node {
 			return res;
 		}
 		
-		System.out.println("1 lhs "+ lhs.getId().getId()+"  "+hashEffect(lhsEntry.getVarEffectList()));
+		//System.out.println("1 lhs "+ lhs.getId().getId()+"  "+hashEffect(lhsEntry.getVarEffectList()));
 		
 		
 		//env seq[lhs = RW]
@@ -116,7 +116,7 @@ public class AssignmentNode implements Node {
 			lhsEntry.setVarEffect(lhs.getDereferenceNum(), Effect.READ_WRITE);
 		}
 		
-		System.out.println("2 lhs "+ lhs.getId().getId()+"  "+hashEffect(lhsEntry.getVarEffectList()));
+		//System.out.println("2 lhs "+ lhs.getId().getId()+"  "+hashEffect(lhsEntry.getVarEffectList()));
 		
 		// controllo che la catena del puntatore non sia a INIT
 		if( lhs.isPointer() ) {
@@ -127,20 +127,20 @@ public class AssignmentNode implements Node {
 				}
 		}
 		
-		System.out.println("3 lhs "+ lhs.getId().getId()+"  "+lhsEntry.getVarEffectList() +"  "+hashEffect(lhsEntry.getVarEffectList()) );
+		//System.out.println("3 lhs "+ lhs.getId().getId()+"  "+lhsEntry.getVarEffectList() +"  "+hashEffect(lhsEntry.getVarEffectList()) );
 		
 		// aggiorno effetto variabile left side
 		Effect newEffect = Effect.seq(lhsEntry.getVarEffect(lhs.getDereferenceNum()), Effect.READ_WRITE);
 		//lhsEntry.setVarEffect(lhs.getDereferenceNum(), newEffect);
 		lhsEntry.getVarEffect(lhs.getDereferenceNum()).setEffect(newEffect);
-		System.out.println("lhs dec "+lhs.getDereferenceNum());
-		System.out.println("4 lhs "+ lhs.getId().getId()+"  "+lhsEntry.getVarEffectList()+"  "+hashEffect(lhsEntry.getVarEffectList()) );
+		//System.out.println("lhs dec "+lhs.getDereferenceNum());
+		//System.out.println("4 lhs "+ lhs.getId().getId()+"  "+lhsEntry.getVarEffectList()+"  "+hashEffect(lhsEntry.getVarEffectList()) );
 		
 		
 		
 		res.addAll(lhs.checkEffects(env));
 		
-		System.out.println("5 lhs "+ lhs.getId().getId()+"  "+lhsEntry.getVarEffectList()+"  "+hashEffect(lhsEntry.getVarEffectList()));
+		//System.out.println("5 lhs "+ lhs.getId().getId()+"  "+lhsEntry.getVarEffectList()+"  "+hashEffect(lhsEntry.getVarEffectList()));
 		
 		if (exp instanceof DerExpNode) {
 			//assegnamento di puntatori: copio gli effetti di exp in lhs
@@ -150,23 +150,24 @@ public class AssignmentNode implements Node {
 			DerExpNode derNode = ((DerExpNode) exp);
 			int expDerNum = derNode.getLhs().getDereferenceNum();
 			
-			System.out.println("COPIA EFFETTI punt-punt\nexp "+ derNode.getLhs().getId().getId()+" "+hashEffect(derNode.getLhs().getId().getSTEntry().getVarEffectList()));
+			/*System.out.println("COPIA EFFETTI punt-punt\nexp "+ derNode.getLhs().getId().getId()+" "+hashEffect(derNode.getLhs().getId().getSTEntry().getVarEffectList()));
 			System.out.println("lhs "+ lhs.getId().getId()+"  "+hashEffect(lhs.getId().getSTEntry().getVarEffectList()));
+			*/
 			
 			for (int i = lhsDer, j = expDerNum; i< maxDer; i++, j++) {
 				//recupero l'effetto da exp e lo copio in lhs
 				Effect expEffect = derNode.getLhs().getId().getSTEntry().getVarEffect(j); 
 				lhs.getId().getSTEntry().setVarEffect(i, expEffect);
 				
-				System.err.println("\nlhs obj " +lhs.getId().getSTEntry().getVarEffect(i).hashCode());
+				/*System.err.println("\nlhs obj " +lhs.getId().getSTEntry().getVarEffect(i).hashCode());
 				System.err.println("exp obj " +derNode.getLhs().getId().getSTEntry().getVarEffect(j).hashCode());
-				
+				*/
 				
 			}
 			
-			System.out.println("DOPO punt-punt\nexp "+ derNode.getLhs().getId().getId()+" "+hashEffect(derNode.getLhs().getId().getSTEntry().getVarEffectList()));
+			/*System.out.println("DOPO punt-punt\nexp "+ derNode.getLhs().getId().getId()+" "+hashEffect(derNode.getLhs().getId().getSTEntry().getVarEffectList()));
 			System.out.println("lhs "+ lhs.getId().getId()+"  "+hashEffect(lhs.getId().getSTEntry().getVarEffectList())  );
-			
+			*/
 		}
 		System.out.println("\n\n");
 		
@@ -177,9 +178,10 @@ public class AssignmentNode implements Node {
 			return res;
 		}
 		
-		System.out.println("FINE ASSIGN");
+		/*System.out.println("FINE ASSIGN");
 		System.out.println("lhs "+ lhs.getId().getId()+"  "+hashEffect(lhs.getId().getSTEntry().getVarEffectList())  );
 		System.out.println("\n\n\n\n\n");
+		*/
 		
 		return res;
 	}

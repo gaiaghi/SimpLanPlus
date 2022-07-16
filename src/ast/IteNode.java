@@ -1,9 +1,13 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import exception.MissingDecException;
 import exception.TypeErrorException;
+import util.Effect;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 
@@ -103,9 +107,41 @@ public class IteNode implements Node {
 		ArrayList<SemanticError> errors = new ArrayList<>();
         errors.addAll(cond.checkEffects(env));
         
+        /*try {
+			STEntry en = env.lookup("x");
+			List<Effect> effParAttuale = en.getVarEffectList();
+			
+			System.err.println("\n\n ite 1 env");
+			System.err.println( "x" 
+					+"  " +hashEffect(effParAttuale) );
+		} catch (MissingDecException e) {
+			System.err.println("------------ERRORE-----------");
+		}*/
+        
         if (elseStm != null) {
         	Environment thenEnv = new Environment(env);
         	Environment elseEnv = new Environment(env);
+        	
+        	/*try {
+    			STEntry en = thenEnv.lookup("x");
+    			List<Effect> effParAttuale = en.getVarEffectList();
+    			
+    			System.err.println("\n\n ite 2 bis thenEnv");
+    			System.err.println( "x" 
+    					+"  " +hashEffect(effParAttuale) );
+    		} catch (MissingDecException e) {
+    			System.err.println("------------ERRORE-----------");
+    		}
+        	try {
+    			STEntry en = elseEnv.lookup("x");
+    			List<Effect> effParAttuale = en.getVarEffectList();
+    			
+    			System.err.println("\n\n ite 2 bis elseEnv");
+    			System.err.println( "x" 
+    					+"  " +hashEffect(effParAttuale) );
+    		} catch (MissingDecException e) {
+    			System.err.println("------------ERRORE-----------");
+    		}*/
         	
         	/* calcolo l'ambiente relativo al branch then */
         	errors.addAll(thenStm.checkEffects(thenEnv));
@@ -113,15 +149,85 @@ public class IteNode implements Node {
         	/* calcolo l'ambiente relativo al branch else*/
         	errors.addAll(elseStm.checkEffects(elseEnv));
         	
+        	/*try {
+    			STEntry en = thenEnv.lookup("x");
+    			List<Effect> effParAttuale = en.getVarEffectList();
+    			
+    			System.err.println("\n\n ite 2 thenEnv");
+    			System.err.println( "x" 
+    					+"  " +hashEffect(effParAttuale) );
+    		} catch (MissingDecException e) {
+    			System.err.println("------------ERRORE-----------");
+    		}
+        	try {
+    			STEntry en = elseEnv.lookup("x");
+    			List<Effect> effParAttuale = en.getVarEffectList();
+    			
+    			System.err.println("\n\n ite 2 elseEnv");
+    			System.err.println( "x" 
+    					+"  " +hashEffect(effParAttuale) );
+    		} catch (MissingDecException e) {
+    			System.err.println("------------ERRORE-----------");
+    		}*/
+        	
         	Environment maxEnv = Environment.maxEnv(thenEnv, elseEnv);
-        	env.copyFrom(maxEnv);
+        	
+        	/*try {
+    			STEntry en = maxEnv.lookup("x");
+    			List<Effect> effParAttuale = en.getVarEffectList();
+    			
+    			System.err.println("\n\n ite 3 maxEnv");
+    			System.err.println( "x" 
+    					+"  " +hashEffect(effParAttuale) );
+    		} catch (MissingDecException e) {
+    			System.err.println("------------ERRORE-----------");
+    		}*/
+        	
+        	//env.copyFrom(maxEnv);
+        	env = Environment.cloneMaxEnv(maxEnv, env);
+        	
+        	/*try {
+    			STEntry en = env.lookup("x");
+    			List<Effect> effParAttuale = en.getVarEffectList();
+    			
+    			System.err.println("\n\n ite 4 env");
+    			System.err.println( "x" 
+    					+"  " +hashEffect(effParAttuale) );
+    		} catch (MissingDecException e) {
+    			System.err.println("------------ERRORE-----------");
+    		}*/
         }
         else {
         	errors.addAll(thenStm.checkEffects(env));
         }
         
+        
+        /*try {
+			STEntry en = env.lookup("x");
+			List<Effect> effParAttuale = en.getVarEffectList();
+			
+			System.err.println("\n\n ite 4");
+			System.err.println( "x" 
+					+"  " +hashEffect(effParAttuale) );
+		} catch (MissingDecException e) {
+			System.err.println("------------ERRORE-----------");
+		}*/
+        
+        
 		return errors;
 	}
+	
+	
+	private String hashEffect(List<Effect> list) {
+		String str="[";
+		for(Effect e : list)
+			str = str + e + ",";
+		str=str+"]        [";
+		for(Effect e : list)
+			str = str + e.hashCode() + ",";
+		return str+"]";
+	}
+	
 	
 	public void setInFunction(boolean b){
 		inFunction = b;

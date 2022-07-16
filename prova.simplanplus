@@ -282,6 +282,7 @@
 //{ void f(int x){ g(x); } void g(int x){ f(x); } }
 
 //n50
+// no variabili globali nel body delle funzioni
 //#n50#ERR
 //{ int y=2; void f(){ print y+x; } int x=3;  }
 
@@ -408,7 +409,7 @@
 
 
 //p07
-// x^=720		x=506
+// x^=720		x=1006
 //#p07#OK
 {void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y=new int; y^=x^ * n; f(y,n-1);} } ^int u=new int; u^=1; f(u,6); }
 
