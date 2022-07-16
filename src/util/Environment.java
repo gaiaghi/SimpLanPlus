@@ -42,6 +42,23 @@ public class Environment {
 			this.symbolTable.add(scopeCopy);   
 		}
 	}
+	
+	
+	public static Environment cloneEnvWithoutEffects(Environment env) {
+		
+		Environment newEnv = new Environment(new ArrayList<>(), env.nestingLvl, env.offset);
+		
+		for (HashMap<String, STEntry> scope: env.symbolTable) {
+			HashMap<String, STEntry> scopeCopy = new HashMap<>();
+			for (String id: scope.keySet())
+				scopeCopy.put(id, STEntry.cloneSTEntryWithoutEffects(scope.get(id)));
+			
+			// qui di seguito non si deve usare addScope perchè nestingLvl non deve essere incrementato.
+			newEnv.symbolTable.add(scopeCopy);   
+		}
+		
+		return newEnv;
+	}
 
 	
 	public int getNestingLevel() {
@@ -198,6 +215,12 @@ public class Environment {
 		HashMap<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size() -1);
 		HashMap<String, STEntry> scope2 = env2.symbolTable.get(env2.symbolTable.size() -1);	
 		
+		System.out.println("\n\nENV PAR  1");
+		try { System.out.println("x     env1 "+env1.lookup("x") +"     "+hashEffect(env1.lookup("x").getVarEffectList()));
+		} catch (MissingDecException e) {System.err.println("ENV PAR   x  non trovata in env1  ");		}
+		try { System.out.println("x     env1 "+env2.lookup("x")+"     "+hashEffect(env1.lookup("x").getVarEffectList()));
+		} catch (MissingDecException e) {System.err.println("ENV PAR   x  non trovata in env2  ");		}
+		
 		// env1(x) se x non e' in env2
 		for (var varEntry1: scope1.entrySet()) {
 			if(! scope2.containsKey(varEntry1.getKey())) {
@@ -206,6 +229,11 @@ public class Environment {
 			}
 		}
 
+		System.out.println("\nENV PAR  2");
+		try { System.out.println("x     envPar "+envPar.lookup("x") +"     "+hashEffect(envPar.lookup("x").getVarEffectList()));
+		} catch (MissingDecException e) {System.err.println("ENV PAR   x  non trovata in envPar  ");		}
+		
+		
 		//env2(x) se x non e' in env1
 		for (var varEntry2: scope2.entrySet()) {
 			if(! scope1.containsKey(varEntry2.getKey())) {
@@ -213,6 +241,13 @@ public class Environment {
 				envPar.safeAddEntry(varEntry2.getKey(), entry);
 			}
 		}
+		
+		
+		
+		System.out.println("\nENV PAR  3");
+		try { System.out.println("x     envPar "+envPar.lookup("x") +"     "+hashEffect(envPar.lookup("x").getVarEffectList()));
+		} catch (MissingDecException e) {System.err.println("ENV PAR   x  non trovata in envPar  ");		}
+		
 		
 		for (var varEntry1: scope1.entrySet()) {
 			for (var varEntry2: scope2.entrySet()) {
@@ -228,9 +263,25 @@ public class Environment {
 		} 
 
 		
+		
+		System.out.println("\nFINE   ENV PAR  ");
+		try { System.out.println("x     envPar "+envPar.lookup("x") +"     "+hashEffect(envPar.lookup("x").getVarEffectList()));
+		} catch (MissingDecException e) {System.err.println("ENV PAR   x  non trovata in envPar  ");		}
+		
+		
 		return envPar;
 	}
 	
+	
+	private static String hashEffect(List<Effect> list) {
+		String str="[";
+		for(Effect e : list)
+			str = str + e + ",";
+		str=str+"]        [";
+		for(Effect e : list)
+			str = str + e.hashCode() + ",";
+		return str+"]";
+	}
 	
 	/* env1 = env1a-> env (multi-scope)
 	 * env2 (single scope contenente gli effetti dei parametri attuali passati per puntatore)
@@ -242,6 +293,14 @@ public class Environment {
 	 * */
 	public static Environment updateEnv (Environment env1, Environment env2 ) {
 		
+		System.out.println("\n\nUPD PAR  1");
+		try { System.out.println("x     env1 "+hashEffect(env1.lookup("x").getVarEffectList()));
+		} catch (MissingDecException e) {System.err.println("UPD PAR   x  non trovata in env1  ");		}
+		try { System.out.println("x     env2 "+hashEffect(env2.lookup("x").getVarEffectList()));
+		} catch (MissingDecException e) {System.err.println("UPD PAR   x  non trovata in env2  ");		}
+		
+		
+		
 		if (env1.symbolTable.size() == 0 || env2.symbolTable.size() == 0)
 			return new Environment(env1);
 		
@@ -252,7 +311,8 @@ public class Environment {
 		
 		// c
 		if (env2Scope.keySet().isEmpty())
-			return new Environment(env1);
+			//return new Environment(env1);
+			return Environment.cloneEnvWithoutEffects(env1);
 		
 		Entry<String, STEntry> u = env2Scope.entrySet().stream().findFirst().get();
 		env2.removeFirstEntry(u.getKey()); 	// env''
@@ -273,7 +333,8 @@ public class Environment {
 			
 			// copia degli effetti
 			for (int i = 0; i< u.getValue().getVarEffectList().size(); i++)
-				entryU.setVarEffect(i, u.getValue().getVarEffect(i));
+				//entryU.setVarEffect(i, u.getValue().getVarEffect(i));
+				entryU.getVarEffect(i).setEffect(u.getValue().getVarEffect(i));
 			
 			env1.removeScope(); // env1a
 			
@@ -281,6 +342,11 @@ public class Environment {
 			envTemp.addScope(topScope); 
 			updatedEnv = updateEnv(envTemp, env2);	
 		}
+		
+		System.out.println("\nFINE   ENV UPD  ");
+		try { System.out.println("x     updatedEnv "+hashEffect(updatedEnv.lookup("x").getVarEffectList()));
+		} catch (MissingDecException e) {System.err.println("UPD ENV   x  non trovata in envUpd  ");		}
+		
 		
 		return updatedEnv;
 	}
@@ -302,7 +368,10 @@ public class Environment {
 				int derNum = id.getDereferenceNum();
 				Effect effect = entry.getVarEffect(derNum);
 				Effect result = Effect.seq(effect, Effect.READ_WRITE);
-				entry.setVarEffect(derNum, result);
+				System.err.println("CHECK 1 " +entry.getVarEffect(derNum) +"  "+ entry.getVarEffect(derNum).hashCode());
+				//entry.setVarEffect(derNum, result);
+				entry.getVarEffect(derNum).setEffect(result);
+				System.err.println("CHECK 2 " +entry.getVarEffect(derNum) +"  "+ entry.getVarEffect(derNum).hashCode());
 				
 				if( result.equals(Effect.ERROR) ) {
 					errors.add(new SemanticError("Cannot read '" + id.getId().getId() + "' after its deletion."));
@@ -329,7 +398,8 @@ public class Environment {
         for (var scope : env.symbolTable) {
         	HashMap<String, STEntry> copiedScope = new HashMap<String, STEntry>();
             for (var id : scope.keySet()) {
-                copiedScope.put(id, new STEntry(scope.get(id)));
+                //copiedScope.put(id, new STEntry(scope.get(id)));
+            	copiedScope.put(id, STEntry.cloneSTEntryWithoutEffects(scope.get(id)));
             }
             symbolTable.add(copiedScope);
         }

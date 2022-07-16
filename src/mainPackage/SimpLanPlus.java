@@ -16,7 +16,6 @@ import exception.MemoryException;
 import exception.SmallCodeAreaCException;
 import exception.TypeErrorException;
 import interpreter.ExecuteVM;
-import interpreter.ExecuteVM2;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
 import svm.SVMLexer;

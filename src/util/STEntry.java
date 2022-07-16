@@ -67,6 +67,20 @@ public class STEntry {
 	}
 	
 	
+	public static STEntry cloneSTEntryWithoutEffects(STEntry entry) {
+		
+		STEntry newEntry = new STEntry(entry.nestingLvl, entry.offset);
+		
+		newEntry.type = entry.type;
+		newEntry.funLabel = entry.funLabel;
+		
+		newEntry.varEffects = entry.varEffects;
+		newEntry.parEffects = entry.parEffects;
+		
+		return newEntry;
+	}
+	
+	
 	public void setType(Node type) {
 		this.type = type;
 		

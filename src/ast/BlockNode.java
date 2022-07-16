@@ -69,7 +69,7 @@ public class BlockNode implements Node {
 
 		if( inFunction ) {
 			if( statements.size() > 0 ) {
-				if ( types.size() > 0 ){
+				if ( types.size() > 0 ) {
 					for(int i = 0; i < types.size(); i ++) {
 						if( ! SimpLanPlusLib.isEquals(types.get(i), types.get(0)) )
 							throw new TypeErrorException("block with multiple return statements having mismatching types.");

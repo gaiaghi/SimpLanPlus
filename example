@@ -1,13 +1,19 @@
-
 {
-  void f(^int a){  print 1; }
-  int x;
-  ^int y;
-  y=new int;
-  y^=5;
-  x=6;
-  
-  f(y);
-  
-  
+	void f(^^int a){
+		//a^^=4;
+		print a^^;
+	}
+	
+	^^int x=new ^int;
+	^int y=new int;
+	x^=y;
+	x^^=2;
+	
+	f(x);
+	print x^^;
+	delete y;
+	
+	
+	//f(x);
+  	print x^^;
 }

@@ -95,6 +95,8 @@ public class ExecuteVM {
 	    	
 	    		if( regs.getHP() + 1 >= regs.getSP() ) {
 	    			System.out.println("\nError: Out of memory");
+	    			if( debug )
+            			closeDebugFile(out);
 	    			return;
 	    		}
 	    		else {
@@ -307,7 +309,6 @@ public class ExecuteVM {
 		            		System.err.println("Error: invalid instruction "+bytecode.getInstr());
 		            		if( debug )
 		            			closeDebugFile(out);
-		            		System.exit(1);
 		            		return;
 		            }
 		            printCPU(bytecode.toString());
@@ -319,7 +320,7 @@ public class ExecuteVM {
     		printCPU("Exception");
     		System.err.println("\n\nError during execution:");
     		System.err.println(e.getMessage());
-    		System.err.println("Instruction: " + bytecode.getInstr());
+    		System.err.println("Instruction: " + bytecode.toString());
     	
     		if( debug )
     			closeDebugFile(out);
@@ -428,7 +429,7 @@ public class ExecuteVM {
 	    	}
 	    	stringToPrint = stringToPrint + "\n  " + "[" + regs.getHP() + "]\t" +"\t<--  $hp";
 	    	
-	    	stringToPrint = stringToPrint + "\n  Stack:";
+	    	stringToPrint = stringToPrint + "\n\n  Stack:";
 	    	for(int i = regs.getHP()+1; i <= CODESIZE+MEMSIZE-1; i ++) {
 	    		
 	    		if( !memory.get(i).isFree() ) {

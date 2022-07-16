@@ -207,7 +207,20 @@ public class CallNode implements Node {
 		}
 		
 		// (4) sulle variabili che compaiono in e_i si fa la SEQ con RW
-		Environment sigma_2 = new Environment(env);
+		//Environment sigma_2 = new Environment(env);
+		Environment sigma_2 = Environment.cloneEnvWithoutEffects(env);
+		
+		try {
+			STEntry en = sigma_2.lookup("x");
+			List<Effect> effParAttuale = en.getVarEffectList();
+			
+			System.err.println("\n\n INIZIO call ");
+			System.err.println( "x" 
+					+"  " +hashEffect(effParAttuale) );
+		} catch (MissingDecException e) {
+			System.err.println("------------ERRORE-----------");
+		}
+		
 		
 		ArrayList<LhsNode> vars = new ArrayList<>();
 		for( int i : y_indexes ) {
@@ -227,12 +240,19 @@ public class CallNode implements Node {
 			// creo una copia della entry per non modificare l'ambiente principale env,
 			// modifico solo il nuovo ambiente sigma_2
 			STEntry newEntry = new STEntry(idEntry);
+			
+			for( int j = 0; j < idEntry.getVarEffectList().size(); j ++)
+				newEntry.getVarEffect(j).setEffect(idEntry.getVarEffectList().get(j));
+			
 			List<Effect> varEffect = newEntry.getVarEffectList();
 			List<Effect> resultSeq = new ArrayList<Effect>();
 			for( int i = 0; i < varEffect.size(); i ++ ) {
 				resultSeq.add( Effect.seq(varEffect.get(i), Effect.READ_WRITE) );
 			}
-			newEntry.setVarEffectList(resultSeq);
+			//newEntry.setVarEffectList(resultSeq);
+			for( int j = 0; j < resultSeq.size(); j ++)
+				newEntry.getVarEffect(j).setEffect(resultSeq.get(j));
+			
 			sigma_2.safeAddEntry(idvar, newEntry);
 		}
 		
@@ -261,6 +281,11 @@ public class CallNode implements Node {
 				return errors;
 			}
 			
+			
+			System.err.println("\n\nPRIMA call");
+			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
+					+"  " +hashEffect(effettoParAttuale) );
+			
 			/* copio gli effetti del parametro attuale nel parametro formale.
 			 * devo considerare il caso in cui il parametro attuale sia un 
 			 * puntatore più lungo del parametro formale */
@@ -273,11 +298,30 @@ public class CallNode implements Node {
 			for( int j = 0; j < effettoParFormale.size(); j ++ ) 
 				resultSeq.add( Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );
 			
-			newEntry.setVarEffectList(resultSeq);
+			//newEntry.setVarEffectList(resultSeq);
+			for( int j = 0; j < resultSeq.size(); j ++)
+				newEntry.getVarEffect(j).setEffect(resultSeq.get(j));
+			
+			
+			System.err.println("\n\n call 0");
+			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
+					+"  " +hashEffect(newEntry.getVarEffectList()) );
+			
 			tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	
 			envList.add(tmp_env);
 			
+			System.err.println("\n\n call 1");
+			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
+					+"  " +hashEffect(effettoParAttuale) );
+			
+			
 			((DerExpNode) parlist.get(i)).getLhs().getId().setSTEntry( new STEntry( newEntry ));
+			
+			
+			System.err.println("\n\n call 2");
+			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
+					+"  " +hashEffect(effettoParAttuale) );
+			
 		}
 		
 		// faccio la PAR 
@@ -289,13 +333,49 @@ public class CallNode implements Node {
 			}
 		}
 		
+		try {
+			STEntry en = sigma_3.lookup("x");
+			List<Effect> effParAttuale = en.getVarEffectList();
+			
+			System.err.println("\n\n call 3");
+			System.err.println( "x" 
+					+"  " +hashEffect(effParAttuale) );
+		} catch (MissingDecException e) {
+			System.err.println("------------ERRORE-----------");
+		}
 
 		// (6) update(Sigma_2, Sigma_3)
-		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);		
+		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);	
+		
+		try {
+			STEntry en = updEnv.lookup("x");
+			List<Effect> effParAttuale = en.getVarEffectList();
+			
+			System.err.println("\n\n call 4");
+			System.err.println( "x" 
+					+"  " +hashEffect(effParAttuale) );
+		} catch (MissingDecException e) {
+			System.err.println("------------ERRORE-----------");
+		}
+		
+		
 		// controllo se ci sono errori nell'ambiente ottenuta dalla update
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 
 		env.copyFrom(updEnv);
+		
+		
+		try {
+			STEntry en = env.lookup("x");
+			List<Effect> effParAttuale = en.getVarEffectList();
+			
+			System.err.println("\n\n call 5");
+			System.err.println( "x" 
+					+"  " +hashEffect(effParAttuale) );
+		} catch (MissingDecException e) {
+			System.err.println("------------ERRORE-----------");
+		}
+		
 		
 		return errors;
 	}
@@ -309,4 +389,15 @@ public class CallNode implements Node {
 		return vars;
     }
 
+	
+	private String hashEffect(List<Effect> list) {
+		String str="[";
+		for(Effect e : list)
+			str = str + e + ",";
+		str=str+"]        [";
+		for(Effect e : list)
+			str = str + e.hashCode() + ",";
+		return str+"]";
+	}
+	
 }
