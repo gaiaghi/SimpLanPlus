@@ -66,7 +66,7 @@ public class DeletionNode implements Node{
 			int derNumDec = id.getDerNumDec();
 			
 			
-			//System.out.println("\n\n\nPRIMA\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList()) );
+			System.out.println("\n\n\nPRIMA\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList()) );
 			
 			
 			
@@ -76,13 +76,13 @@ public class DeletionNode implements Node{
 			if ( idEntry.getVarEffect(derNumDec).equals(Effect.ERROR) )
 				res.add(new SemanticError("Variable " + id.getId() + " was already deleted."));
 			
-			//System.out.println("DOPO\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList()) );
+			System.out.println("DOPO\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList()) );
 		
 			id.setSTEntry(new STEntry( env.lookup(id.getId())) );
 			
 			
 			
-			//System.out.println("FINE\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList())+"\n\n" );
+			System.out.println("FINE\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList())+"\n\n" );
 			
 		} catch (MissingDecException e1) {
 			res.add(new SemanticError("MissingDecException: " + id.getId()));

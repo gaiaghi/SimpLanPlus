@@ -11,14 +11,11 @@ push $ra
 mv $al $fp
 lw $a0 1($al)
 push $a0
-li $a0 1
-lw $t1 0($sp)
-add $a0 $t1 $a0
-pop
-li $ret 1
-b label_1
+mv $al $fp
+lw $a0 -2($al)
+del $a0
 label_1:
-addi $sp $sp 0
+addi $sp $sp 1
 push $a0
 li $a0 1
 beq $ret $a0 label_2
@@ -45,12 +42,16 @@ push $ra
 push $fp
 mv $al $fp
 lw $a0 1($al)
+lw $a0 0($a0)
 push $a0
 mv $al $fp
 push $al
 jal function_0
-li $ret 1
-b label_5
+mv $al $fp
+lw $a0 1($al)
+lw $a0 0($a0)
+lw $a0 0($a0)
+print $a0 1
 label_5:
 addi $sp $sp 0
 push $a0
@@ -72,57 +73,38 @@ pop
 li $ret 0
 jr $ra
 label_4:
-li $a0 1
+li $t1 -1
+sw $t1 0($hp)
+addi $a0 $hp 0
+addi $hp $hp 1
 push $a0
+li $t1 -1
+sw $t1 0($hp)
+addi $a0 $hp 0
+addi $hp $hp 1
+push $a0
+mv $al $fp
+addi $a0 $al -2
+lw $a0 0($a0)
+lw $t1 0($sp)
+pop
+sw $t1 0($a0)
+li $a0 2
+push $a0
+mv $al $fp
+addi $a0 $al -2
+lw $a0 0($a0)
+lw $a0 0($a0)
+lw $t1 0($sp)
+pop
+sw $t1 0($a0)
+push $fp
 mv $al $fp
 lw $a0 -2($al)
-push $a0
-push $fp
-li $a0 1
-push $a0
-mv $al $fp
-push $al
-jal function_0
-lw $t1 0($sp)
-beq $t1 $a0 label_10
-li $a0 0
-b label_11
-label_10:
-li $a0 1
-label_11:
-pop
-li $t1 1
-beq $a0 $t1 label_9
-push $fp
-li $a0 3
 push $a0
 mv $al $fp
 push $al
 jal function_2
-push $a0
-mv $al $fp
-addi $a0 $al -2
-lw $t1 0($sp)
-pop
-sw $t1 0($a0)
-b label_8
-label_9:
-push $fp
-li $a0 2
-push $a0
-mv $al $fp
-push $al
-jal function_0
-push $a0
-mv $al $fp
-addi $a0 $al -2
-lw $t1 0($sp)
-pop
-sw $t1 0($a0)
-label_8:
-mv $al $fp
-lw $a0 -2($al)
-print $a0 1
 addi $sp $sp 1
 pop
 pop

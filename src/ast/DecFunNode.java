@@ -279,11 +279,11 @@ public class DecFunNode implements Node {
 		
 		
 		
-		/*System.out.println("\n-----------------------------sigma_0");
+		System.out.println("\n-----------------------------sigma_0");
 		for( int j = 0; j < sigma_0.size(); j ++)
 			System.err.println("EFFETTI sigma_0 "
 					+"    "+hashEffect(sigma_0.get(j)));
-		*/
+		
 		
 		
 		/*
@@ -320,11 +320,11 @@ public class DecFunNode implements Node {
 		boolean stop = false;
 		while( !stop ) {
 		
-			/*System.out.println("\nPUNTO FISSO    -------- inizio ");
+			System.out.println("\nPUNTO FISSO    -------- inizio ");
 			for( int j = 0; j < sigma_1.size(); j ++)
 				System.err.println("EFFETTI sigma_1 "
 						+"    "+hashEffect(sigma_1.get(j)));
-			*/
+			
 			
 			
 			// valuto gli effetti nel corpo della funzione
@@ -348,7 +348,7 @@ public class DecFunNode implements Node {
 			}
 			
 			
-			/*System.out.println("\nPUNTO FISSO     -------- fine ");
+			System.out.println("\nPUNTO FISSO     -------- fine ");
 			for( int j = 0; j < sigma_1.size(); j ++)
 				System.err.println("EFFETTI sigma_1 "
 						+"    "+hashEffect(sigma_1.get(j)));
@@ -356,7 +356,7 @@ public class DecFunNode implements Node {
 			for( int j = 0; j < prec_sigma_1.size(); j ++)
 				System.err.println("EFFETTI sigma_1_prec "
 						+"    "+hashEffect(prec_sigma_1.get(j)));
-			*/
+			
 			
 			
 			// controllo terminazione punto fisso (prec_sigma_1 == sigma_1)
@@ -392,10 +392,10 @@ public class DecFunNode implements Node {
 			env.lookup(id.getId()).setParEffectList(sigma_1);
 			
 			
-			/*for( int j = 0; j < sigma_1.size(); j ++)
+			for( int j = 0; j < sigma_1.size(); j ++)
 				System.err.println("EFFETTI FUN "
 						+"    "+hashEffect(sigma_1.get(j)));
-			*/
+			
 			
 		} catch (MissingDecException e) {
 			errors.add(new SemanticError("Missing declaration: "+id.getId()));

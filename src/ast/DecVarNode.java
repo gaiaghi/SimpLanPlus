@@ -2,6 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import exception.MissingDecException;
 import exception.MultipleDecException;
@@ -125,7 +126,44 @@ public class DecVarNode implements Node{
 		
 		if (exp != null) {
 			res.addAll(exp.checkEffects(env));
-			entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
+			
+			
+			System.err.println("--------------------------------------------------decvar 1 "
+					+"  "+id.getId()+"   " +exp.getClass());
+			
+			
+			
+			if( exp instanceof DerExpNode ) {
+				DerExpNode derExp = (DerExpNode) exp;
+				List<Effect> newEffectList = derExp.getLhs().getId().getSTEntry().getVarEffectList();
+				
+				
+				System.err.println("--------------------------------------------------decvar 2"
+								+"  "+id.getId()+"   " +exp.getClass()
+								+"\n dec  "+hashEffect(id.getSTEntry().getVarEffectList())
+								+"\n derExp "+hashEffect(newEffectList)
+								+"\n   id.getDerNumDec= "+id.getDerNumDec() 
+								+ "\n  derExp.getLhs().getDereferenceNum()= "+derExp.getLhs().getDereferenceNum());
+				
+				
+				
+				
+				for(int i = 0; i <= id.getDerNumDec(); i ++) {
+					Effect newEffect = newEffectList.get(derExp.getLhs().getDereferenceNum()+i);
+					//entry.getVarEffect(i).setEffect(newEffect);already declared
+					entry.setVarEffect(i, newEffect);
+				}
+				
+				
+				System.err.println("--------------------------------------------------decvar 2"
+						+"  "+id.getId()+"   " +exp.getClass()
+						+"\n dec  "+hashEffect(id.getSTEntry().getVarEffectList())
+						+"\n derExp "+hashEffect(newEffectList));
+				
+				
+			}
+			else
+				entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
 		}
 		
 		try {
@@ -137,5 +175,15 @@ public class DecVarNode implements Node{
 		return res;
 	}
 	
+	
+	private String hashEffect(List<Effect> list) {
+		String str="[";
+		for(Effect e : list)
+			str = str + e + ",";
+		str=str+"]        [";
+		for(Effect e : list)
+			str = str + e.hashCode() + ",";
+		return str+"]";
+	}
 
 }

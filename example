@@ -1,1 +1,21 @@
-{int f(int x){return x+1;} int g(int x){return f(x);} int z=1; if(z==f(1)) z=f(2); else z=g(3); print (z);}
+{
+void g(^int a) {
+	//^int y=new int;
+	//y=a;
+	^int y=a;
+  	delete y;
+}
+
+void f(^^int a) {
+  g(a^);
+  //^^a = 3;
+  print(a^^);
+}
+
+
+^^int x=new ^int;
+x^=new int;
+x^^=2;
+f(x);
+
+}
