@@ -66,12 +66,25 @@ public class DeletionNode implements Node{
 			int derNumDec = id.getDerNumDec();
 			
 			
-			System.out.println("\n\n\nPRIMA\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList()) );
+//			System.out.println("\n\n\nPRIMA\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList()) );
+
+			//i puntatori devono essere inizializzati per poterli cancellare
+			for (int i=0; i<=derNumDec; i++) {
+				if (id.getSTEntry().getVarEffect(i).equals(Effect.INITIALIZED)) {
+					res.add(new SemanticError("Cannot delete the not initialized pointer "+ id.getId()) );
+					return res;
+					}
+			}
 			
 			
-			
+			//si aggiorna a seq DELETED il valore puntato
 			Effect seqEffect = Effect.seq(idEntry.getVarEffect(derNumDec), Effect.DELETED);
 			idEntry.getVarEffect(derNumDec).setEffect(seqEffect);
+			
+			//eventuali puntatori intermedi vengono messi a INIT 
+			for (int i = 0; i < id.getDerNumDec(); i++) {
+				idEntry.getVarEffect(i).setEffect(Effect.INITIALIZED);
+			}
 			
 			if ( idEntry.getVarEffect(derNumDec).equals(Effect.ERROR) )
 				res.add(new SemanticError("Variable " + id.getId() + " was already deleted."));

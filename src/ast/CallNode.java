@@ -264,9 +264,7 @@ public class CallNode implements Node {
 		ArrayList<Environment> envList = new ArrayList<Environment>();
 		for( int i : x_indexes ) {
 			
-			
-			
-//--------------------------------------------------------------------------------------------------------------
+			// copia del collegamento tra puntatori se creato nelle funzioni
 			for (int j: x_indexes) {
 				if (i != j && parEffectList.get(i).size()>=parEffectList.get(j).size()) {
 					List<Effect> bigPar = parEffectList.get(i);
@@ -274,7 +272,7 @@ public class CallNode implements Node {
 					int differ = bigPar.size() - smallPar.size();
 					for(int k=0; k < bigPar.size()-differ; k++) {
 						if ( bigPar.get(k+differ).hashCode() == smallPar.get(k).hashCode()) {
-							System.err.println("Sono uguali");	
+//							System.err.println("Sono uguali");	
 
 							
 							STEntry newEntry;
@@ -305,7 +303,6 @@ public class CallNode implements Node {
 					}
 				}
 			}
-//--------------------------------------------------------------------------------------------------------------
 			
 			
 			Environment tmp_env = new Environment();
@@ -313,6 +310,7 @@ public class CallNode implements Node {
 			
 			// recupero l'effetto Sigma_1(x_i)
 			List<Effect> effettoParFormale = parEffectList.get(i);
+			
 			
 			// recupero l'effetto Sigma(u_i)
 			// dato che questo parametro attuale è di tipo PointerTypeNode
@@ -326,6 +324,14 @@ public class CallNode implements Node {
 				return errors;
 			}
 			
+			//i puntatori devono essere inizializzati per poterli passare come parametri
+			for (int k = 0; k < effettoParAttuale.size(); k++) {
+				if (effettoParAttuale.get(k).equals(Effect.INITIALIZED)) {
+					String idName = ((DerExpNode) parlist.get(i)).getLhs().getId().getId();
+					errors.add(new SemanticError("Cannot use not initialized pointer "+ idName +" as function parameter") );
+					return errors;
+					}
+			}
 			
 			/*System.err.println("\n\nPRIMA call");
 			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 

@@ -110,11 +110,6 @@ public class AssignmentNode implements Node {
 		
 		
 		//env seq[lhs = RW]
-		if( lhs.isPointer() 
-				&& lhs.getId().getDerNumLhs() == lhs.getId().getDerNumDec() 
-				&& lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.DELETED) ) {
-			lhsEntry.setVarEffect(lhs.getDereferenceNum(), Effect.READ_WRITE);
-		}
 		
 		//System.out.println("2 lhs "+ lhs.getId().getId()+"  "+hashEffect(lhsEntry.getVarEffectList()));
 		
@@ -125,6 +120,12 @@ public class AssignmentNode implements Node {
 		            res.add(new SemanticError(lhs.getId().getId() + " has not status RW. " +lhsEntry.getVarEffectList()));
 		            return res;
 				}
+		}
+		
+		if( lhs.isPointer() 
+				&& lhs.getId().getDerNumLhs() == lhs.getId().getDerNumDec() 
+				&& lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.DELETED) ) {
+			lhsEntry.setVarEffect(lhs.getDereferenceNum(), Effect.READ_WRITE);
 		}
 		
 		//System.out.println("3 lhs "+ lhs.getId().getId()+"  "+lhsEntry.getVarEffectList() +"  "+hashEffect(lhsEntry.getVarEffectList()) );
