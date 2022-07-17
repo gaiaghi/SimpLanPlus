@@ -46,24 +46,24 @@ public class DerExpNode implements Node {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 
 		
-		try {
+		/*try {
 			System.out.println("------------ der "+env.lookup("x").getVarEffectList()
 					+"\n "+lhs.getId().getEffect(lhs.getDereferenceNum()));
 		} catch (MissingDecException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		
         errors.addAll(lhs.checkEffects(env));
         	
-        try {
+        /*try {
 			System.out.println("------------ der "+env.lookup("x").getVarEffectList()
 					+"\n "+lhs.getId().getEffect(lhs.getDereferenceNum()));
 		} catch (MissingDecException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
         
         if (lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
             errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
@@ -72,13 +72,13 @@ public class DerExpNode implements Node {
         
         errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));     
 
-        try {
+        /*try {
 			System.out.println("------------ der "+env.lookup("x").getVarEffectList()
 					+"\n "+lhs.getId().getEffect(lhs.getDereferenceNum()));
 		} catch (MissingDecException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
         
         return errors;
 	}

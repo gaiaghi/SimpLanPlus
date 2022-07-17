@@ -523,6 +523,23 @@ public class Environment {
 		}
 		return newEnv;
 	}
+		
+		
+		
+	public void printEnv(String str) {
+		System.out.println("\n\n\n----------PRINT ENV--------------------\n"+str);
+		int i = 0;
+		for( HashMap<String, STEntry> scope : symbolTable ) {
+			System.out.println("----------scope "+i+"--------------------");
+			i ++;
+			for( Entry<String,STEntry> entryVar : scope.entrySet() ) {
+				System.out.println(entryVar.getKey());
+			}
+		}
+		System.out.println("----------FINE PRINT ENV--------------------\n");
+	}
+		
+	
 	
 	
 }

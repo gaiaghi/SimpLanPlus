@@ -372,6 +372,7 @@
 
 //n65
 // esempio riuso di un puntatore dopo la delete
+// Output: 3,2
 //#n65#OK
 //{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; delete x; x=new ^int; x^=new int; y^=4; x^^=2; print x^^; }
 //versione ERR:
@@ -396,14 +397,28 @@
 
 
 //n69
+// print del puntatore che è stato cancellato
 //#n69#ERR
-{ void g(^int a) {  ^int y=a;    delete y;} void f(^^int a) {  g(a^);  print(a^^);} ^^int x=new ^int; x^=new int; x^^=2; f(x); }
+//{ void g(^int a) {  ^int y=a;    delete y;} void f(^^int a) {  g(a^);  print(a^^);} ^^int x=new ^int; x^=new int; x^^=2; f(x); }
 
 
 //{^^int x=new ^int; x^ = new int; x^^ = 22; delete x; x= new^int; x^ = new int; x^^=8; print x^^;}
 //{^int x=  new int; x^ = 22; print x; delete x; x= new int; print x; x^=7;} 
 //{^^int x ; ^int y = new int; x = new ^int; x^ = y ; y^ = 22 ; print y;  delete y; y= new int; print y;}
 //{^^int x ; ^int y = new int; x = new ^int; x^ = y ; y^ = 22 ; delete y; y= new int; y^ = 8; print y^; print x^^; }
+
+
+//n70
+// a ha effetto error a causa della doppia delete
+//#n70#ERR
+//{void f(^int x, ^int y){delete x; delete y;} ^int a = new int; a^=3; f(a,a);}
+
+
+//n71
+// x^=720		x=1006
+//#n71#OK
+//{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y=new int; y^=x^ * n; f(y,n-1);} } ^int u=new int; u^=1; f(u,6);}
+
 
 //p01
 //OK		output = 1
@@ -429,6 +444,7 @@
 
 
 //p05
+// la versione del prof ha solo la definizione di funzione
 //#p05#ERR
 //{void g(^int x, int y){if (y==0) delete x; else {x^= x^-1; g(x,y); delete x;} }  ^int a = new int; int b=0; a^=2; g(a,b);}
 
@@ -441,9 +457,14 @@
 
 
 //p07
-// x^=720		x=1006
-//#p07#OK
-//{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y=new int; y^=x^ * n; f(y,n-1);} } ^int u=new int; u^=1; f(u,6);}
+// errore di tipo sul primo parametro della call di f
+//#p07#ERR
+//{int u = 1 ;
+void f(^int x, int n){ 
+	if (n == 0) { print(x) ; delete x ; }
+	else { ^int y = new int; y^ = x^ * n ; f(y,n-1) ; }	
+}
+f(u,6) ; }
 
 
 //p08

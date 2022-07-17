@@ -122,15 +122,18 @@ public class DecVarNode implements Node{
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
+		//env.printEnv("inizio decVar --> "+id.getId());
+		
+		
 		STEntry entry = id.getSTEntry();
 		
 		if (exp != null) {
 			res.addAll(exp.checkEffects(env));
 			
 			
-			System.err.println("--------------------------------------------------decvar 1 "
+			/*System.err.println("--------------------------------------------------decvar 1 "
 					+"  "+id.getId()+"   " +exp.getClass());
-			
+			*/
 			
 			
 			if( exp instanceof DerExpNode ) {
@@ -138,13 +141,13 @@ public class DecVarNode implements Node{
 				List<Effect> newEffectList = derExp.getLhs().getId().getSTEntry().getVarEffectList();
 				
 				
-				System.err.println("--------------------------------------------------decvar 2"
+				/*System.err.println("--------------------------------------------------decvar 2"
 								+"  "+id.getId()+"   " +exp.getClass()
 								+"\n dec  "+hashEffect(id.getSTEntry().getVarEffectList())
 								+"\n derExp "+hashEffect(newEffectList)
 								+"\n   id.getDerNumDec= "+id.getDerNumDec() 
 								+ "\n  derExp.getLhs().getDereferenceNum()= "+derExp.getLhs().getDereferenceNum());
-				
+				*/
 				
 				
 				
@@ -155,22 +158,24 @@ public class DecVarNode implements Node{
 				}
 				
 				
-				System.err.println("--------------------------------------------------decvar 2"
+				/*System.err.println("--------------------------------------------------decvar 2"
 						+"  "+id.getId()+"   " +exp.getClass()
 						+"\n dec  "+hashEffect(id.getSTEntry().getVarEffectList())
 						+"\n derExp "+hashEffect(newEffectList));
-				
+				*/
 				
 			}
 			else
 				entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
 		}
 		
-		try {
-			env.addEntry(id.getId(), entry);
-		} catch (MultipleDecException e) {
+		//try {
+			env.safeAddEntry(id.getId(), entry);
+		/*} catch (MultipleDecException e) {
 			res.add(new SemanticError("Var id " + id.getId() + " already declared"));
-		}
+		}*/
+		
+		//env.printEnv("fine decVar --> "+id.getId());
 		
 		return res;
 	}

@@ -1,21 +1,13 @@
-{
-void g(^int a) {
-	//^int y=new int;
-	//y=a;
-	^int y=a;
-  	delete y;
-}
+{void g(^int x, int y){
+	if (y==0) 
+		delete x; 
+	else {
+		x^= x^-1; 
+		g(x,y); 
+		delete x;} 
+}  
 
-void f(^^int a) {
-  g(a^);
-  //^^a = 3;
-  print(a^^);
-}
-
-
-^^int x=new ^int;
-x^=new int;
-x^^=2;
-f(x);
-
-}
+^int a = new int; 
+int b=0; 
+a^=2; 
+g(a,b);}
