@@ -120,10 +120,7 @@ public class IdNode implements Node {
 		
 		try {
 			entry = env.lookup(id);
-		} catch (MissingDecException e) {
-			errors.add(new SemanticError("Missing declaration: " + id));
-			return errors;
-		}
+		} catch (MissingDecException e) {}
 		
 	    return errors;
 	}
