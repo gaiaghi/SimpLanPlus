@@ -8,7 +8,7 @@ import util.SemanticError;
 public class ArgNode implements Node {
 	
 	// grammar rule:
-	//	arg : type ID;
+	// arg : type ID;
 	
 	private Node type;
 	private IdNode id;

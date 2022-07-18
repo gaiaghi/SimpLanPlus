@@ -122,60 +122,25 @@ public class DecVarNode implements Node{
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
-		//env.printEnv("inizio decVar --> "+id.getId());
-		
-		
 		STEntry entry = id.getSTEntry();
 		
 		if (exp != null) {
 			res.addAll(exp.checkEffects(env));
-			
-			
-			/*System.err.println("--------------------------------------------------decvar 1 "
-					+"  "+id.getId()+"   " +exp.getClass());
-			*/
-			
-			
+		
 			if( exp instanceof DerExpNode ) {
 				DerExpNode derExp = (DerExpNode) exp;
 				List<Effect> newEffectList = derExp.getLhs().getId().getSTEntry().getVarEffectList();
-				
-				
-				/*System.err.println("--------------------------------------------------decvar 2"
-								+"  "+id.getId()+"   " +exp.getClass()
-								+"\n dec  "+hashEffect(id.getSTEntry().getVarEffectList())
-								+"\n derExp "+hashEffect(newEffectList)
-								+"\n   id.getDerNumDec= "+id.getDerNumDec() 
-								+ "\n  derExp.getLhs().getDereferenceNum()= "+derExp.getLhs().getDereferenceNum());
-				*/
-				
-				
-				
+			
 				for(int i = 0; i <= id.getDerNumDec(); i ++) {
 					Effect newEffect = newEffectList.get(derExp.getLhs().getDereferenceNum()+i);
-					//entry.getVarEffect(i).setEffect(newEffect);already declared
 					entry.setVarEffect(i, newEffect);
 				}
-				
-				
-				/*System.err.println("--------------------------------------------------decvar 2"
-						+"  "+id.getId()+"   " +exp.getClass()
-						+"\n dec  "+hashEffect(id.getSTEntry().getVarEffectList())
-						+"\n derExp "+hashEffect(newEffectList));
-				*/
-				
 			}
 			else
 				entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
 		}
 		
-		//try {
-			env.safeAddEntry(id.getId(), entry);
-		/*} catch (MultipleDecException e) {
-			res.add(new SemanticError("Var id " + id.getId() + " already declared"));
-		}*/
-		
-		//env.printEnv("fine decVar --> "+id.getId());
+		env.safeAddEntry(id.getId(), entry);
 		
 		return res;
 	}

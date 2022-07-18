@@ -64,15 +64,10 @@ public class DeletionNode implements Node{
 		
 		res.addAll(id.checkEffects(env));
 		
-		
-		
 		try {
 			STEntry idEntry = env.lookup(id.getId()); 
 			int derNumDec = id.getDerNumDec();
 			
-			
-//			System.out.println("\n\n\nPRIMA\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList()) );
-
 			//i puntatori devono essere inizializzati per poterli cancellare
 			for (int i=0; i<=derNumDec; i++) {
 				if (id.getSTEntry().getVarEffect(i).equals(Effect.INITIALIZED)) {
@@ -94,17 +89,10 @@ public class DeletionNode implements Node{
 			if ( idEntry.getVarEffect(derNumDec).equals(Effect.ERROR) )
 				res.add(new SemanticError("Variable " + id.getId() + " was already deleted."));
 			
-			//System.out.println("DOPO\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList()) );
-		
+			
 			id.setSTEntry(new STEntry( env.lookup(id.getId())) );
 			
-			
-			
-			//System.out.println("FINE\nDELETE "+id.getId() + hashEffect(idEntry.getVarEffectList())+"\n\n" );
-			
-		} catch (MissingDecException e1) {
-			res.add(new SemanticError("MissingDecException: " + id.getId()));
-		}
+		} catch (MissingDecException e1) {}
 	
 		return res;
 	}

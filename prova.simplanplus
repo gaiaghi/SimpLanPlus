@@ -462,7 +462,8 @@
 //p07
 // errore di tipo sul primo parametro della call di f
 //#p07#ERR
-//{int u = 1; void f(^int x, int n){ 
+//{int u = 1; 
+void f(^int x, int n){ 
 	if (n == 0) { print(x) ; delete x ; }
 	else { ^int y = new int; y^ = x^ * n ; f(y,n-1) ; }	
 }

@@ -216,12 +216,8 @@ public class DecFunNode implements Node {
 		 * ho bisogno di questa entry perchè sono ammesse le chiamate 
 		 * ricorsive 
 		 **/
-		try {
-			env.addEntry(id.getId(), id.getSTEntry());
-		} catch (MultipleDecException e) {
-			errors.add(new SemanticError("Fun id " + id.getId() + " already declared"));
-			return errors;
-		}
+		env.safeAddEntry(id.getId(), id.getSTEntry());
+		
 		
 		
 		/* creo l'ambiente {Sigma_FUN, Sigma_0[f -> Sigma_0 ->Sigma_1]}.
@@ -234,10 +230,7 @@ public class DecFunNode implements Node {
 		try {
 			env_0 = env.envFunc();
 			env_0.addScope();
-		} catch (MultipleDecException e1) {
-			errors.add(new SemanticError("There is a function already declared"));
-			return errors;
-		} 
+		} catch (MultipleDecException e1) {} 
 		
 		List<List<Effect>> sigma_0 = new ArrayList<List<Effect>>(args.size());
 		for( Node a : args ) {
@@ -246,12 +239,7 @@ public class DecFunNode implements Node {
 			STEntry newArgEntry = new STEntry(arg.getSTEntry());
 			
 			// inserisco la entry del parametro nell'ambiente
-			try {
-				env_0.addEntry(arg.getId(), newArgEntry);
-			} catch (MultipleDecException e) {
-				errors.add(new SemanticError("Arg id "+arg.getId() +" already declared"));
-				return errors;
-			}
+			env_0.safeAddEntry(arg.getId(), newArgEntry);
 			
 			List<Effect> argEffects = new ArrayList<Effect>();
 			for(int i = 0; i < newArgEntry.getSizeVarEffects(); i ++) {
@@ -265,25 +253,9 @@ public class DecFunNode implements Node {
 		/*
 		 * Aggiungo la entry della funzione nel nuovo scope
 		 * */
-		STEntry newFunEntry = new STEntry(id.getSTEntry());
-		try {		
-			newFunEntry.setParEffectList(sigma_0);
-			env_0.addEntry(id.getId(), newFunEntry);
-		} catch (MultipleDecException e) {
-			errors.add(new SemanticError("Fun id " + id.getId() + " already declared"));
-			return errors;
-		}
-		
-		
-		
-		
-		
-		
-		/*System.out.println("\n-----------------------------sigma_0");
-		for( int j = 0; j < sigma_0.size(); j ++)
-			System.err.println("EFFETTI sigma_0 "
-					+"    "+hashEffect(sigma_0.get(j)));
-		*/
+		STEntry newFunEntry = new STEntry(id.getSTEntry());		
+		newFunEntry.setParEffectList(sigma_0);
+		env_0.safeAddEntry(id.getId(), newFunEntry);
 		
 		
 		/*
@@ -291,10 +263,6 @@ public class DecFunNode implements Node {
 		 * */
 		// Effetti dei parametri dopo una valutazione del corpo della funzione
 		List<List<Effect>> sigma_1 = new ArrayList<List<Effect>>(/*sigma_0*/);
-		
-		
-	
-		
 		
 		// Lista che serve a mantenere una copia di sigma_1.
 		// prec_sigma_1 usata per fare il controllo di terminazione del punto fisso.
@@ -311,23 +279,9 @@ public class DecFunNode implements Node {
 		}
 		
 		
-		/*System.out.println("\n-----------------------------sigma_1");
-		for( int j = 0; j < sigma_1.size(); j ++)
-			System.err.println("EFFETTI sigma_1 "
-					+"    "+hashEffect(sigma_1.get(j))
-					+"    "+hashEffect(prec_sigma_1.get(j)));
-		*/
-		
 		boolean stop = false;
 		while( !stop ) {
 		
-			/*System.out.println("\nPUNTO FISSO    -------- inizio ");
-			for( int j = 0; j < sigma_1.size(); j ++)
-				System.err.println("EFFETTI sigma_1 "
-						+"    "+hashEffect(sigma_1.get(j)));
-			*/
-			
-			
 			// valuto gli effetti nel corpo della funzione
 			errorsPuntoFisso.clear();
 			errorsPuntoFisso.addAll(block.checkEffects(env_0));
@@ -343,21 +297,8 @@ public class DecFunNode implements Node {
 				// setto i nuovi effetti dei parametri della funzione
 				env_0.lookup(id.getId()).setParEffectList(sigma_1);
 				
-			} catch (MissingDecException e) {
-				errors.add(new SemanticError("Missing declaration: " + argId));
-				return errors;
-			}
+			} catch (MissingDecException e) {}
 			
-			
-			/*System.out.println("\nPUNTO FISSO     -------- fine ");
-			for( int j = 0; j < sigma_1.size(); j ++)
-				System.err.println("EFFETTI sigma_1 "
-						+"    "+hashEffect(sigma_1.get(j)));
-			System.out.println("\nPUNTO FISSO     -------- fine prec ");
-			for( int j = 0; j < prec_sigma_1.size(); j ++)
-				System.err.println("EFFETTI sigma_1_prec "
-						+"    "+hashEffect(prec_sigma_1.get(j)));
-			*/
 			
 			
 			// controllo terminazione punto fisso (prec_sigma_1 == sigma_1)
@@ -371,10 +312,7 @@ public class DecFunNode implements Node {
 					STEntry argEntry = null;
 					try {
 						argEntry = env_0.lookup(arg.getId());
-					} catch (MissingDecException e) {
-						errors.add(new SemanticError("Missing declaration: " + arg.getId()));
-						return errors;
-					}
+					} catch (MissingDecException e) {}
 					
 					for(int i = 0; i < argEntry.getSizeVarEffects(); i ++) {
 						argEntry.setVarEffect(i, new Effect(Effect.READ_WRITE));
@@ -392,16 +330,7 @@ public class DecFunNode implements Node {
 		try {
 			env.lookup(id.getId()).setParEffectList(sigma_1);
 			
-			
-			/*for( int j = 0; j < sigma_1.size(); j ++)
-				System.err.println("EFFETTI FUN "
-						+"    "+hashEffect(sigma_1.get(j)));
-			*/
-			
-		} catch (MissingDecException e) {
-			errors.add(new SemanticError("Missing declaration: "+id.getId()));
-			return errors;
-		}
+		} catch (MissingDecException e) {}
 		
 		return errors;
 	}

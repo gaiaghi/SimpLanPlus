@@ -188,10 +188,8 @@ public class CallNode implements Node {
 		STEntry funEntry = null;
 		try {
 			funEntry = env.lookup(id.getId());
-		} catch (MissingDecException e1) {
-			errors.add(new SemanticError("Missing declaration: " + id.getId() ));
-			return errors;
-		}
+		} catch (MissingDecException e1) {}
+		
 		List< List<Effect> > parEffectList = funEntry.getParEffectList();
 		
 		
@@ -210,19 +208,6 @@ public class CallNode implements Node {
 		// (4) sulle variabili che compaiono in e_i si fa la SEQ con RW
 		//Environment sigma_2 = new Environment(env);
 		Environment sigma_2 = Environment.cloneEnvWithoutEffects(env);
-		
-		/*try {
-			STEntry en = sigma_2.lookup("x");
-			List<Effect> effParAttuale = en.getVarEffectList();
-			
-			System.err.println("\n\n INIZIO call ");
-			System.err.println( "x" 
-					+"  " +hashEffect(effParAttuale) );
-		} catch (MissingDecException e) {
-			System.err.println("------------ERRORE-----------");
-		}
-		*/
-		
 		ArrayList<LhsNode> vars = new ArrayList<>();
 		for( int i : y_indexes ) {
 			vars.addAll(parlist.get(i).getIDsOfVariables());
@@ -230,13 +215,10 @@ public class CallNode implements Node {
 		
 		for( LhsNode node: vars ) {
 			String idvar = ((LhsNode) node).getId().getId();
-			STEntry idEntry;
+			STEntry idEntry = null;
 			try {
 				idEntry = sigma_2.lookup(idvar);
-			} catch (MissingDecException e) {
-				errors.add(new SemanticError("Missing declaration: " + idvar));
-				return errors;
-			}
+			} catch (MissingDecException e) {}
 			
 			// creo una copia della entry per non modificare l'ambiente principale env,
 			// modifico solo il nuovo ambiente sigma_2
@@ -250,7 +232,7 @@ public class CallNode implements Node {
 			for( int i = 0; i < varEffect.size(); i ++ ) {
 				resultSeq.add( Effect.seq(varEffect.get(i), Effect.READ_WRITE) );
 			}
-			//newEntry.setVarEffectList(resultSeq);
+			
 			for( int j = 0; j < resultSeq.size(); j ++)
 				newEntry.getVarEffect(j).setEffect(resultSeq.get(j));
 			
@@ -272,33 +254,21 @@ public class CallNode implements Node {
 					int differ = bigPar.size() - smallPar.size();
 					for(int k=0; k < bigPar.size()-differ; k++) {
 						if ( bigPar.get(k+differ).hashCode() == smallPar.get(k).hashCode()) {
-//							System.err.println("Sono uguali");	
 
-							
-							STEntry newEntry;
+							STEntry newEntry = null;
 							try {
 								newEntry = env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
-							} catch (MissingDecException e) {
-								errors.add(new SemanticError("Missing declaration: " + ((DerExpNode) parlist.get(i)).getLhs().getId().getId()) );
-								return errors;
-							}
+							} catch (MissingDecException e) {}
 							
-							List<Effect> smallParAttuale;
-							STEntry smallEntry;
+							List<Effect> smallParAttuale = null;
+							STEntry smallEntry = null;
 							try {
 								smallEntry= env.lookup(((DerExpNode) parlist.get(j)).getLhs().getId().getId());
 								smallParAttuale = smallEntry.getVarEffectList();
-							} catch (MissingDecException e) {
-								errors.add(new SemanticError("Missing declaration: " + ((DerExpNode) parlist.get(j)).getLhs().getId().getId()) );
-								return errors;
-							}
-//							System.out.println(hashEffect(smallEntry.getVarEffectList()));
-//							System.out.println(hashEffect(newEntry.getVarEffectList()));
+							} catch (MissingDecException e) {}
+
 							newEntry.setVarEffect(k+differ, smallEntry.getVarEffect(k));
 
-//							System.out.println("dopo: \n"+hashEffect(smallEntry.getVarEffectList()));
-//							System.out.println(hashEffect(newEntry.getVarEffectList()));
-							
 						}			
 					}
 				}
@@ -311,18 +281,14 @@ public class CallNode implements Node {
 			// recupero l'effetto Sigma_1(x_i)
 			List<Effect> effettoParFormale = parEffectList.get(i);
 			
-			
 			// recupero l'effetto Sigma(u_i)
 			// dato che questo parametro attuale è di tipo PointerTypeNode
-			List<Effect> effettoParAttuale;
-			STEntry newEntry;
+			List<Effect> effettoParAttuale = null;
+			STEntry newEntry = null;
 			try {
 				newEntry = env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
 				effettoParAttuale = newEntry.getVarEffectList();
-			} catch (MissingDecException e) {
-				errors.add(new SemanticError("Missing declaration: " + ((DerExpNode) parlist.get(i)).getLhs().getId().getId()) );
-				return errors;
-			}
+			} catch (MissingDecException e) {}
 			
 			//i puntatori devono essere inizializzati per poterli passare come parametri
 			for (int k = 0; k < effettoParAttuale.size(); k++) {
@@ -332,10 +298,6 @@ public class CallNode implements Node {
 					return errors;
 					}
 			}
-			
-			/*System.err.println("\n\nPRIMA call");
-			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
-					+"  " +hashEffect(effettoParAttuale) );*/
 			
 			/* copio gli effetti del parametro attuale nel parametro formale.
 			 * devo considerare il caso in cui il parametro attuale sia un 
@@ -348,34 +310,19 @@ public class CallNode implements Node {
 			
 			for( int j = 0; j < effettoParFormale.size(); j ++ ) {
 				resultSeq.add( Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );
-				
-				/*System.err.println("-------- "+effettoParAttuale.get(j+diff)+"   seq   "+effettoParFormale.get(j)
-						+"   =   "+Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );*/
 			}
 			
 			
-			//newEntry.setVarEffectList(resultSeq);
 			for( int j = 0; j < resultSeq.size(); j ++)
 				newEntry.getVarEffect(j).setEffect(resultSeq.get(j));
 
-			/*System.err.println("\n\n call 0");
-			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
-					+"  " +hashEffect(newEntry.getVarEffectList()) );*/
 			
 			tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	
 			envList.add(tmp_env);
 			
-			/*System.err.println("\n\n call 1");
-			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
-					+"  " +hashEffect(effettoParAttuale) );*/
-			
 			
 			((DerExpNode) parlist.get(i)).getLhs().getId().setSTEntry( new STEntry( newEntry ));
 			
-			
-			/*System.err.println("\n\n call 2");
-			System.err.println( ((DerExpNode) parlist.get(i)).getLhs().getId().getId() 
-					+"  " +hashEffect(effettoParAttuale) );*/
 			
 		}
 		
@@ -388,62 +335,15 @@ public class CallNode implements Node {
 			}
 		}
 		
-		/*System.out.println("\n PAR ENV dopo: \n" );
-		for (Environment envi: envList) {
-			for(STEntry scope: envi.getCurrentScope().values())
-			System.out.println(hashEffect(scope.getVarEffectList()));
-		}
 		
-		System.out.println("\n PAR ENV dopo: \n" );
-		for (STEntry scope: sigma_3.getCurrentScope().values()) {
-			System.out.println(hashEffect(scope.getVarEffectList()));
-		}*/
-		
-		/*try {
-			STEntry en = sigma_3.lookup("x");
-			List<Effect> effParAttuale = en.getVarEffectList();
-			
-			System.err.println("\n\n call 3");
-			System.err.println( "x" 
-					+"  " +hashEffect(effParAttuale) );
-		} catch (MissingDecException e) {
-			System.err.println("------------ERRORE-----------");
-		}*/
-
 		// (6) update(Sigma_2, Sigma_3)
 		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);	
 
-//		System.out.println("\n UPD ENV dopo: \n"+ updEnv.getCurrentScope());
-		/*try {
-			STEntry en = updEnv.lookup("x");
-			List<Effect> effParAttuale = en.getVarEffectList();
-			
-			System.err.println("\n\n call 4");
-			System.err.println( "x" 
-					+"  " +hashEffect(effParAttuale) );
-		} catch (MissingDecException e) {
-			System.err.println("------------ERRORE-----------");
-		}*/
-		
 		
 		// controllo se ci sono errori nell'ambiente ottenuta dalla update
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 
 		env.copyFrom(updEnv);
-
-//		System.out.println("\n  ENV dopo: \n"+ env.getCurrentScope());
-		
-		/*try {
-			STEntry en = env.lookup("x");
-			List<Effect> effParAttuale = en.getVarEffectList();
-			
-			System.err.println("\n\n call 5");
-			System.err.println( "x" 
-					+"  " +hashEffect(effParAttuale) );
-		} catch (MissingDecException e) {
-			System.err.println("------------ERRORE-----------");
-		}*/
-		
 		
 		return errors;
 	}
