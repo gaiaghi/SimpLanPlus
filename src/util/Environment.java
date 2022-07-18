@@ -350,9 +350,7 @@ public class Environment {
 						entry.setVarEffect(i, result);
 				}
 			}
-			catch(MissingDecException e) {
-				errors.add(new SemanticError("Missing declaration: " + id.getId().getId() ));
-			}
+			catch(MissingDecException e) {}
 		}
 		
 		return errors;
