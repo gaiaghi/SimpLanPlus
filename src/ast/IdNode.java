@@ -84,11 +84,16 @@ public class IdNode implements Node {
 		int offset = entry.getOffset();
 		code = code + "lw $a0 " + offset + "($al)\n";
 		
+		
 		if( isInDeletionNode ) {
-			for(int i = 0; i < getDerNumDec()-1; i ++ ) {
-				code = code + "lw $a0 0($a0)\n";
+			String delList = "";
+			for(int i = 0; i < getDerNumDec(); i ++ ) {
+				code = code + "push $a0\n" + "lw $a0 0($a0)\n";
+				delList = delList + "lw $a0 0($sp)\n" +"pop\n" + "del $a0\n";
 			}
+			code = code + delList;
 		}
+		
 		
 		return code;
 	}

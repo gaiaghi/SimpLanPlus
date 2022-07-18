@@ -277,6 +277,7 @@ public class ExecuteVM {
 			                
 		            	case SVMParser.DELETION :
 		            		arg1 = regs.getRegisterValue( bytecode.getArg1() );
+		            		System.err.println("DEL "+arg1);
 		            		free(arg1);
 			                break;
 			                

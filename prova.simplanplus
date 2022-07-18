@@ -279,7 +279,8 @@
 
 //n49
 // mutua ricorsione
-//#n50#ERR
+// Missing declaration: g
+//#n49#ERR
 //{ void f(int x){ g(x); } void g(int x){ f(x); } }
 
 //n50
@@ -289,6 +290,7 @@
 
 
 //n51
+// Output: 2, 3
 //#n51#OK
 //{void f(int x, int y){ {int z; if(x==0) return; else print x;} print y; } f(2,3);}
 
@@ -299,6 +301,7 @@
 
 
 //n53
+// Output: 3
 //#n53#OK
 //{ ^^int x = new ^int; ^int y ; x^=new int;  x^^=3; y=x^; print y^;}
 
@@ -308,12 +311,12 @@
 
 
 //n55
-// dovrebbe dare errore perchè passo x^ e non x
+// dovrebbe dare errore perchÃ¨ passo x^ e non x
 //#n55#ERR
 //{void f(^int x){ delete x; }  ^int x=new int; x^=3; f(x^);   }
 
 //n56
-// dovrebbe dare errore perchè passo un bool al posto di un int alla funzione
+// dovrebbe dare errore perchÃ¨ passo un bool al posto di un int alla funzione
 //#n56#ERR
 //{void f(^int x){ delete x; }  ^bool x=new bool; x^=true; f(x);   }
 
@@ -346,7 +349,7 @@
 
 
 //n62		
-// come il 61, ma con parametro attuale che è un puntatore di puntatore mentre il parametro formale è un puntatore
+// come il 61, ma con parametro attuale che Ã¨ un puntatore di puntatore mentre il parametro formale Ã¨ un puntatore
 // Output = 5,3
 //#n62#OK
 //{int f(^int x, int n){ x^=3; n=4; return 5;} ^^int y=new ^int; int t; y^=new int;  y^^=1; t=f(y^,2); print t; print y^^;}
@@ -397,7 +400,7 @@
 
 
 //n69
-// print del puntatore che è stato cancellato
+// print del puntatore che Ã¨ stato cancellato
 //#n69#ERR
 //{ void g(^int a) {  ^int y=a;    delete y;} void f(^^int a) {  g(a^);  print(a^^);} ^^int x=new ^int; x^=new int; x^^=2; f(x); }
 
@@ -451,7 +454,7 @@
 
 
 //p06
-//ERR x non è visibile dal corpo della funzione
+//ERR x non Ã¨ visibile dal corpo della funzione
 //#p06#ERR
 //{int x = 1; void f(int y) { if (y == 0)  print(x);  else f(y-1);}  f(54); }
 
@@ -459,8 +462,7 @@
 //p07
 // errore di tipo sul primo parametro della call di f
 //#p07#ERR
-//{int u = 1 ;
-void f(^int x, int n){ 
+//{int u = 1; void f(^int x, int n){ 
 	if (n == 0) { print(x) ; delete x ; }
 	else { ^int y = new int; y^ = x^ * n ; f(y,n-1) ; }	
 }

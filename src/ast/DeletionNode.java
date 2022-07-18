@@ -43,7 +43,12 @@ public class DeletionNode implements Node{
 	public String codeGeneration() {
 		id.setDeletionNode(true);
 		String code = id.codeGeneration();
-		code = code + "del $a0\n";
+		
+		//for( int i = 1; i <= id.getDerNumDec(); i ++ )
+			//System.out.println(id.getId()+" index "+i+"   effetto "+id.getSTEntry().getVarEffect(i));
+			//code = code + "del $a0\n";
+			
+		//code = code + "del $a0\n";
 		return code;
 	}
 
