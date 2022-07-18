@@ -66,7 +66,8 @@ public class STEntry {
 		}
 	}
 	
-	
+	// Restituisce una nuova STEntry composta da una nuona copia di tutti 
+	// gli attributi, tranne che degli effetti.
 	public static STEntry cloneSTEntryWithoutEffects(STEntry entry) {
 		
 		STEntry newEntry = new STEntry(entry.nestingLvl, entry.offset);
