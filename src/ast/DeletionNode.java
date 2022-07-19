@@ -76,15 +76,11 @@ public class DeletionNode implements Node{
 					}
 			}
 			
-			
-			//si aggiorna a seq DELETED il valore puntato
-			Effect seqEffect = Effect.seq(idEntry.getVarEffect(derNumDec), Effect.DELETED);
-			idEntry.getVarEffect(derNumDec).setEffect(seqEffect);
-			
-			//eventuali puntatori intermedi vengono messi a INIT 
-			for (int i = 0; i < id.getDerNumDec(); i++) {
-				idEntry.getVarEffect(i).setEffect(Effect.INITIALIZED);
-			}
+			//la catena dei puntatori viene messa a seq DELETED 
+			for (int i = 0; i <= id.getDerNumDec(); i++) {
+				Effect seqEffect = Effect.seq(idEntry.getVarEffect(i), Effect.DELETED);
+				idEntry.getVarEffect(i).setEffect(seqEffect);
+			}	
 			
 			if ( idEntry.getVarEffect(derNumDec).equals(Effect.ERROR) )
 				res.add(new SemanticError("Variable " + id.getId() + " was already deleted."));

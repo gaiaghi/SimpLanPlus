@@ -364,22 +364,17 @@
 
 
 //n64
-// esempio riuso di un puntatore dopo la delete
-// viene cancellato il valore nello heap puntato dal puntatore
-// la catena del puntatore non viene cancellata --> messa ad init
-//#n64#OK
+// esempio riuso di un puntatore dopo la delete NON permesso. 
+// L'intera catena di puntatori è messa a deleted
+//#n64#ERR
 //{^int x=new int; x^=3; delete x; x = new int; x^=4;}
-//versione ERR:
-//{^int x=new int; x^=3; delete x; x^=4;}
 
 
 //n65
-// esempio riuso di un puntatore dopo la delete
-// Output: 3,2
-//#n65#OK
+//#n65#ERR
 //{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; delete x; x=new ^int; x^=new int; y^=4; x^^=2; print x^^; }
-//versione ERR:
-//{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; delete x; y^=4; x^^=2; print x^^; }
+//{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; y=x^; delete x; y^=4;  }
+{^^int x=new ^int; x^=new int; x^^=3; print x^^; delete x; }
 
 
 //n66
@@ -405,6 +400,7 @@
 //{ void g(^int a) {  ^int y=a;    delete y;} void f(^^int a) {  g(a^);  print(a^^);} ^^int x=new ^int; x^=new int; x^^=2; f(x); }
 
 
+// usi dei puntatori non permessi. Tutti ad ERR: 
 //{^^int x=new ^int; x^ = new int; x^^ = 22; delete x; x= new^int; x^ = new int; x^^=8; print x^^;}
 //{^int x=  new int; x^ = 22; print x; delete x; x= new int; print x; x^=7;} 
 //{^^int x ; ^int y = new int; x = new ^int; x^ = y ; y^ = 22 ; print y;  delete y; y= new int; print y;}
@@ -462,12 +458,7 @@
 //p07
 // errore di tipo sul primo parametro della call di f
 //#p07#ERR
-//{int u = 1; 
-void f(^int x, int n){ 
-	if (n == 0) { print(x) ; delete x ; }
-	else { ^int y = new int; y^ = x^ * n ; f(y,n-1) ; }	
-}
-f(u,6) ; }
+//{int u = 1; void f(^int x, int n){ if (n == 0) { print(x) ; delete x ; }	else { ^int y = new int; y^ = x^ * n ; f(y,n-1) ; } } f(u,6) ; }
 
 
 //p08
@@ -475,4 +466,3 @@ f(u,6) ; }
 // f(4,5) --> out of memory
 //#p08#OK
 //{void f(int m, int n){if (m>n) {print(m+n);} else {int x = 1; f(m+1, n+1);} } f(4,5);}
-
