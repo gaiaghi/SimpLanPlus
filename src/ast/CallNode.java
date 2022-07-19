@@ -208,9 +208,10 @@ public class CallNode implements Node {
 			if( err.size() > 0 ) {
 				//System.err.println("trovati errori ");
 				errors.addAll(err);
-				return errors;
+				//return errors;
 			}
 		}
+		
 		
 		// (1) recupero il tipo della funzione f dalla entry
 		ArrowTypeNode funType = (ArrowTypeNode) entry.getType();

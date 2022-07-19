@@ -104,6 +104,7 @@ public class AssignmentNode implements Node {
 		} catch (MissingDecException e1) {}
 		
 		
+		
 		//env seq[lhs = RW]
 		// controllo che la catena del puntatore non sia a INIT
 		if( lhs.isPointer() ) {
@@ -114,24 +115,27 @@ public class AssignmentNode implements Node {
 				}
 			
 			if( exp instanceof NewExpNode ) {
-				if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.READ_WRITE) ) {
+				/*if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.READ_WRITE) ) {
 					res.add(new SemanticError("Pointer '" + lhs.getId().getId() + "' was already initialized."));
 		            return res;
-				}
+				}*/
 				
 				if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.DELETED) ) {
 					res.add(new SemanticError("Cannot use pointer '" + lhs.getId().getId() + "', it was deleted."));
 		            return res;
 				}
+				
+				for(int i = getDereferenceNum()+1; i <= lhs.getId().getDerNumDec(); i ++)
+					lhsEntry.getVarEffect(i).setEffect(new Effect(Effect.INITIALIZED));
 			}
 		}
-		
-		
 		
 		
 		// aggiorno effetto variabile left side
 		Effect newEffect = Effect.seq(lhsEntry.getVarEffect(lhs.getDereferenceNum()), Effect.READ_WRITE);
 		lhsEntry.getVarEffect(lhs.getDereferenceNum()).setEffect(newEffect);
+		
+		
 		
 		res.addAll(lhs.checkEffects(env));
 		
@@ -151,7 +155,7 @@ public class AssignmentNode implements Node {
 			}
 			
 		}
-//		System.out.println("\n\n");
+
 		
 		try {
 			lhs.getId().setSTEntry(new STEntry( env.lookup(lhs.getId().getId()) ));

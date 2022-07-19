@@ -235,6 +235,7 @@ public class SimpLanPlus{
 	        }
 		}catch(Exception e){
 			System.err.println("Error in effects analysis: " + e.toString());
+			e.printStackTrace();
 			System.exit(1);
 		}
 

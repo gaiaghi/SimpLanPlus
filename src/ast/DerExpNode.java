@@ -47,10 +47,10 @@ public class DerExpNode implements Node {
 		
         errors.addAll(lhs.checkEffects(env));
 
-        if (lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
+        if ( !lhs.isPointer() && lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
             errors.add(new SemanticError(lhs.getId().getId() + " not initialized."));
             return errors;
-        }        
+        }    
         errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));     
         
         return errors;

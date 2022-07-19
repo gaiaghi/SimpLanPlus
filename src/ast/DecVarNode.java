@@ -124,6 +124,15 @@ public class DecVarNode implements Node{
 		
 		STEntry entry = id.getSTEntry();
 		
+		
+		
+		for(int i = 0; i < entry.getVarEffectList().size(); i ++) {
+			entry.setVarEffect(i, new Effect(Effect.INITIALIZED));
+		}
+		
+		
+		
+		
 		if (exp != null) {
 			res.addAll(exp.checkEffects(env));
 		
@@ -141,6 +150,8 @@ public class DecVarNode implements Node{
 		}
 		
 		env.safeAddEntry(id.getId(), entry);
+		
+		
 		
 		return res;
 	}

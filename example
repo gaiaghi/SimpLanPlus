@@ -1,18 +1,1 @@
-{ 
-
-	void g(^int y){ 
-        print y^; 
-        //delete x;
- 
-    } 
-
-   void h(^int x){ 
-        g(x);
-        //print x^; 
-        //delete x;
- 
-    } 
-    ^int a = new int;
-    //a^=2;
-    h(a);  
-}
+{void f(^int x, ^int y){delete x; delete y;} ^int a = new int;  f(a,a);}

@@ -104,7 +104,12 @@ public class LhsNode implements Node {
 			
 			if( leftSide ) {
 				if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) {
-		            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW."));
+		            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW.  leftSide"));
+				}
+			}
+			else {
+				if ( id.getEffect(getDereferenceNum()).equals(Effect.INITIALIZED) ) {
+		            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW.   rightSide"));
 				}
 			}
 		}
