@@ -103,6 +103,7 @@ public class DecFunNode implements Node {
 		code = code + "b " + label + "\n";
 				
 		code = code + id.getSTEntry().getFunLabel() + ":\n";
+		
 		code = code + "mv $fp $sp\n";
 		code = code + "push $ra\n";
 		block.setFunEndLabel(id.getSTEntry().getFunEndLabel());
@@ -110,6 +111,8 @@ public class DecFunNode implements Node {
 		code = code + block.codeGeneration(); 
 		
 		code = code + id.getSTEntry().getFunEndLabel() + ":\n";
+		
+		
 		code = code + "lw $ra 0($sp)\n"; 			// $ra <- top
 		code = code + "addi $sp $sp "+(n+2)+"\n"; 	// pop di parametri formali + ra + al
 		code = code + "lw $fp 0($sp)\n";
@@ -277,7 +280,6 @@ public class DecFunNode implements Node {
 			}
 				
 		}
-		
 		
 		boolean stop = false;
 		while( !stop ) {

@@ -98,6 +98,7 @@ public class CallNode implements Node {
 	
 	@Override
 	public String codeGeneration() {
+		
 		String code = "";
 		
 		code = code + "push $fp\n";
@@ -299,6 +300,8 @@ public class CallNode implements Node {
 					}
 			}
 			
+			
+			
 			/* copio gli effetti del parametro attuale nel parametro formale.
 			 * devo considerare il caso in cui il parametro attuale sia un 
 			 * puntatore più lungo del parametro formale */
@@ -367,5 +370,5 @@ public class CallNode implements Node {
 			str = str + e.hashCode() + ",";
 		return str+"]";
 	}
-	
+
 }

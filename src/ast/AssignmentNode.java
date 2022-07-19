@@ -14,7 +14,7 @@ import util.SimpLanPlusLib;
 public class AssignmentNode implements Node {
 
 	// grammar rule:
-	//	assignment  : lhs '=' exp ;
+	// assignment  : lhs '=' exp ;
 	
 	private Node exp;
 	private LhsNode lhs;
@@ -112,6 +112,18 @@ public class AssignmentNode implements Node {
 		            res.add(new SemanticError(lhs.getId().getId() + " has not status RW. " +lhsEntry.getVarEffectList()));
 		            return res;
 				}
+			
+			if( exp instanceof NewExpNode ) {
+				if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.READ_WRITE) ) {
+					res.add(new SemanticError("Pointer '" + lhs.getId().getId() + "' was already initialized."));
+		            return res;
+				}
+				
+				if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.DELETED) ) {
+					res.add(new SemanticError("Cannot use pointer '" + lhs.getId().getId() + "', it was deleted."));
+		            return res;
+				}
+			}
 		}
 		
 		if( lhs.isPointer() 
@@ -163,8 +175,6 @@ public class AssignmentNode implements Node {
 			str = str + e.hashCode() + ",";
 		return str+"]";
 	}
-	
-	
 	
 	
 }

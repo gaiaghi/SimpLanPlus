@@ -1,1 +1,11 @@
-{^int x=  new int; x^ = 22; print x; delete x; x= new int; print x; x^=7;} 
+{
+^^int a; 
+
+a=new ^int;
+a^=new int;
+a^^=2;
+delete a;
+ a=new ^int;
+ a^=new int;
+
+}

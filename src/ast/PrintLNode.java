@@ -47,5 +47,7 @@ public class PrintLNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		return print.checkEffects(env);
 	}
+	
+	
 
 }

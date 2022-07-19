@@ -48,5 +48,7 @@ public class DeletionLNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		return deletion.checkEffects(env);
 	}
+	
+
 
 }

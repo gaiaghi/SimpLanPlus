@@ -240,22 +240,18 @@ public class Environment {
 		for (var varEntry1: scope1.entrySet()) {
 			for (var varEntry2: scope2.entrySet()) {
 				if ( varEntry1.getKey().compareTo(varEntry2.getKey()) == 0 ) {
-					STEntry entry = new STEntry(varEntry1.getValue());
+					
+					STEntry entry = STEntry.cloneSTEntryWithoutEffects(varEntry1.getValue());
 					
 					for (int i=0; i < varEntry2.getValue().getVarEffectList().size(); i++) 
-						entry.setVarEffect(i, Effect.par(varEntry1.getValue().getVarEffect(i), varEntry1.getValue().getVarEffect(i)));
+						entry.getVarEffect(i).setEffect( Effect.par(varEntry1.getValue().getVarEffect(i), varEntry1.getValue().getVarEffect(i)));
 					
 					envPar.safeAddEntry(varEntry2.getKey(), entry);
 				}
 			}
 		} 
 
-		
-		
-		/*System.out.println("\nFINE   ENV PAR  ");
-		try { System.out.println("x     envPar "+envPar.lookup("x") +"     "+hashEffect(envPar.lookup("x").getVarEffectList()));
-		} catch (MissingDecException e) {System.err.println("ENV PAR   x  non trovata in envPar  ");		}
-		*/
+	
 		
 		return envPar;
 	}

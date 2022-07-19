@@ -155,5 +155,7 @@ public class DecVarNode implements Node{
 			str = str + e.hashCode() + ",";
 		return str+"]";
 	}
-
+	
+	
+	
 }

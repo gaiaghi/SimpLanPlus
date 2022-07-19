@@ -46,5 +46,6 @@ public class CallLNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		return call.checkEffects(env);
 	}
-
+	
+	
 }

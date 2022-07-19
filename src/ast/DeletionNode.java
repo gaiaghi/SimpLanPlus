@@ -46,9 +46,9 @@ public class DeletionNode implements Node{
 		
 		//for( int i = 1; i <= id.getDerNumDec(); i ++ )
 			//System.out.println(id.getId()+" index "+i+"   effetto "+id.getSTEntry().getVarEffect(i));
-			//code = code + "del $a0\n";
-			
 		//code = code + "del $a0\n";
+			
+		
 		return code;
 	}
 
@@ -106,6 +106,7 @@ public class DeletionNode implements Node{
 			str = str + e.hashCode() + ",";
 		return str+"]";
 	}
+	
 	
 	
 	

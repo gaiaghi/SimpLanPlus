@@ -46,5 +46,7 @@ public class DecFunLNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		return decFun.checkEffects(env);
 	}
+	
+	
 
 }
