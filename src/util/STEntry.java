@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ast.ArrowTypeNode;
+import ast.DecFunNode;
 import ast.Node;
 
 // entry of the Symbol Table
@@ -18,11 +19,39 @@ public class STEntry {
 	private String funEndLabel; 				// label fine funzione per il return
 	
 	
+	
+	//testEffetti
+	private DecFunNode decFun;
+	private Environment envFunc;
+	
+	public Environment getEnvFunc() {
+		return envFunc;
+	}
+
+	public void setEnvFunc(Environment envFunc) {
+		this.envFunc = envFunc;
+	}
+
+	public DecFunNode getDecFun() {
+		return decFun;
+	}
+
+	public void setDecFun(DecFunNode decFun) {
+		this.decFun = decFun;
+	}
+
+	
+	
+	
 	public STEntry (int nestingLvl, int offset) {
 		this.nestingLvl = nestingLvl;
 		this.offset = offset; 
 		this.varEffects = new ArrayList<>();
 		this.parEffects = new ArrayList<>();
+		
+		//testEffetti
+		decFun = null;
+		envFunc = null;
 	}
 	
 	public STEntry(int nestingLvl, Node type, int offset) {
@@ -45,6 +74,10 @@ public class STEntry {
 				this.varEffects.add(new Effect(Effect.INITIALIZED));
 		}
 		
+		//testEffetti
+		decFun = null;
+		envFunc = null;
+		
 	}
 
 
@@ -64,6 +97,11 @@ public class STEntry {
 			
 			this.parEffects.add(copyEffects);
 		}
+		
+		//testEffetti
+		decFun = entry.decFun;
+		envFunc = entry.envFunc;
+		
 	}
 	
 	// Restituisce una nuova STEntry composta da una nuona copia di tutti 
@@ -77,6 +115,11 @@ public class STEntry {
 		
 		newEntry.varEffects = entry.varEffects;
 		newEntry.parEffects = entry.parEffects;
+		
+		
+		//testEffetti
+		newEntry.decFun = entry.decFun;
+		newEntry.envFunc = entry.envFunc;
 		
 		return newEntry;
 	}

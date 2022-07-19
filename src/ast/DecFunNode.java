@@ -220,7 +220,7 @@ public class DecFunNode implements Node {
 		 * ricorsive 
 		 **/
 		env.safeAddEntry(id.getId(), id.getSTEntry());
-		
+		id.getSTEntry().setDecFun(this); //testEffetti
 		
 		
 		/* creo l'ambiente {Sigma_FUN, Sigma_0[f -> Sigma_0 ->Sigma_1]}.
@@ -232,6 +232,9 @@ public class DecFunNode implements Node {
 		Environment env_0 = null;
 		try {
 			env_0 = env.envFunc();
+			
+			id.getSTEntry().setEnvFunc(env_0); //testEffetti
+			
 			env_0.addScope();
 		} catch (MultipleDecException e1) {} 
 		
@@ -265,11 +268,11 @@ public class DecFunNode implements Node {
 		 * Calcolo del punto fisso
 		 * */
 		// Effetti dei parametri dopo una valutazione del corpo della funzione
-		List<List<Effect>> sigma_1 = new ArrayList<List<Effect>>(/*sigma_0*/);
+		List<List<Effect>> sigma_1 = new ArrayList<List<Effect>>();
 		
 		// Lista che serve a mantenere una copia di sigma_1.
 		// prec_sigma_1 usata per fare il controllo di terminazione del punto fisso.
-		List<List<Effect>> prec_sigma_1 = new ArrayList<List<Effect>>(/*sigma_0*/);
+		List<List<Effect>> prec_sigma_1 = new ArrayList<List<Effect>>();
 		
 		for( int j = 0; j < sigma_0.size(); j ++) {
 			sigma_1.add(new ArrayList<Effect>());
@@ -283,7 +286,19 @@ public class DecFunNode implements Node {
 		
 		boolean stop = false;
 		while( !stop ) {
-		
+			//testEffetti
+			/*System.err.println("PUNTO FISSO       checkEffects ");
+			for( Node a : args ) {
+				try {
+					STEntry s = env_0.lookup(  ( (ArgNode) a).getId().getId() );
+					System.err.println(((ArgNode) a).getId().getId()+
+							"    "+s.getVarEffectList());
+				} catch (MissingDecException e) {
+				}
+				
+			}*/
+			
+			
 			// valuto gli effetti nel corpo della funzione
 			errorsPuntoFisso.clear();
 			errorsPuntoFisso.addAll(block.checkEffects(env_0));
@@ -304,6 +319,7 @@ public class DecFunNode implements Node {
 			
 			
 			// controllo terminazione punto fisso (prec_sigma_1 == sigma_1)
+			//System.err.println(sigma_1+"   ---------   "+prec_sigma_1);
 			if( prec_sigma_1.equals(sigma_1) )
 				stop = true;
 			else {
@@ -348,5 +364,127 @@ public class DecFunNode implements Node {
 			str = str + e.hashCode() + ",";
 		return str+"]";
 	}
+	
+	
+	public ArrayList<SemanticError> checkEffectsActualArgs(List<List<Effect>> actParList) {
+		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
+		ArrayList<SemanticError> errorsPuntoFisso = new ArrayList<SemanticError>();
+		
+		Environment env_0 = id.getSTEntry().getEnvFunc();
+		env_0.addScope();
+		
+		List<List<Effect>> sigma_0 = new ArrayList<List<Effect>>(actParList.size());
+		for( int i = 0; i < args.size(); i ++ ) {
+			// nuova copia della entry del paramentro
+			IdNode arg = ((ArgNode) args.get(i)).getId();
+			STEntry newArgEntry = new STEntry(arg.getSTEntry());
+			
+			for( int j = 0; j < actParList.get(i).size(); j ++ )
+				newArgEntry.setVarEffect(j,new Effect(actParList.get(i).get(j)));
+				//setVarEffectList(actParList.get(i));
+			
+			// inserisco la entry del parametro nell'ambiente
+			env_0.safeAddEntry(arg.getId(), newArgEntry);
+			
+			List<Effect> argEffects = newArgEntry.getVarEffectList();
+			
+			sigma_0.add(argEffects);
+		}
+		
+		/*
+		 * Aggiungo la entry della funzione nel nuovo scope
+		 * */
+		STEntry newFunEntry = new STEntry(id.getSTEntry());		
+		newFunEntry.setParEffectList(sigma_0);
+		env_0.safeAddEntry(id.getId(), newFunEntry);
+		
+		
+		/*
+		 * Calcolo del punto fisso
+		 * */
+		// Effetti dei parametri dopo una valutazione del corpo della funzione
+		List<List<Effect>> sigma_1 = new ArrayList<List<Effect>>();
+		
+		// Lista che serve a mantenere una copia di sigma_1.
+		// prec_sigma_1 usata per fare il controllo di terminazione del punto fisso.
+		List<List<Effect>> prec_sigma_1 = new ArrayList<List<Effect>>();
+		
+		for( int j = 0; j < sigma_0.size(); j ++) {
+			sigma_1.add(new ArrayList<Effect>());
+			prec_sigma_1.add(new ArrayList<Effect>());
+			for( int i = 0; i < sigma_0.get(j).size(); i ++) {
+				sigma_1.get(j).add(new Effect( sigma_0.get(j).get(i) ));
+				prec_sigma_1.get(j).add(new Effect( sigma_0.get(j).get(i) ));
+			}
+				
+		}
+		
+		boolean stop = false;
+		while( !stop ) {
+			/*System.err.println("PUNTO FISSO       checkEffectsActualArgs ");
+			for( Node a : args ) {
+				try {
+					STEntry s = env_0.lookup(  ( (ArgNode) a).getId().getId() );
+					System.err.println(((ArgNode) a).getId().getId()+
+							"    "+s.getVarEffectList());
+				} catch (MissingDecException e) {
+				}
+				
+			}*/
+			
+			
+			
+			
+			
+			// valuto gli effetti nel corpo della funzione
+			errorsPuntoFisso.clear();
+			errorsPuntoFisso.addAll(block.checkEffects(env_0));
+			
+			// ricavo gli effetti ottenuti dopo la valutazione del corpo della funzione
+			String argId = null;
+			try {
+				sigma_1.clear();
+				for( Node a : args ) {
+					argId = ((ArgNode) a).getId().getId();
+					sigma_1.add( env_0.lookup(argId).getVarEffectList() );
+				}
+				// setto i nuovi effetti dei parametri della funzione
+				env_0.lookup(id.getId()).setParEffectList(sigma_1);
+				
+			} catch (MissingDecException e) {}
+			
+			
+			
+			// controllo terminazione punto fisso (prec_sigma_1 == sigma_1)
+			//System.err.println(hashEffect(sigma_1.get(0))+"   ---------   "+hashEffect(prec_sigma_1.get(0)));
+			if( prec_sigma_1.equals(sigma_1) )
+				stop = true;
+			else {
+				prec_sigma_1 = new ArrayList<List<Effect>>(sigma_1);
+				
+				for( int i = 0; i < args.size(); i ++ ) {
+					IdNode arg = ((ArgNode) args.get(i)).getId(); 
+					STEntry argEntry = null;
+					try {
+						argEntry = env_0.lookup(arg.getId());
+					} catch (MissingDecException e) {}
+					
+					for( int j = 0; j < actParList.get(i).size(); j ++ )
+						argEntry.setVarEffect(j, new Effect(actParList.get(i).get(j)));
+					
+				}
+			}
+			//stop=true;
+		}
+		
+		errors.addAll(errorsPuntoFisso);
+		
+		// chiudi lo scope dopo il calcolo del punto fisso
+		env_0.removeScope();
+		
+		
+		return errors;
+	}
+	
 
 }

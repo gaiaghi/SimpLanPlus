@@ -126,11 +126,7 @@ public class AssignmentNode implements Node {
 			}
 		}
 		
-		if( lhs.isPointer() 
-				&& lhs.getId().getDerNumLhs() == lhs.getId().getDerNumDec() 
-				&& lhsEntry.getVarEffect(lhs.getDereferenceNum()).equals(Effect.DELETED) ) {
-			lhsEntry.setVarEffect(lhs.getDereferenceNum(), Effect.READ_WRITE);
-		}
+		
 		
 		
 		// aggiorno effetto variabile left side

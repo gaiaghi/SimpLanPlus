@@ -1,11 +1,18 @@
-{
-^^int a; 
+{ 
 
-a=new ^int;
-a^=new int;
-a^^=2;
-delete a;
- a=new ^int;
- a^=new int;
+	void g(^int y){ 
+        print y^; 
+        //delete x;
+ 
+    } 
 
+   void h(^int x){ 
+        g(x);
+        //print x^; 
+        //delete x;
+ 
+    } 
+    ^int a = new int;
+    //a^=2;
+    h(a);  
 }

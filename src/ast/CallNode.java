@@ -176,6 +176,39 @@ public class CallNode implements Node {
 		for(Node par : parlist)
 			errors.addAll(par.checkEffects(env));
 		
+		
+		//testEffetti
+		List<List<Effect>> pl = new ArrayList();
+		
+		for(Node par : parlist) {
+			try {
+				if( par instanceof DerExpNode ) {
+					pl.add( env.lookup(((DerExpNode) par).getLhs().getId().getId()).getVarEffectList()  );
+					//System.err.println(id.getId()+"  CALL par "+hashEffect(env.lookup(((DerExpNode) par).getLhs().getId().getId()).getVarEffectList()));
+				}
+				else {
+					ArrayList<Effect> arr = new ArrayList<Effect>();
+					arr.add(new Effect(Effect.READ_WRITE));
+					pl.add(arr);
+				}
+			} catch (MissingDecException e) {}
+		}
+		
+		ArrayList<SemanticError> err = null;
+		try {
+			err = env.lookup(id.getId()).getDecFun().checkEffectsActualArgs(pl);
+		} catch (MissingDecException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		if( err.size() > 0 ) {
+			//System.err.println("trovati errori ");
+			errors.addAll(err);
+			return errors;
+		}
+		
+		
+		
 		// (1) recupero il tipo della funzione f dalla entry
 		ArrowTypeNode funType = (ArrowTypeNode) entry.getType();
 		
@@ -292,13 +325,13 @@ public class CallNode implements Node {
 			} catch (MissingDecException e) {}
 			
 			//i puntatori devono essere inizializzati per poterli passare come parametri
-			for (int k = 0; k < effettoParAttuale.size(); k++) {
+			/*for (int k = 0; k < effettoParAttuale.size(); k++) {
 				if (effettoParAttuale.get(k).equals(Effect.INITIALIZED)) {
 					String idName = ((DerExpNode) parlist.get(i)).getLhs().getId().getId();
 					errors.add(new SemanticError("Cannot use not initialized pointer "+ idName +" as function parameter") );
 					return errors;
 					}
-			}
+			}*/
 			
 			
 			
