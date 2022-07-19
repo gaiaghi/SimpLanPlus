@@ -20,10 +20,12 @@ public class CallNode implements Node {
 	private STEntry entry; 
 	private ArrayList<Node> parlist; 
 	private int nestingLvl;
+	private boolean firstArgCheck;
 	
 	public CallNode(IdNode id, ArrayList<Node> args) {
 		this.id = id;
 	    parlist = args;
+	    firstArgCheck = true;
 	}
 
 	@Override
@@ -178,36 +180,37 @@ public class CallNode implements Node {
 		
 		
 		//testEffetti
-		List<List<Effect>> pl = new ArrayList();
-		
-		for(Node par : parlist) {
+		if (firstArgCheck) {
+			firstArgCheck = false;
+			List<List<Effect>> pl = new ArrayList();
+
+			for(Node par : parlist) {
+				try {
+					if( par instanceof DerExpNode ) {
+						pl.add( env.lookup(((DerExpNode) par).getLhs().getId().getId()).getVarEffectList()  );
+						//System.err.println(id.getId()+"  CALL par "+hashEffect(env.lookup(((DerExpNode) par).getLhs().getId().getId()).getVarEffectList()));
+					}
+					else {
+						ArrayList<Effect> arr = new ArrayList<Effect>();
+						arr.add(new Effect(Effect.READ_WRITE));
+						pl.add(arr);
+					}
+				} catch (MissingDecException e) {}
+			}
+
+			ArrayList<SemanticError> err = null;
 			try {
-				if( par instanceof DerExpNode ) {
-					pl.add( env.lookup(((DerExpNode) par).getLhs().getId().getId()).getVarEffectList()  );
-					//System.err.println(id.getId()+"  CALL par "+hashEffect(env.lookup(((DerExpNode) par).getLhs().getId().getId()).getVarEffectList()));
-				}
-				else {
-					ArrayList<Effect> arr = new ArrayList<Effect>();
-					arr.add(new Effect(Effect.READ_WRITE));
-					pl.add(arr);
-				}
-			} catch (MissingDecException e) {}
+				err = env.lookup(id.getId()).getDecFun().checkEffectsActualArgs(pl);
+			} catch (MissingDecException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			if( err.size() > 0 ) {
+				//System.err.println("trovati errori ");
+				errors.addAll(err);
+				return errors;
+			}
 		}
-		
-		ArrayList<SemanticError> err = null;
-		try {
-			err = env.lookup(id.getId()).getDecFun().checkEffectsActualArgs(pl);
-		} catch (MissingDecException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		if( err.size() > 0 ) {
-			//System.err.println("trovati errori ");
-			errors.addAll(err);
-			return errors;
-		}
-		
-		
 		
 		// (1) recupero il tipo della funzione f dalla entry
 		ArrowTypeNode funType = (ArrowTypeNode) entry.getType();

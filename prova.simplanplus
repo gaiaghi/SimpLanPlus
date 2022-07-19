@@ -374,7 +374,7 @@
 //#n65#ERR
 //{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; delete x; x=new ^int; x^=new int; y^=4; x^^=2; print x^^; }
 //{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; y=x^; delete x; y^=4;  }
-{^^int x=new ^int; x^=new int; x^^=3; print x^^; delete x; }
+//{^^int x=new ^int; x^=new int; x^^=3; print x^^; delete x; }
 
 
 //n66
@@ -389,7 +389,6 @@
 
 
 //n68
-// passaggio di puntatori non inizializzati come parametri
 //#n68#ERR
 //{ void f(^^int a){ a^^=4; print a^^; } ^^int x=new ^int; ^int y=new int; f(x); }
 
@@ -417,6 +416,19 @@
 // x^=720		x=1006
 //#n71#OK
 //{void f(^int x, int n){if (n==0) {print(x); delete x;} else {^int y=new int; y^=x^ * n; f(y,n-1);} } ^int u=new int; u^=1; f(u,6);}
+
+
+//n72
+//#n72#ERR
+// danno tutti errore:
+//{ void f(^^int a){ a^=new int; a^^=4; print a^^; } ^^int x=new ^int; f(x); }
+//{ void f(^^int a){ a^=new int; a^^=4; print a^^; } ^^int x=new ^int; x^ = new int; f(x); }
+
+//n73
+//#n73#OK
+//{ void h(^int x){ print 100; } ^int a=new int; h(a); }
+//questo invece dà errore:
+//{ void h(^int x){ print 100; } ^int a; h(a); }
 
 
 //p01

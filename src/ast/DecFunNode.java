@@ -378,9 +378,10 @@ public class DecFunNode implements Node {
 			// nuova copia della entry del paramentro
 			IdNode arg = ((ArgNode) args.get(i)).getId();
 			STEntry newArgEntry = new STEntry(arg.getSTEntry());
-			
-			for( int j = 0; j < actParList.get(i).size(); j ++ )
+
+			for( int j = 0; j < newArgEntry.getSizeVarEffects(); j ++ ) {
 				newArgEntry.setVarEffect(j,new Effect(actParList.get(i).get(j)));
+				}
 				//setVarEffectList(actParList.get(i));
 			
 			// inserisco la entry del parametro nell'ambiente
@@ -468,8 +469,8 @@ public class DecFunNode implements Node {
 					try {
 						argEntry = env_0.lookup(arg.getId());
 					} catch (MissingDecException e) {}
-					
-					for( int j = 0; j < actParList.get(i).size(); j ++ )
+
+					for( int j = 0; j < argEntry.getSizeVarEffects(); j ++ ) 
 						argEntry.setVarEffect(j, new Effect(actParList.get(i).get(j)));
 					
 				}

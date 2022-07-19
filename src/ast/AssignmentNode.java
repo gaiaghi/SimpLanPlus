@@ -151,7 +151,7 @@ public class AssignmentNode implements Node {
 			}
 			
 		}
-		System.out.println("\n\n");
+//		System.out.println("\n\n");
 		
 		try {
 			lhs.getId().setSTEntry(new STEntry( env.lookup(lhs.getId().getId()) ));
