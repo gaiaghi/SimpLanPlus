@@ -63,9 +63,9 @@ public class DecVarNode implements Node{
 
 			if( derNumRightDec != derNumExpDec )
 
-				throw new TypeErrorException("not valid assignment between pointer "
-						+ ((PointerTypeNode)decType).getErrorMsg() + " and " 
-						+ ((PointerTypeNode)expType).getErrorMsg());
+				throw new TypeErrorException("not valid assignment between pointer '"
+						+ ((PointerTypeNode)decType).getErrorMsg() + "' and '" 
+						+ ((PointerTypeNode)expType).getErrorMsg() + "'");
 			
 			decType = ((PointerTypeNode) decType).getPointedType();
 			expType = ((PointerTypeNode) expType).getPointedType();
@@ -77,7 +77,7 @@ public class DecVarNode implements Node{
 		if (! SimpLanPlusLib.isEquals(expType, decType) )
 			 throw new TypeErrorException("wrong usage of expression "
 					 + exp.toString().substring(exp.toString().indexOf(".")+1, exp.toString().indexOf("@"))
-					 + " with variable " + id.getId() );
+					 + " with variable '" + id.getId() + "'" );
 		
 		return null; 
 	}
@@ -109,7 +109,7 @@ public class DecVarNode implements Node{
         	env.addEntry(id.getId(), entry);
         	id.setSTEntry(entry);
         }catch(MultipleDecException e) {
-        	res.add(new SemanticError("Var id " + id.getId() + " already declared"));
+        	res.add(new SemanticError("Var id '" + id.getId() + "' already declared"));
         }
         
         if (exp != null)
@@ -124,14 +124,9 @@ public class DecVarNode implements Node{
 		
 		STEntry entry = id.getSTEntry();
 		
-		
-		
 		for(int i = 0; i < entry.getVarEffectList().size(); i ++) {
 			entry.setVarEffect(i, new Effect(Effect.INITIALIZED));
 		}
-		
-		
-		
 		
 		if (exp != null) {
 			res.addAll(exp.checkEffects(env));
@@ -148,10 +143,7 @@ public class DecVarNode implements Node{
 			else
 				entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
 		}
-		
 		env.safeAddEntry(id.getId(), entry);
-		
-		
 		
 		return res;
 	}

@@ -57,7 +57,7 @@ public class IdNode implements Node {
 		Node idType = entry.getType();
 		
 		if (idType instanceof ArrowTypeNode) {
-			throw new TypeErrorException("wrong usage of function identifier " + id);
+			throw new TypeErrorException("wrong usage of function identifier '" + id + "'");
 		}
 		
 		if( idType instanceof PointerTypeNode ) {
@@ -65,7 +65,7 @@ public class IdNode implements Node {
 			pointer.setDerNum(getDerNumDec(), getDerNumLhs(), id);
 			
 			if( pointer.getDerNumStm() > pointer.getDerNumDec() )
-				throw new TypeErrorException("too many dereference operations at pointer " + id);
+				throw new TypeErrorException("too many dereference operations at pointer '" + id + "'");
 		}
 			  
 		return idType;

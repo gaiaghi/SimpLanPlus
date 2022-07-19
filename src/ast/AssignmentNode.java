@@ -53,8 +53,8 @@ public class AssignmentNode implements Node {
 			int derNumExp = pointerExp.getDerNumStm();
 			
 			if( (derNumLhsDec - derNumLhs) != (derNumExpDec - derNumExp) ) 
-				throw new TypeErrorException("not valid assignment between pointer " 
-						+ pointerLhs.getErrorMsg() + " and " + pointerExp.getErrorMsg());
+				throw new TypeErrorException("not valid assignment between pointer '" 
+						+ pointerLhs.getErrorMsg() + "' and '" + pointerExp.getErrorMsg() + "'");
 			
 			lhsType = pointerLhs.getPointedType();
 			expType = pointerExp.getPointedType();
@@ -63,7 +63,7 @@ public class AssignmentNode implements Node {
 		
 		if (! SimpLanPlusLib.isEquals(lhsType, expType))
 			throw new TypeErrorException("cannot assign "+expType.toPrint("") 
-				+ " value for variable " + lhs.getId().getId() + " of type " + lhsType.toPrint(""));
+				+ " value for variable '" + lhs.getId().getId() + "' of type " + lhsType.toPrint(""));
 		
 		return null;
 	}
@@ -110,15 +110,11 @@ public class AssignmentNode implements Node {
 		if( lhs.isPointer() ) {
 			for(int i = 0; i < lhs.getDereferenceNum(); i ++)
 				if ( ! lhsEntry.getVarEffect(i).equals(Effect.READ_WRITE) ) {
-		            res.add(new SemanticError(lhs.getId().getId() + " has not status RW. " +lhsEntry.getVarEffectList()));
+		            res.add(new SemanticError("'"+lhs.getId().getId() + "' has not status RW. " +lhsEntry.getVarEffectList()));
 		            return res;
 				}
 			
 			if( exp instanceof NewExpNode ) {
-				/*if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.READ_WRITE) ) {
-					res.add(new SemanticError("Pointer '" + lhs.getId().getId() + "' was already initialized."));
-		            return res;
-				}*/
 				
 				if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.DELETED) ) {
 					res.add(new SemanticError("Cannot use pointer '" + lhs.getId().getId() + "', it was deleted."));

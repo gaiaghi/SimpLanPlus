@@ -6,6 +6,7 @@ import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Effect;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 
 public class LhsNode implements Node {
@@ -104,12 +105,12 @@ public class LhsNode implements Node {
 			
 			if( leftSide ) {
 				if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) {
-		            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW.  leftSide"));
+		            errors.add(new SemanticError("'"+lhs.getId().getId() + "' has not status RW."));
 				}
 			}
 			else {
 				if ( id.getEffect(getDereferenceNum()).equals(Effect.INITIALIZED) ) {
-		            errors.add(new SemanticError(lhs.getId().getId() + " has not status RW.   rightSide"));
+		            errors.add(new SemanticError("'"+lhs.getId().getId() + "' has not status RW."));
 				}
 			}
 		}

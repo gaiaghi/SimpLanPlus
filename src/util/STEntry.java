@@ -231,7 +231,7 @@ public class STEntry {
 				}
 			}
 			if( error )
-				errors.add(new SemanticError(id + " has error effect. Status: " + varEffects));
+				errors.add(new SemanticError("'"+id + "' has error effect. Status: " + varEffects));
 		}
 		
 		return errors;

@@ -67,15 +67,15 @@ public class CallNode implements Node {
 	 			int derNumActual = pointerActual.getDerNumStm();
 				 
 	 			if( derNumFormalDec != (derNumActualDec - derNumActual) ) 
-	 				throw new TypeErrorException("not valid pointer parameter " 
-							+ pointerFormal.getErrorMsg() + " and " + pointerActual.getErrorMsg());
+	 				throw new TypeErrorException("not valid pointer parameter '" 
+							+ pointerFormal.getErrorMsg() + "' and '" + pointerActual.getErrorMsg() + "'");
 		 		
 	 			formalParType = pointerFormal.getPointedType();
 	 			actualParType = pointerActual.getPointedType();
 	 		}
 	 		 
 		    if ( !(SimpLanPlusLib.isEquals( actualParType, formalParType) ) ) 
-	    		throw new TypeErrorException("wrong type for " + (i+1) + "-th parameter in the invocation of " + id.getId() );
+	    		throw new TypeErrorException("wrong type for " + (i+1) + "-th parameter in the invocation of '" + id.getId() + "'");
 	    }
 	     
 	    return funType.getRet();
@@ -174,12 +174,10 @@ public class CallNode implements Node {
 		
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
-		// controllo che i parametri siano inizializzati
 		for(Node par : parlist)
 			errors.addAll(par.checkEffects(env));
 		
-		
-		//testEffetti
+		// controllo sugli effetti dei paramatri attuali
 		if (firstArgCheck) {
 			firstArgCheck = false;
 			List<List<Effect>> pl = new ArrayList();
@@ -188,7 +186,6 @@ public class CallNode implements Node {
 				try {
 					if( par instanceof DerExpNode ) {
 						pl.add( env.lookup(((DerExpNode) par).getLhs().getId().getId()).getVarEffectList()  );
-						//System.err.println(id.getId()+"  CALL par "+hashEffect(env.lookup(((DerExpNode) par).getLhs().getId().getId()).getVarEffectList()));
 					}
 					else {
 						ArrayList<Effect> arr = new ArrayList<Effect>();
@@ -201,14 +198,9 @@ public class CallNode implements Node {
 			ArrayList<SemanticError> err = null;
 			try {
 				err = env.lookup(id.getId()).getDecFun().checkEffectsActualArgs(pl);
-			} catch (MissingDecException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
+			} catch (MissingDecException e2) {}
 			if( err.size() > 0 ) {
-				//System.err.println("trovati errori ");
 				errors.addAll(err);
-				//return errors;
 			}
 		}
 		
@@ -328,16 +320,6 @@ public class CallNode implements Node {
 				effettoParAttuale = newEntry.getVarEffectList();
 			} catch (MissingDecException e) {}
 			
-			//i puntatori devono essere inizializzati per poterli passare come parametri
-			/*for (int k = 0; k < effettoParAttuale.size(); k++) {
-				if (effettoParAttuale.get(k).equals(Effect.INITIALIZED)) {
-					String idName = ((DerExpNode) parlist.get(i)).getLhs().getId().getId();
-					errors.add(new SemanticError("Cannot use not initialized pointer "+ idName +" as function parameter") );
-					return errors;
-					}
-			}*/
-			
-			
 			
 			/* copio gli effetti del parametro attuale nel parametro formale.
 			 * devo considerare il caso in cui il parametro attuale sia un 
@@ -356,14 +338,10 @@ public class CallNode implements Node {
 			for( int j = 0; j < resultSeq.size(); j ++)
 				newEntry.getVarEffect(j).setEffect(resultSeq.get(j));
 
-			
 			tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	
 			envList.add(tmp_env);
 			
-			
 			((DerExpNode) parlist.get(i)).getLhs().getId().setSTEntry( new STEntry( newEntry ));
-			
-			
 		}
 		
 		// faccio la PAR 
@@ -375,11 +353,8 @@ public class CallNode implements Node {
 			}
 		}
 		
-		
 		// (6) update(Sigma_2, Sigma_3)
 		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);	
-
-		
 		// controllo se ci sono errori nell'ambiente ottenuta dalla update
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 

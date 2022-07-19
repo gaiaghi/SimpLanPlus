@@ -1,1 +1,22 @@
-{void f(^int x, ^int y){delete x; delete y;} ^int a = new int;  f(a,a);}
+{
+	void f(^^int a){
+		a^^=4;
+		
+	}
+	
+	^^int x=new ^int;
+	^int y=new int;
+	x^=y;
+	x^^=2;
+	
+	
+	print x^^;
+	delete y;
+	
+	
+	f(x);
+  	//print x^^;
+}
+
+
+

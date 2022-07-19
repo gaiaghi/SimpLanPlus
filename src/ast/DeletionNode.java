@@ -44,11 +44,6 @@ public class DeletionNode implements Node{
 		id.setDeletionNode(true);
 		String code = id.codeGeneration();
 		
-		//for( int i = 1; i <= id.getDerNumDec(); i ++ )
-			//System.out.println(id.getId()+" index "+i+"   effetto "+id.getSTEntry().getVarEffect(i));
-		//code = code + "del $a0\n";
-			
-		
 		return code;
 	}
 
@@ -71,7 +66,7 @@ public class DeletionNode implements Node{
 			//i puntatori devono essere inizializzati per poterli cancellare
 			for (int i=0; i<=derNumDec; i++) {
 				if (id.getSTEntry().getVarEffect(i).equals(Effect.INITIALIZED)) {
-					res.add(new SemanticError("Cannot delete the not initialized pointer "+ id.getId()) );
+					res.add(new SemanticError("Cannot delete the not initialized pointer '"+ id.getId() + "'") );
 					return res;
 					}
 			}
@@ -83,7 +78,7 @@ public class DeletionNode implements Node{
 			}	
 			
 			if ( idEntry.getVarEffect(derNumDec).equals(Effect.ERROR) )
-				res.add(new SemanticError("Variable " + id.getId() + " was already deleted."));
+				res.add(new SemanticError("Variable '" + id.getId() + "' was already deleted."));
 			
 			
 			id.setSTEntry(new STEntry( env.lookup(id.getId())) );

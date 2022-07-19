@@ -73,10 +73,10 @@ public class DecFunNode implements Node {
 		Node bodyType = block.typeCheck();
 		
 		if ( type instanceof PointerTypeNode )
-			throw new TypeErrorException("function " + id.getId() + " cannot be of type pointer.");
+			throw new TypeErrorException("function '" + id.getId() + "' cannot be of type pointer.");
 		
 		if( ! SimpLanPlusLib.isEquals(bodyType, type) )
-			throw new TypeErrorException("wrong return type for function " + id.getId());
+			throw new TypeErrorException("wrong return type for function '" + id.getId() + "'");
 		
 		return null; //valore di ritorno non usato
 	}
@@ -157,7 +157,7 @@ public class DecFunNode implements Node {
 					env.addEntry(arg.getId().getId(), parEntry);
 					arg.getId().setSTEntry(parEntry);
 				}catch(MultipleDecException e) {
-					res.add(new SemanticError("Parameter id " + arg.getId().getId() + " already declared"));
+					res.add(new SemanticError("Parameter id '" + arg.getId().getId() + "' already declared"));
 					return res;
 				}		
 			}
@@ -182,7 +182,7 @@ public class DecFunNode implements Node {
 					try {
 						env_0.addEntry(arg.getId(), newArgEntry);
 					} catch (MultipleDecException e) {
-						res.add(new SemanticError("Arg id " + arg.getId() + " already declared"));
+						res.add(new SemanticError("Arg id '" + arg.getId() + "' already declared"));
 						return res;
 					}
 				}
@@ -195,7 +195,7 @@ public class DecFunNode implements Node {
 			env.removeScope();
 			
         }catch(MultipleDecException e) {
-        	res.add(new SemanticError("Fun id " + id.getId() + " already declared"));
+        	res.add(new SemanticError("Fun id '" + id.getId() + "' already declared"));
         }
         
         return res;		
@@ -220,7 +220,7 @@ public class DecFunNode implements Node {
 		 * ricorsive 
 		 **/
 		env.safeAddEntry(id.getId(), id.getSTEntry());
-		id.getSTEntry().setDecFun(this); //testEffetti
+		id.getSTEntry().setDecFun(this); 
 		
 		
 		/* creo l'ambiente {Sigma_FUN, Sigma_0[f -> Sigma_0 ->Sigma_1]}.
@@ -232,9 +232,7 @@ public class DecFunNode implements Node {
 		Environment env_0 = null;
 		try {
 			env_0 = env.envFunc();
-			
-			id.getSTEntry().setEnvFunc(env_0); //testEffetti
-			
+			id.getSTEntry().setEnvFunc(env_0); 
 			env_0.addScope();
 		} catch (MultipleDecException e1) {} 
 		
@@ -281,23 +279,10 @@ public class DecFunNode implements Node {
 				sigma_1.get(j).add(new Effect( sigma_0.get(j).get(i) ));
 				prec_sigma_1.get(j).add(new Effect( sigma_0.get(j).get(i) ));
 			}
-				
 		}
 		
 		boolean stop = false;
 		while( !stop ) {
-			//testEffetti
-			/*System.err.println("PUNTO FISSO       checkEffects ");
-			for( Node a : args ) {
-				try {
-					STEntry s = env_0.lookup(  ( (ArgNode) a).getId().getId() );
-					System.err.println(((ArgNode) a).getId().getId()+
-							"    "+s.getVarEffectList());
-				} catch (MissingDecException e) {
-				}
-				
-			}*/
-			
 			
 			// valuto gli effetti nel corpo della funzione
 			errorsPuntoFisso.clear();
@@ -319,7 +304,6 @@ public class DecFunNode implements Node {
 			
 			
 			// controllo terminazione punto fisso (prec_sigma_1 == sigma_1)
-			//System.err.println(sigma_1+"   ---------   "+prec_sigma_1);
 			if( prec_sigma_1.equals(sigma_1) )
 				stop = true;
 			else {
@@ -381,9 +365,8 @@ public class DecFunNode implements Node {
 
 			for( int j = 0; j < newArgEntry.getSizeVarEffects(); j ++ ) {
 				newArgEntry.setVarEffect(j,new Effect(actParList.get(i).get(j)));
-				}
-				//setVarEffectList(actParList.get(i));
-			
+			}
+				
 			// inserisco la entry del parametro nell'ambiente
 			env_0.safeAddEntry(arg.getId(), newArgEntry);
 			
@@ -417,25 +400,10 @@ public class DecFunNode implements Node {
 				sigma_1.get(j).add(new Effect( sigma_0.get(j).get(i) ));
 				prec_sigma_1.get(j).add(new Effect( sigma_0.get(j).get(i) ));
 			}
-				
 		}
 		
 		boolean stop = false;
 		while( !stop ) {
-			/*System.err.println("PUNTO FISSO       checkEffectsActualArgs ");
-			for( Node a : args ) {
-				try {
-					STEntry s = env_0.lookup(  ( (ArgNode) a).getId().getId() );
-					System.err.println(((ArgNode) a).getId().getId()+
-							"    "+s.getVarEffectList());
-				} catch (MissingDecException e) {
-				}
-				
-			}*/
-			
-			
-			
-			
 			
 			// valuto gli effetti nel corpo della funzione
 			errorsPuntoFisso.clear();
@@ -457,7 +425,6 @@ public class DecFunNode implements Node {
 			
 			
 			// controllo terminazione punto fisso (prec_sigma_1 == sigma_1)
-			//System.err.println(hashEffect(sigma_1.get(0))+"   ---------   "+hashEffect(prec_sigma_1.get(0)));
 			if( prec_sigma_1.equals(sigma_1) )
 				stop = true;
 			else {
@@ -475,14 +442,12 @@ public class DecFunNode implements Node {
 					
 				}
 			}
-			//stop=true;
 		}
 		
 		errors.addAll(errorsPuntoFisso);
 		
 		// chiudi lo scope dopo il calcolo del punto fisso
 		env_0.removeScope();
-		
 		
 		return errors;
 	}

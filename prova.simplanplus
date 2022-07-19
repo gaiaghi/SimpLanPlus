@@ -365,7 +365,7 @@
 
 //n64
 // esempio riuso di un puntatore dopo la delete NON permesso. 
-// L'intera catena di puntatori è messa a deleted
+// L'intera catena di puntatori ? messa a deleted
 //#n64#ERR
 //{^int x=new int; x^=3; delete x; x = new int; x^=4;}
 
@@ -422,12 +422,12 @@
 //#n72#ERR
 // danno tutti errore:
 //{ void f(^^int a){ a^=new int; a^^=4; print a^^; } ^^int x=new ^int; f(x); }
-//{ void f(^^int a){ a^=new int; a^^=4; print a^^; } ^^int x=new ^int; x^ = new int; f(x); }
+//{ void f(^^int a){ a^=new int; a^^=4; print a^^; } ^^int x=new ^int; x^ = new int; f(x); print x^^}
 
 //n73
 //#n73#OK
 //{ void h(^int x){ print 100; } ^int a=new int; h(a); }
-//questo invece dà errore:
+//questo invece d? errore:
 //{ void h(^int x){ print 100; } ^int a; h(a); }
 
 
