@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 
-public class SPPErrorListener extends BaseErrorListener{
+public class SLPErrorListener extends BaseErrorListener{
 	private List<String> errors = new ArrayList<>();
 	
 	@Override

@@ -1,22 +1,2 @@
-{
-	void f(^^int a){
-		a^^=4;
-		
-	}
-	
-	^^int x=new ^int;
-	^int y=new int;
-	x^=y;
-	x^^=2;
-	
-	
-	print x^^;
-	delete y;
-	
-	
-	f(x);
-  	//print x^^;
-}
-
-
-
+{int f(int x) {print x+1; {if(x>10)return x-1;} return x+1; } int y=10; y=f(y); if(y==9) print y; 
+else y+8;  }

@@ -22,7 +22,7 @@ import svm.SVMLexer;
 import svm.SVMParser;
 import util.Environment;
 import util.SemanticError;
-import parser.SPPErrorListener;
+import parser.SLPErrorListener;
 
 
 public class SimpLanPlus{
@@ -142,7 +142,7 @@ public class SimpLanPlus{
 		//SimpLanPlus parser
 		SimpLanPlusParser parser = new SimpLanPlusParser(new CommonTokenStream(lexer));
 		parser.removeErrorListeners();
-		SPPErrorListener listener = new SPPErrorListener();
+		SLPErrorListener listener = new SLPErrorListener();
 		try {
 			parser.addErrorListener(listener);
 		}
