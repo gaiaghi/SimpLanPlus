@@ -29,7 +29,7 @@ public class SimpLanPlus{
 	public static void main(String[] args) {
 		
 		String usageString = "Usage:\n"
-	            + "   java -jar exec/SimpLanPlus.jar <inputFileName> [-ast] [-codesize=n1] [-memsize=n2] [-debug]\n"
+	            + "   java -jar SimpLanPlus.jar <inputFileName> [-ast] [-codesize=n1] [-memsize=n2] [-debug]\n"
 	            + "\n   where:\n"
 	          	+ "      - n1 and n2 are non-zero positive numbers\n"
 	          	+ "\n";
