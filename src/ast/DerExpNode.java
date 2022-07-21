@@ -16,9 +16,11 @@ public class DerExpNode implements Node {
 	// exp	    : lhs
 	
 	private LhsNode lhs;
+	private boolean inAssign;
 	
 	public DerExpNode(LhsNode lhs) {
 		this.lhs = lhs;
+		this.inAssign = false;
 	}
 
 	@Override
@@ -50,7 +52,16 @@ public class DerExpNode implements Node {
         if ( !lhs.isPointer() && lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
             errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized."));
             return errors;
-        }    
+        } 
+        
+        if( inAssign ) {
+        	 if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
+        		 errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized."));
+                 return errors;
+             } 
+        }
+       
+        
         errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));     
         
         return errors;
@@ -67,4 +78,8 @@ public class DerExpNode implements Node {
 		return lhs;
 	}
 
+	public void setInAssign(boolean value) {
+		inAssign = value;
+	}
+	
 }

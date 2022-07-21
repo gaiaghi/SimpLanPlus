@@ -25,7 +25,12 @@ public class NotExpNode implements Node {
 
 	@Override
 	public Node typeCheck() throws TypeErrorException{
-		if( !(exp.typeCheck() instanceof BoolTypeNode) )
+		
+		Node typeExp = exp.typeCheck();
+		
+		typeExp = util.SimpLanPlusLib.getNodeIfPointer(typeExp);
+		
+		if( !(typeExp instanceof BoolTypeNode) )
 			throw new TypeErrorException("the argument of 'Not' is not bool type.");
 		
 		return new BoolTypeNode();

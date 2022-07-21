@@ -174,7 +174,7 @@ public class CallNode implements Node {
 		
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
-		for(Node par : parlist)
+		for(Node par : parlist) 
 			errors.addAll(par.checkEffects(env));
 		
 		// controllo sugli effetti dei paramatri attuali

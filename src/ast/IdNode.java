@@ -67,6 +67,9 @@ public class IdNode implements Node {
 			if( pointer.getDerNumStm() > pointer.getDerNumDec() )
 				throw new TypeErrorException("too many dereference operations at pointer '" + id + "'");
 		}
+		
+		if( getDerNumLhs() > getDerNumDec() )
+			throw new TypeErrorException("cannot use dereference operation on variable '" + id + "'");
 			  
 		return idType;
 	}

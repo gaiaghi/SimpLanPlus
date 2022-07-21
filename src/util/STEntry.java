@@ -18,9 +18,6 @@ public class STEntry {
 	private String funLabel; 					// label delle funzioni per codGen
 	private String funEndLabel; 				// label fine funzione per il return
 	
-	
-	
-	//testEffetti
 	private DecFunNode decFun;
 	private Environment envFunc;
 	
@@ -49,7 +46,7 @@ public class STEntry {
 		this.varEffects = new ArrayList<>();
 		this.parEffects = new ArrayList<>();
 		
-		//testEffetti
+		
 		decFun = null;
 		envFunc = null;
 	}
@@ -74,7 +71,6 @@ public class STEntry {
 				this.varEffects.add(new Effect(Effect.INITIALIZED));
 		}
 		
-		//testEffetti
 		decFun = null;
 		envFunc = null;
 		
@@ -98,7 +94,6 @@ public class STEntry {
 			this.parEffects.add(copyEffects);
 		}
 		
-		//testEffetti
 		decFun = entry.decFun;
 		envFunc = entry.envFunc;
 		
@@ -116,8 +111,6 @@ public class STEntry {
 		newEntry.varEffects = entry.varEffects;
 		newEntry.parEffects = entry.parEffects;
 		
-		
-		//testEffetti
 		newEntry.decFun = entry.decFun;
 		newEntry.envFunc = entry.envFunc;
 		

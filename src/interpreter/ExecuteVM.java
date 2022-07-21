@@ -270,7 +270,10 @@ public class ExecuteVM {
 	            				if( arg1 == 1 )
 	            					System.out.println( "-> true");
 	            				else
-	            					System.out.println( "-> false");
+	            					if( arg1 == 0 )
+	            						System.out.println( "-> false");
+	            					else 
+	            						System.out.println( "-> " + arg1);
 	            			}
 		            		
 			                break;

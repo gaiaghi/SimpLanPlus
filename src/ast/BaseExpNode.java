@@ -63,5 +63,10 @@ public class BaseExpNode implements Node {
 		return exp;
 	}
 	
+	public void setInAssign(boolean value) {
+		if( exp instanceof DerExpNode )
+			((DerExpNode) exp).setInAssign(true);
+	}
+	
 
 }

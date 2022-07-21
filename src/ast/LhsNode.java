@@ -51,8 +51,9 @@ public class LhsNode implements Node {
 	
 	@Override
 	public Node typeCheck() throws TypeErrorException{
-		if (lhs == null)
-			return id.typeCheck();	
+		
+		if (lhs == null)	
+			return id.typeCheck();
 		
 		return lhs.typeCheck();
 	}
@@ -98,8 +99,9 @@ public class LhsNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
-		if( lhs == null )
+		if( lhs == null ) {
 			errors.addAll(id.checkEffects(env));
+		}
 		else {
 			errors.addAll(lhs.checkEffects(env));
 			
@@ -137,5 +139,5 @@ public class LhsNode implements Node {
 	public void setLeftSide(boolean value) {
 		leftSide = value;
 	}
-
+	
 }

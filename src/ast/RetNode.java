@@ -37,9 +37,7 @@ public class RetNode implements Node {
 			return new VoidTypeNode();
 		else {
 			Node expType = exp.typeCheck();	
-
 			expType = util.SimpLanPlusLib.getNodeIfPointer(expType);
-			
 			return expType;
 		}
 	}

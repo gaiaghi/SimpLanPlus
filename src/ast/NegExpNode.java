@@ -24,18 +24,23 @@ public class NegExpNode implements Node {
 	}
 
 	@Override
-	public Node typeCheck() throws TypeErrorException{
-		if( !(exp.typeCheck() instanceof IntTypeNode) )
-			throw new TypeErrorException("the argument of 'Neg' is not int type.");
-		
-		return new IntTypeNode();
-	}
-
-	@Override
 	public String codeGeneration() {
 		String code = exp.codeGeneration();
 		code = code + "multi $a0 $a0 -1\n"; 
 		return  code;
+	}
+
+	@Override
+	public Node typeCheck() throws TypeErrorException{
+		
+		Node typeExp = exp.typeCheck();
+		
+		typeExp = util.SimpLanPlusLib.getNodeIfPointer(typeExp);
+		
+		if( ! (typeExp instanceof IntTypeNode) )
+			throw new TypeErrorException("the argument of 'Neg' is not int type.");
+		
+		return new IntTypeNode();
 	}
 
 	@Override
