@@ -464,7 +464,7 @@ public class ExecuteVM {
     
     private BufferedWriter openDebugFile() {
     	try {
-			return new BufferedWriter(new FileWriter("debug.txt"));
+			return new BufferedWriter(new FileWriter("examples/debug.txt"));
 			
 		} catch (IOException e) {
 			System.err.println("Write error for debug file: " + e.toString());

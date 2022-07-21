@@ -14,9 +14,5 @@ una doppia delete sul puntatore passato come parametro.
 			delete x;
 		} 
 	} 
-	 
-	^int a = new int;
-	int b=1;
-	a^=2;
-	g(a,b);
+
 }
