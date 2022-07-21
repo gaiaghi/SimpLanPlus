@@ -21,24 +21,6 @@ public class STEntry {
 	private DecFunNode decFun;
 	private Environment envFunc;
 	
-	public Environment getEnvFunc() {
-		return envFunc;
-	}
-
-	public void setEnvFunc(Environment envFunc) {
-		this.envFunc = envFunc;
-	}
-
-	public DecFunNode getDecFun() {
-		return decFun;
-	}
-
-	public void setDecFun(DecFunNode decFun) {
-		this.decFun = decFun;
-	}
-
-	
-	
 	
 	public STEntry (int nestingLvl, int offset) {
 		this.nestingLvl = nestingLvl;
@@ -229,6 +211,23 @@ public class STEntry {
 		
 		return errors;
 	}
+	
+	public Environment getEnvFunc() {
+		return envFunc;
+	}
+
+	public void setEnvFunc(Environment envFunc) {
+		this.envFunc = envFunc;
+	}
+
+	public DecFunNode getDecFun() {
+		return decFun;
+	}
+
+	public void setDecFun(DecFunNode decFun) {
+		this.decFun = decFun;
+	}
+
 
 	
 }
