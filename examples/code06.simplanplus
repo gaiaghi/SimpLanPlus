@@ -1,0 +1,15 @@
+{
+
+/* Il codice non compila a causa di un errore semantico. Nel corpo delle funzioni non è possibile 
+accedere a variabili esterne: la variabile x non è visibile dal corpo della funzione.
+*/
+
+	int x = 1;
+	void f(int y) {
+		if (y == 0) 
+			print(x); 
+		else 
+			f(y-1);
+	}  
+	f(54); 
+}

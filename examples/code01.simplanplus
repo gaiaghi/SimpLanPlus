@@ -1,0 +1,11 @@
+{
+
+/* L'utilizzo dei puntatori è corretto. Il codice stampa il valore 1. */
+
+	^^int x ; 
+	^int y = new int; 
+	y^ = 1; 
+	x = new ^int; 
+	x^ = y; 
+	print x^^;
+}

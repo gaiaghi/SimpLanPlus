@@ -1,0 +1,15 @@
+{
+
+/*
+Il codice non viene eseguito a causa di un errore sull'analisi degli effetti: il fenomeno dell'aliasing
+causa una doppia delete sulla variabile x. 
+*/
+
+	void f(^int x, ^int y)
+		{
+			delete x; 
+			delete y;
+		} 
+	^int x = new int; 
+	f(x,x);
+}

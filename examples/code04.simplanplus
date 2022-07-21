@@ -1,0 +1,14 @@
+{
+
+/* Il codice riporta una corretta definizione di funzione. */
+
+	void h(^int x, ^int y){
+		if (y^==0)
+			delete x; 
+		else 
+			{ 
+				x^ = x^ - 1;
+				h(y,x); 
+			} 
+	} 
+}

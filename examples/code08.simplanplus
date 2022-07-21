@@ -1,0 +1,19 @@
+{
+
+/* Il codice è corretto e viene eseguito. La funzione f è ricorsiva.  
+	La chiamata di funzione f(5,4) termina e restituisce in stampa il valore 9.
+	La chiamata di funzione f(4,5) non termina e causa errore "out of memory" 
+*/
+
+	void f(int m, int n){
+		if (m>n) {
+			print(m+n);
+		} 
+		else {
+			int x = 1;
+			f(m+1, n+1);
+		}
+	} 
+	
+	f(4,5);
+}

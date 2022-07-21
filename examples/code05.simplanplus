@@ -1,0 +1,22 @@
+{
+
+/*
+Il codice non viene eseguito a causa di un errore nell'analisi degli effetti: la funzione potrebbe causare 
+una doppia delete sul puntatore passato come parametro. 
+*/
+
+	void g(^int x, int y){
+		if (y==0) 
+			delete x; 
+		else {
+			x^= x^-1;
+			g(x,y);
+			delete x;
+		} 
+	} 
+	 
+	^int a = new int;
+	int b=1;
+	a^=2;
+	g(a,b);
+}

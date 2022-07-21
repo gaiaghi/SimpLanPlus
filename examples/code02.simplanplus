@@ -1,0 +1,11 @@
+{
+
+/* Il codice non viene eseguito a causa dell'errore semantico "Missing declaration: y".
+La variabile y viene utilizzata ma non è stata dichiarata. 
+*/
+ 
+	^int x = new int;
+	x^ = 1; 
+	delete x; 
+	y = x^; 
+}
