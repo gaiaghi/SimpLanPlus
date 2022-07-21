@@ -78,7 +78,7 @@ public class DeletionNode implements Node{
 			}	
 			
 			if ( idEntry.getVarEffect(derNumDec).equals(Effect.ERROR) )
-				res.add(new SemanticError("Variable '" + id.getId() + "' was already deleted."));
+				res.add(new SemanticError("Pointer '" + id.getId() + "' was already deleted."));
 			
 			
 			id.setSTEntry(new STEntry( env.lookup(id.getId())) );

@@ -8,9 +8,6 @@ b label_0
 function_0:
 mv $fp $sp
 push $ra
-li $a0 1
-li $ret 1
-b label_1
 label_1:
 addi $sp $sp 0
 push $a0
@@ -38,14 +35,7 @@ addi $a0 $hp 0
 addi $hp $hp 1
 push $a0
 addi $sp $sp -1
-li $a0 2
-push $a0
-mv $al $fp
-addi $a0 $al -2
-lw $a0 0($a0)
-lw $t1 0($sp)
-pop
-sw $t1 0($a0)
+addi $sp $sp -1
 push $fp
 mv $al $fp
 lw $a0 -2($al)
@@ -53,7 +43,7 @@ push $a0
 mv $al $fp
 push $al
 jal function_0
-addi $sp $sp 2
+addi $sp $sp 3
 pop
 pop
 lw $fp 0($sp)

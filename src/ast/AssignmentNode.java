@@ -149,15 +149,6 @@ public class AssignmentNode implements Node {
 			DerExpNode derNode = ((DerExpNode) exp);
 			int expDerNum = derNode.getLhs().getDereferenceNum();
 			
-			/*System.err.println("assign "+derNode.getLhs().getDereferenceNum() +"   eff "
-					+derNode.getLhs().getId().getEffect(derNode.getLhs().getDereferenceNum())
-					+"   id "+derNode.getLhs().getId().getId());
-			if ( derNode.getLhs().getId().getEffect(derNode.getLhs().getDereferenceNum()).equals(Effect.INITIALIZED)) {
-	            res.add(new SemanticError("'"+derNode.getLhs().getId().getId() + "' not initialized. assign"));
-	            System.err.println("assign if");
-	            return res;
-	        } */
-			
 			for (int i = lhsDer, j = expDerNum; i< maxDer; i++, j++) {
 				//recupero l'effetto da exp e lo copio in lhs
 				Effect expEffect = derNode.getLhs().getId().getSTEntry().getVarEffect(j); 

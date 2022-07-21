@@ -1,6 +1,6 @@
 { 
-	int f(^int x){
-		return 1;
+	void f(^int x){
+		
 	}
 
    ^int a=new int;
@@ -10,17 +10,22 @@
    //print !t;
  
  
- //^int b;
+ ^int b;
  //a=(b);
+ 
+ 
  
  
  int v;
  //print v^;
  //int z;
  //v=z;
- 
- a^=2; 
- //b^=4; 
+ //a^=2;
+ //delete a;
+ //delete a;
+ //print a; 
+ //b^=4;
+ //a=b;
  //a^=-b^+(a^);
  //print -a^+b^;
  f(a); 
