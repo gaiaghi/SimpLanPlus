@@ -1,4 +1,4 @@
-// Generated from SVM.g4 by ANTLR 4.9.3
+// Generated from SVM.g4 by ANTLR 4.4
 package svm;
 
 import java.util.List;
@@ -15,87 +15,36 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class SVMLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.9.3", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.4", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, PUSH=3, POP=4, ADD=5, SUB=6, MULT=7, DIV=8, ADDI=9, SUBI=10, 
+		T__1=1, T__0=2, PUSH=3, POP=4, ADD=5, SUB=6, MULT=7, DIV=8, ADDI=9, SUBI=10, 
 		MULTI=11, DIVI=12, LI=13, LB=14, STOREW=15, LOADW=16, BRANCH=17, BRANCHEQ=18, 
 		BRANCHLESSEQ=19, JR=20, JAL=21, PRINT=22, DELETION=23, MOVE=24, AND=25, 
 		OR=26, NOT=27, HALT=28, REGISTER=29, COL=30, LABEL=31, NUMBER=32, BOOL=33, 
 		WHITESP=34, ERR=35;
-	public static String[] channelNames = {
-		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
-	};
-
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};
 
-	private static String[] makeRuleNames() {
-		return new String[] {
-			"T__0", "T__1", "PUSH", "POP", "ADD", "SUB", "MULT", "DIV", "ADDI", "SUBI", 
-			"MULTI", "DIVI", "LI", "LB", "STOREW", "LOADW", "BRANCH", "BRANCHEQ", 
-			"BRANCHLESSEQ", "JR", "JAL", "PRINT", "DELETION", "MOVE", "AND", "OR", 
-			"NOT", "HALT", "REGISTER", "COL", "LABEL", "NUMBER", "BOOL", "WHITESP", 
-			"ERR"
-		};
-	}
-	public static final String[] ruleNames = makeRuleNames();
-
-	private static String[] makeLiteralNames() {
-		return new String[] {
-			null, "'('", "')'", "'push'", "'pop'", "'add'", "'sub'", "'mult'", "'div'", 
-			"'addi'", "'subi'", "'multi'", "'divi'", "'li'", "'lb'", "'sw'", "'lw'", 
-			"'b'", "'beq'", "'bleq'", "'jr'", "'jal'", "'print'", "'del'", "'mv'", 
-			"'and'", "'or'", "'not'", "'halt'", null, "':'"
-		};
-	}
-	private static final String[] _LITERAL_NAMES = makeLiteralNames();
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, null, null, "PUSH", "POP", "ADD", "SUB", "MULT", "DIV", "ADDI", 
-			"SUBI", "MULTI", "DIVI", "LI", "LB", "STOREW", "LOADW", "BRANCH", "BRANCHEQ", 
-			"BRANCHLESSEQ", "JR", "JAL", "PRINT", "DELETION", "MOVE", "AND", "OR", 
-			"NOT", "HALT", "REGISTER", "COL", "LABEL", "NUMBER", "BOOL", "WHITESP", 
-			"ERR"
-		};
-	}
-	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
-	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
-
-	/**
-	 * @deprecated Use {@link #VOCABULARY} instead.
-	 */
-	@Deprecated
-	public static final String[] tokenNames;
-	static {
-		tokenNames = new String[_SYMBOLIC_NAMES.length];
-		for (int i = 0; i < tokenNames.length; i++) {
-			tokenNames[i] = VOCABULARY.getLiteralName(i);
-			if (tokenNames[i] == null) {
-				tokenNames[i] = VOCABULARY.getSymbolicName(i);
-			}
-
-			if (tokenNames[i] == null) {
-				tokenNames[i] = "<INVALID>";
-			}
-		}
-	}
-
-	@Override
-	@Deprecated
-	public String[] getTokenNames() {
-		return tokenNames;
-	}
-
-	@Override
-
-	public Vocabulary getVocabulary() {
-		return VOCABULARY;
-	}
+	public static final String[] tokenNames = {
+		"'\\u0000'", "'\\u0001'", "'\\u0002'", "'\\u0003'", "'\\u0004'", "'\\u0005'", 
+		"'\\u0006'", "'\\u0007'", "'\b'", "'\t'", "'\n'", "'\\u000B'", "'\f'", 
+		"'\r'", "'\\u000E'", "'\\u000F'", "'\\u0010'", "'\\u0011'", "'\\u0012'", 
+		"'\\u0013'", "'\\u0014'", "'\\u0015'", "'\\u0016'", "'\\u0017'", "'\\u0018'", 
+		"'\\u0019'", "'\\u001A'", "'\\u001B'", "'\\u001C'", "'\\u001D'", "'\\u001E'", 
+		"'\\u001F'", "' '", "'!'", "'\"'", "'#'"
+	};
+	public static final String[] ruleNames = {
+		"T__1", "T__0", "PUSH", "POP", "ADD", "SUB", "MULT", "DIV", "ADDI", "SUBI", 
+		"MULTI", "DIVI", "LI", "LB", "STOREW", "LOADW", "BRANCH", "BRANCHEQ", 
+		"BRANCHLESSEQ", "JR", "JAL", "PRINT", "DELETION", "MOVE", "AND", "OR", 
+		"NOT", "HALT", "REGISTER", "COL", "LABEL", "NUMBER", "BOOL", "WHITESP", 
+		"ERR"
+	};
 
 
 	private List<String> errors = new ArrayList<>();
@@ -118,13 +67,13 @@ public class SVMLexer extends Lexer {
 	public String getGrammarFileName() { return "SVM.g4"; }
 
 	@Override
+	public String[] getTokenNames() { return tokenNames; }
+
+	@Override
 	public String[] getRuleNames() { return ruleNames; }
 
 	@Override
 	public String getSerializedATN() { return _serializedATN; }
-
-	@Override
-	public String[] getChannelNames() { return channelNames; }
 
 	@Override
 	public String[] getModeNames() { return modeNames; }
@@ -135,21 +84,17 @@ public class SVMLexer extends Lexer {
 	@Override
 	public void action(RuleContext _localctx, int ruleIndex, int actionIndex) {
 		switch (ruleIndex) {
-		case 34:
-			ERR_action((RuleContext)_localctx, actionIndex);
-			break;
+		case 34: ERR_action((RuleContext)_localctx, actionIndex); break;
 		}
 	}
 	private void ERR_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
-		case 0:
-			 errors.add("Invalid character: "+ getText());  
-			break;
+		case 0:  errors.add("Invalid character: "+ getText());   break;
 		}
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2%\u0107\b\1\4\2\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\2%\u0107\b\1\4\2\t"+
 		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -169,7 +114,7 @@ public class SVMLexer extends Lexer {
 		"\3\"\3\"\3\"\3\"\5\"\u00fa\n\"\3#\6#\u00fd\n#\r#\16#\u00fe\3#\3#\3$\3"+
 		"$\3$\3$\3$\2\2%\3\3\5\4\7\5\t\6\13\7\r\b\17\t\21\n\23\13\25\f\27\r\31"+
 		"\16\33\17\35\20\37\21!\22#\23%\24\'\25)\26+\27-\30/\31\61\32\63\33\65"+
-		"\34\67\359\36;\37= ?!A\"C#E$G%\3\2\4\4\2C\\c|\5\2\13\f\17\17\"\"\2\u0114"+
+		"\34\67\359\36;\37= ?!A\"C#E$G%\3\2\4\4\2C\\c|\5\2\13\f\17\17\"\"\u0114"+
 		"\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2"+
 		"\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2"+
 		"\2\31\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2"+
