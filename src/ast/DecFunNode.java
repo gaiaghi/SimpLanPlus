@@ -113,6 +113,30 @@ public class DecFunNode implements Node {
 		code = code + id.getSTEntry().getFunEndLabel() + ":\n";
 		
 		
+		// Devo aggiornare i valori dei parametri attuali di tipo parametro.
+		// I valori dei parametri attuali si trovano nel frame sottostate.
+		int n_pointer_par = 0;
+		for( int i = 0; i < args.size(); i ++ ) {
+			ArgNode arg = (ArgNode) args.get(i);
+			
+			if( arg.getType() instanceof PointerTypeNode ) {
+				n_pointer_par ++;
+				int offsetParFormale = i + 1;
+				
+				code = code + "lw $t1 " + offsetParFormale + "($fp)\n";
+				
+				/* partendo dal frame pointer devo scendere di:
+					"args.size()"		numero di parametri presenti nel frame corrente 
+										della chiamata di funzione
+					"1"					per "old FP"
+					"n_pointer_par"		numero progressivo corrispondente ai parametri
+										di tipo puntatore
+				*/
+				code = code + "sw $t1 " + (args.size() + 1 + n_pointer_par) + "($fp)\n";
+			}
+		}
+		
+		
 		code = code + "lw $ra 0($sp)\n"; 			// $ra <- top
 		code = code + "addi $sp $sp "+(n+2)+"\n"; 	// pop di parametri formali + ra + al
 		code = code + "lw $fp 0($sp)\n";

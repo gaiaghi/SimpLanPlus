@@ -101,7 +101,13 @@ public class ExecuteVM {
 	    		}
 	    		else {
 	    			// fetch
+	    			try {
 	    			bytecode = code.get( regs.getIP() );  
+	    			}catch(IndexOutOfBoundsException e) {
+	    				System.err.println("EXE val IP="+regs.getIP());
+	    				System.err.println("EXE size code="+code.size());
+	    				return;
+	    			}
 		    		regs.addOneToIP();
 
 		    		int value;

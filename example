@@ -1,0 +1,49 @@
+{
+	void g(^^int r, ^int d, int c){
+		d=new int;
+		d^=14;
+		
+		r=new ^int;
+		r^= new int;
+		r^^=28;
+	}
+	
+	void f(int y, ^int x, ^^int z){
+		x=new int;
+		x^=3;
+		
+		z=new ^int;
+		z^= new int;
+		z^^=25;
+		
+		g(z,x,y);
+		
+		
+	}
+
+	int b=4;
+	^int a=new int;
+	^^int c=new ^int;
+	
+	a^=1;
+	c^= new int;
+	c^^=22;
+	
+	print a;
+	print a^;
+	print true;
+	print c;
+	print c^;
+	print c^^;
+	print false;
+	
+	f(b,a,c);
+	
+	print a;
+	print a^;
+	print true;
+	print c;
+	print c^;
+	print c^^;
+
+}

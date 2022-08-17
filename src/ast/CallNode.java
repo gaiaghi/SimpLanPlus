@@ -21,6 +21,7 @@ public class CallNode implements Node {
 	private ArrayList<Node> parlist; 
 	private int nestingLvl;
 	private boolean firstArgCheck;
+	private ArrayList<Integer> indexesPointerPar;
 	
 	public CallNode(IdNode id, ArrayList<Node> args) {
 		this.id = id;
@@ -103,6 +104,24 @@ public class CallNode implements Node {
 		
 		String code = "";
 		
+		// per ogni parametro attuale di tipo puntatore, metto sullo
+		// stack l'indirizzo a cui punta.
+		// (ordine push dei parametri: dall'ultimo al primo)
+		for(int i = indexesPointerPar.size()-1; i > -1; i -- ) {
+			int index = indexesPointerPar.get(i);
+			
+			if( parlist.get( index ) instanceof DerExpNode ) {
+				DerExpNode derExp = ((DerExpNode) parlist.get( index ));
+				
+				if( derExp.getLhs().isPointer() ) {
+					code = code + derExp.codeGeneration();
+					code = code + "push $a0\n";
+				}
+			}
+		}
+		
+		
+		
 		code = code + "push $fp\n";
 		
 		// caricamento dei parametri dall'ultimo al primo
@@ -119,6 +138,38 @@ public class CallNode implements Node {
 		code = code + "push $al\n";
 		
 		code = code + "jal " + entry.getFunLabel() + "\n";
+		
+		// i valori dei puntatori nel frame possono essere aggiornati.
+		// copio i valori dei puntatori che si trovano in cima allo stack
+		// nella loro locazione sullo stack
+		for(int i = 0; i < indexesPointerPar.size(); i ++ ) {
+			int index = indexesPointerPar.get(i);
+			
+			if( parlist.get( index ) instanceof DerExpNode ) {
+				DerExpNode derExp = ((DerExpNode) parlist.get( index ));
+				
+				if( derExp.getLhs().isPointer() ) {
+					int nestingLevelPar = derExp.getLhs().getId().getSTEntry().getNestingLevel();
+					int offsetPar = derExp.getLhs().getId().getSTEntry().getOffset();
+					
+					// prendo dallo stack l'eventuale nuovo valore del parametro
+					// attuale di tipo puntatore
+					code = code + "lw $t1 0($sp)\n";
+					code = code + "pop\n";
+					
+					code = code + "mv $al $fp\n";
+					for (int j = 0; j < nestingLvl - nestingLevelPar; j ++ ) {
+						code = code + "lw $al 0($al)\n";
+					}
+					
+					// copio il valore del parametro formale
+					// nel parametro attuale
+					code = code + "sw $t1 " +offsetPar +"($al)\n";
+				}
+			}
+			
+		}
+		
 		
 		return code;
 	}
@@ -213,6 +264,7 @@ public class CallNode implements Node {
 		
 		// calcolo indici dei parametri formali x_i che sono puntatori
 		ArrayList<Integer> x_indexes = funType.getIndexesPointerPar();
+		indexesPointerPar = x_indexes;
 		
 		// (2) recupero gli effetti della funzione f dalla entry
 		STEntry funEntry = null;
