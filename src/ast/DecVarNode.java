@@ -58,17 +58,20 @@ public class DecVarNode implements Node{
 		
 		Node decType = type;
 		if( decType instanceof PointerTypeNode && expType instanceof PointerTypeNode ) {
-			int derNumRightDec = ((PointerTypeNode) decType).getDereferenceNum();
-			int derNumExpDec = ((PointerTypeNode) expType).getDerNumDec();
+			PointerTypeNode pointerDecType = (PointerTypeNode) decType;
+			PointerTypeNode pointerExpType = (PointerTypeNode) expType;
+			
+			int derNumRightDec = pointerDecType.getDereferenceNum();
+			int derNumExpDec = pointerExpType.getDerNumDec();
 
 			if( derNumRightDec != derNumExpDec )
 
 				throw new TypeErrorException("not valid assignment between pointer '"
-						+ ((PointerTypeNode)decType).getErrorMsg() + "' and '" 
-						+ ((PointerTypeNode)expType).getErrorMsg() + "'");
+						+ id.getId() + "' and '" 
+						+ pointerExpType.getErrorMsg() + "'");
 			
-			decType = ((PointerTypeNode) decType).getPointedType();
-			expType = ((PointerTypeNode) expType).getPointedType();
+			decType = pointerDecType.getPointedType();
+			expType = pointerExpType.getPointedType();
 		}
 
 		else 

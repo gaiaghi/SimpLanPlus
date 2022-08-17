@@ -82,6 +82,10 @@ public class PointerTypeNode implements Node {
 		return errorMsg;
 	}
 	
+	public void setErrorMsg(String str) {
+		errorMsg = str;
+	}
+	
 	
 	public Node getType() {
 		return type;
