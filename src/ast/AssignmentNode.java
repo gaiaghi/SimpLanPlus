@@ -126,8 +126,9 @@ public class AssignmentNode implements Node {
 		            return res;
 				}
 				
-				for(int i = getDereferenceNum()+1; i <= lhs.getId().getDerNumDec(); i ++)
+				for(int i = lhs.getDereferenceNum()+1; i <= lhs.getId().getDerNumDec(); i ++) {
 					lhsEntry.getVarEffect(i).setEffect(new Effect(Effect.INITIALIZED));
+				}
 			}
 		}
 		

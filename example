@@ -20,6 +20,26 @@
 		
 		
 	}
+	
+	void ff(int y, ^int x, ^^int z){
+		int tmp1 = x^;
+		int tmp2 = z^^;
+		
+		x=new int;
+		x^=tmp1;
+		
+		z^= new int;
+		z^^=tmp2;
+		
+		if (y == 0)
+			return;
+		else {
+			y = y -1;
+			x^ = x^ -1;
+			z^^ = z^^ -1;
+			ff(y,x,z);
+		}	
+	}
 
 	int b=4;
 	^int a=new int;
@@ -37,7 +57,7 @@
 	print c^^;
 	print false;
 	
-	f(b,a,c);
+	ff(b,a,c);
 	
 	print a;
 	print a^;

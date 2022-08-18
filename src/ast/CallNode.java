@@ -149,6 +149,10 @@ public class CallNode implements Node {
 				DerExpNode derExp = ((DerExpNode) parlist.get( index ));
 				
 				if( derExp.getLhs().isPointer() ) {
+					int formalLen = id.getSTEntry().getParEffectList().get(index).size();
+					int actualLen = derExp.getLhs().getId().getSTEntry().getSizeVarEffects();
+					int diffLen = actualLen - formalLen;
+					
 					int nestingLevelPar = derExp.getLhs().getId().getSTEntry().getNestingLevel();
 					int offsetPar = derExp.getLhs().getId().getSTEntry().getOffset();
 					
@@ -156,15 +160,24 @@ public class CallNode implements Node {
 					// attuale di tipo puntatore
 					code = code + "lw $t1 0($sp)\n";
 					code = code + "pop\n";
-					
+
 					code = code + "mv $al $fp\n";
 					for (int j = 0; j < nestingLvl - nestingLevelPar; j ++ ) {
 						code = code + "lw $al 0($al)\n";
 					}
-					
+
 					// copio il valore del parametro formale
-					// nel parametro attuale
-					code = code + "sw $t1 " +offsetPar +"($al)\n";
+					// nel parametro attuale					
+					if (diffLen > 0) {
+						code = code + "addi $al $al "+offsetPar+"\n";
+						for (int j = 0; j < diffLen; j++) 
+							code = code + "lw $al 0($al)\n";
+						code = code + "sw $t1 0($al)\n";
+					}
+					else {
+						code = code + "sw $t1 " +offsetPar +"($al)\n";	
+					}
+			
 				}
 			}
 			

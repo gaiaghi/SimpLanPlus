@@ -131,7 +131,7 @@ public class DecVarNode implements Node{
 		if (exp != null) {
 			res.addAll(exp.checkEffects(env));
 		
-			if( exp instanceof DerExpNode ) {
+			if( exp instanceof DerExpNode && type instanceof PointerTypeNode) {
 				DerExpNode derExp = (DerExpNode) exp;
 				List<Effect> newEffectList = derExp.getLhs().getId().getSTEntry().getVarEffectList();
 			
@@ -144,7 +144,6 @@ public class DecVarNode implements Node{
 				entry.setVarEffect(0, new Effect(Effect.READ_WRITE));
 		}
 		env.safeAddEntry(id.getId(), entry);
-		
 		return res;
 	}
 	

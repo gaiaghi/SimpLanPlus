@@ -352,7 +352,8 @@
 // come il 61, ma con parametro attuale che è un puntatore di puntatore mentre il parametro formale è un puntatore
 // Output = 5,3
 //#n62#OK
-//{int f(^int x, int n){ x^=3; n=4; return 5;} ^^int y=new ^int; int t; y^=new int;  y^^=1; t=f(y^,2); print t; print y^^;}
+//{int f(^int x, int n){ x^=3; n=4; return 5;} ^^int y=new ^int;  ^^int z=new ^int; int t; y^=new int; y^^=1; t=f(y^,2); print t; print y^^; }
+//{int f(^int x, int n){ x = new int; x^=3; n=4; return 5;} ^^^int y=new ^^int; int t; y^ = new ^int;  y^^=new int; y^^^=1; t=f(y^^,2); print t; print y^^^; }
 
 
 
@@ -374,6 +375,7 @@
 //#n65#ERR
 //{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; delete x; x=new ^int; x^=new int; y^=4; x^^=2; print x^^; }
 //{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; y=x^; delete x; y^=4;  }
+// questo ok:
 //{^^int x=new ^int; x^=new int; x^^=3; print x^^; delete x; }
 
 
@@ -411,7 +413,6 @@
 //#n70#ERR
 //{void f(^int x, ^int y){delete x; delete y;} ^int a = new int; a^=3; f(a,a);}
 
-
 //n71
 // x^=720		x=1006
 //#n71#OK
@@ -419,15 +420,13 @@
 
 
 //n72
-//#n72#ERR
-// danno tutti errore:
+//#n72#OK
 //{ void f(^^int a){ a^=new int; a^^=4; print a^^; } ^^int x=new ^int; f(x); }
-//{ void f(^^int a){ a^=new int; a^^=4; print a^^; } ^^int x=new ^int; x^ = new int; f(x); print x^^}
+//{ void f(^^int a){ a^=new int; a^^=4; print a^^; } ^^int x=new ^int; x^ = new int; f(x); print x^^;}
 
 //n73
 //#n73#OK
 //{ void h(^int x){ print 100; } ^int a=new int; h(a); }
-//questo invece d? errore:
 //{ void h(^int x){ print 100; } ^int a; h(a); }
 
 
