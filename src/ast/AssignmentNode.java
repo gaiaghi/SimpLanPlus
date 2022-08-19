@@ -156,9 +156,14 @@ public class AssignmentNode implements Node {
 				lhs.getId().getSTEntry().setVarEffect(i, expEffect);
 			}
 			
+			// salvo gli effetti di exp in questo punto
+			/*try {
+				derNode.getLhs().getId().setSTEntry(new STEntry( env.lookup(derNode.getLhs().getId().getId()) ));
+			} catch (MissingDecException e1) {}
+			*/
 		}
 
-		
+		// salvo gli effetti di lhs in questo punto
 		try {
 			lhs.getId().setSTEntry(new STEntry( env.lookup(lhs.getId().getId()) ));
 		} catch (MissingDecException e1) {}
