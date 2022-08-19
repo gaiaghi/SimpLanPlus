@@ -157,10 +157,10 @@ public class AssignmentNode implements Node {
 			}
 			
 			// salvo gli effetti di exp in questo punto
-			/*try {
+			try {
 				derNode.getLhs().getId().setSTEntry(new STEntry( env.lookup(derNode.getLhs().getId().getId()) ));
 			} catch (MissingDecException e1) {}
-			*/
+			
 		}
 
 		// salvo gli effetti di lhs in questo punto
