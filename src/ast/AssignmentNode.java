@@ -153,7 +153,7 @@ public class AssignmentNode implements Node {
 			for (int i = lhsDer, j = expDerNum; i< maxDer; i++, j++) {
 				//recupero l'effetto da exp e lo copio in lhs
 				Effect expEffect = derNode.getLhs().getId().getSTEntry().getVarEffect(j); 
-				lhs.getId().getSTEntry().setVarEffect(i, expEffect);
+				lhsEntry.setVarEffect(i, expEffect);
 			}
 			
 			// salvo gli effetti di exp in questo punto

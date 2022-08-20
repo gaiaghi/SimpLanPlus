@@ -2,8 +2,10 @@ package ast;
 
 import java.util.ArrayList;
 
+import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 
@@ -69,6 +71,7 @@ public class PrintNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		if( exp instanceof DerExpNode )
 			((DerExpNode) exp).setInAssign(true);
+		
 		return exp.checkEffects(env);
 	}
 	
