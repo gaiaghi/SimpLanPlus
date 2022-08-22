@@ -1,69 +1,33 @@
+/*
 {
-	void g(^^int r, ^int d, int c){
-		d=new int;
-		d^=14;
-		
-		r=new ^int;
-		r^= new int;
-		r^^=28;
-	}
-	
-	void f(int y, ^int x, ^^int z){
-		x=new int;
-		x^=3;
-		
-		z=new ^int;
-		z^= new int;
-		z^^=25;
-		
-		g(z,x,y);
-		
-		
-	}
-	
-	void ff(int y, ^int x, ^^int z){
-		int tmp1 = x^;
-		int tmp2 = z^^;
-		
-		x=new int;
-		x^=tmp1;
-		
-		z^= new int;
-		z^^=tmp2;
-		
-		if (y == 0)
-			return;
-		else {
-			y = y -1;
-			x^ = x^ -1;
-			z^^ = z^^ -1;
-			ff(y,x,z);
-		}	
-	}
 
-	int b=4;
-	^int a=new int;
-	^^int c=new ^int;
-	
-	a^=1;
-	c^= new int;
-	c^^=22;
-	
-	print a;
-	print a^;
-	print true;
-	print c;
-	print c^;
-	print c^^;
-	print false;
-	
-	ff(b,a,c);
-	
-	print a;
-	print a^;
-	print true;
-	print c;
-	print c^;
-	print c^^;
+/* L'utilizzo dei puntatori è corretto. Il codice stampa il valore 1. */
 
+	^^int x ; 
+	^int y = new int; 
+	y^ = 1; 
+	x = new ^int; 
+	print x;
+	x^ = y; 
+	print x^^;
 }
+
+
+
+{
+
+/* Il codice riporta una corretta definizione di funzione. */
+
+	void h(^int x, ^int y){
+		if (y^==0)
+			delete x; 
+		else 
+			{ 
+				x^ = x^ - 1;
+				h(y,x); 
+			} 
+	} 
+}
+*/
+
+

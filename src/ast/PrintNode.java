@@ -69,10 +69,16 @@ public class PrintNode implements Node {
 
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
+		ArrayList<SemanticError> errors = new ArrayList<>();
+		
 		if( exp instanceof DerExpNode )
 			((DerExpNode) exp).setInAssign(true);
 		
-		return exp.checkEffects(env);
+		errors = exp.checkEffects(env);
+		
+		exp.updateEffectsOfId(env);
+		
+		return errors;
 	}
 	
 	

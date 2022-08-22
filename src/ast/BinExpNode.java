@@ -3,9 +3,11 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
+import exception.MissingDecException;
 import exception.TypeErrorException;
 
 import util.Environment;
+import util.STEntry;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 
@@ -340,5 +342,10 @@ public class BinExpNode implements Node {
 		
 		return vars;
     }
+	
+	public void updateEffectsOfId(Environment env) {
+		leftExp.updateEffectsOfId(env);
+		rightExp.updateEffectsOfId(env);
+	}
 
 }

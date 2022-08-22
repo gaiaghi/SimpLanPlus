@@ -64,5 +64,9 @@ public class NegExpNode implements Node {
 	public Node getExp() {
 		return exp;
 	}
+	
+	public void updateEffectsOfId(Environment env) {
+		exp.updateEffectsOfId(env);
+	}
 
 }

@@ -68,5 +68,8 @@ public class BaseExpNode implements Node {
 			((DerExpNode) exp).setInAssign(true);
 	}
 	
+	public void updateEffectsOfId(Environment env) {
+		exp.updateEffectsOfId(env);
+	}
 
 }

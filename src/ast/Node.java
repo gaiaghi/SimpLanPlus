@@ -41,7 +41,7 @@ public interface Node {
         return new ArrayList<LhsNode>();
     }
 	
-	
+	default void updateEffectsOfId(Environment env) { }
 
 	
 }  

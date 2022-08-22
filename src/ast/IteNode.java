@@ -107,6 +107,8 @@ public class IteNode implements Node {
 		ArrayList<SemanticError> errors = new ArrayList<>();
         errors.addAll(cond.checkEffects(env));
         
+        cond.updateEffectsOfId(env);
+        
         if (elseStm != null) {
         	Environment thenEnv = new Environment(env);
         	Environment elseEnv = new Environment(env);

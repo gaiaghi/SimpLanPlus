@@ -123,8 +123,8 @@ public class IdNode implements Node {
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 		
 		try {
-			//entry = env.lookup(id);
-			entry = new STEntry(env.lookup(id));
+			entry = env.lookup(id);
+			//entry = new STEntry(env.lookup(id));
 		} catch (MissingDecException e) {}
 		
 	    return errors;

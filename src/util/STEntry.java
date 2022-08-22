@@ -21,7 +21,6 @@ public class STEntry {
 	private DecFunNode decFun;
 	private Environment envFunc;
 	
-	
 	public STEntry (int nestingLvl, int offset) {
 		this.nestingLvl = nestingLvl;
 		this.offset = offset; 
@@ -227,7 +226,6 @@ public class STEntry {
 	public void setDecFun(DecFunNode decFun) {
 		this.decFun = decFun;
 	}
-
 
 	
 }

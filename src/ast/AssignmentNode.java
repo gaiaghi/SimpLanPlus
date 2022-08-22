@@ -162,6 +162,9 @@ public class AssignmentNode implements Node {
 			} catch (MissingDecException e1) {}
 			
 		}
+		else {
+			exp.updateEffectsOfId(env);
+		}
 
 		// salvo gli effetti di lhs in questo punto
 		try {

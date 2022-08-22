@@ -62,7 +62,8 @@ public class DerExpNode implements Node {
         }
        
         
-        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env));     
+        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env)); 
+        
         
         return errors;
 	}
@@ -80,6 +81,23 @@ public class DerExpNode implements Node {
 
 	public void setInAssign(boolean value) {
 		inAssign = value;
+	}
+	
+	public void updateEffectsOfId(Environment env) {
+		try {
+			//System.err.println("der "+lhs.getId().getId());
+			lhs.getId().setSTEntry(new STEntry( env.lookup(lhs.getId().getId()) ));
+		} catch (MissingDecException e1) {}
+	}
+	
+	private String hashEffect(List<Effect> list) {
+		String str="[";
+		for(Effect e : list)
+			str = str + e + ",";
+		str=str+"]        [";
+		for(Effect e : list)
+			str = str + e.hashCode() + ",";
+		return str+"]";
 	}
 	
 }
