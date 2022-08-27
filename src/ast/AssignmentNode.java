@@ -121,10 +121,10 @@ public class AssignmentNode implements Node {
 			
 			if( exp instanceof NewExpNode ) {
 				
-				if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.DELETED) ) {
-					res.add(new SemanticError("Cannot use pointer '" + lhs.getId().getId() + "', it was deleted."));
-		            return res;
-				}
+//				if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.DELETED) ) {
+//					res.add(new SemanticError("Cannot use pointer '" + lhs.getId().getId() + "', it was deleted."));
+//		            return res;
+//				}
 				
 				for(int i = lhs.getDereferenceNum()+1; i <= lhs.getId().getDerNumDec(); i ++) {
 					lhsEntry.getVarEffect(i).setEffect(new Effect(Effect.INITIALIZED));
