@@ -59,6 +59,7 @@ public class DerExpNode implements Node {
         		 errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized."));
                  return errors;
              } 
+        	 
         }
        
         

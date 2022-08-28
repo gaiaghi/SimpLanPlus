@@ -28,6 +28,79 @@
 			} 
 	} 
 }
+
+
+
+{	void f(^int x, ^int y)
+	{
+		delete x;
+	} 
+	
+	^int a = new int; 
+	
+	^^int b;
+	b = new ^int;
+	b^ = new int;
+	b^^=3;
+	
+	a^=3; 
+	f(a,a);
+}
+	*/
+	
+/*
+{^^int x=new ^int; 
+
+^int y=new int; 
+y^=3; 
+
+print y;
+print y^; 
+
+print true;
+print x;
+
+x^=y; 
+
+print true;
+print x;
+print x^; 
+print x^^;
+
+delete y; 
+
+y = new int; 
+y^ = 6; 
+
+print true;
+//print x;
+//print x^; 
+print x^^;
+
+print true;
+print y;
+print y^; 
+}
+
 */
 
 
+
+{
+^^int x=new ^int; 
+^int y=new int; 
+y^=3; 
+x^=y; 
+
+delete y; 
+
+y = new int; 
+y^ = 6; 
+
+print x^; 
+print x^^;
+}
+
+
+	
+	

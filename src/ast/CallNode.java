@@ -387,7 +387,7 @@ public class CallNode implements Node {
 			List<Effect> effettoParAttuale = null;
 			STEntry newEntry = null;
 			try {
-				newEntry = env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
+				newEntry = new STEntry( env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId()) );
 				effettoParAttuale = newEntry.getVarEffectList();
 			} catch (MissingDecException e) {}
 			
@@ -398,6 +398,10 @@ public class CallNode implements Node {
 			List<Effect> resultSeq = new ArrayList<Effect>();
 			int diff = effettoParAttuale.size() - effettoParFormale.size();
 			
+			
+			//System.out.println(i+" effects   attuale  " +hashEffect( effettoParAttuale) );
+			//System.out.println(i+" effects   formale  " +hashEffect( effettoParFormale) );
+			
 			for( int j = 0; j < effettoParAttuale.size() - effettoParFormale.size(); j ++ )
 				resultSeq.add( effettoParAttuale.get(j) );
 			
@@ -406,11 +410,17 @@ public class CallNode implements Node {
 			}
 			
 			
+			
 			for( int j = 0; j < resultSeq.size(); j ++)
 				newEntry.getVarEffect(j).setEffect(resultSeq.get(j));
+			
+			
+			//System.out.println(i+" effects   entry  " +hashEffect( newEntry.getVarEffectList()) );
+			//System.out.println(i+" effects   seq  " +hashEffect( resultSeq) +"\n\n");
 
 			tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	
 			envList.add(tmp_env);
+			
 			
 			((DerExpNode) parlist.get(i)).getLhs().getId().setSTEntry( new STEntry( newEntry ));
 		}
@@ -420,7 +430,25 @@ public class CallNode implements Node {
 		if( envList.size() > 0 ) {
 			sigma_3 = envList.get(0);
 			for( int i = 1; i < envList.size(); i ++) {
+				
+				/*try {
+					System.out.println(i+"   " +hashEffect( sigma_3.lookup("a").getVarEffectList()));
+				} catch (MissingDecException e) {}
+				
+				
+				try {
+					System.out.println(hashEffect( envList.get(i).lookup("a").getVarEffectList()));
+				} catch (MissingDecException e) {}
+				*/
+				
 				sigma_3 = Environment.parEnv(sigma_3, envList.get(i));
+				
+				/*try {
+					System.out.println(hashEffect( sigma_3.lookup("a").getVarEffectList()));
+				} catch (MissingDecException e) {}
+				
+				System.out.println("\n\n\n");
+				*/
 			}
 		}
 		

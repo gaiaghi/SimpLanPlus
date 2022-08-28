@@ -126,9 +126,15 @@ public class AssignmentNode implements Node {
 //		            return res;
 //				}
 				
-				for(int i = lhs.getDereferenceNum()+1; i <= lhs.getId().getDerNumDec(); i ++) {
-					lhsEntry.getVarEffect(i).setEffect(new Effect(Effect.INITIALIZED));
+				System.err.println("prima " +hashEffect(lhsEntry.getVarEffectList()));
+				
+				
+				for(int i = lhs.getDereferenceNum()/*+1*/; i <= lhs.getId().getDerNumDec(); i ++) {
+					lhsEntry.setVarEffect(i, new Effect(Effect.INITIALIZED));
+					//lhsEntry.getVarEffect(i).setEffect(new Effect(Effect.INITIALIZED));
 				}
+				
+				System.err.println("dopo " +hashEffect(lhsEntry.getVarEffectList()));
 			}
 		}
 		

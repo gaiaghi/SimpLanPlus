@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import exception.MissingDecException;
 import exception.TypeErrorException;
+import util.Effect;
 import util.Environment;
 import util.STEntry;
 import util.SemanticError;
@@ -71,7 +72,7 @@ public class PrintNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 		
-		if( exp instanceof DerExpNode )
+		if( exp instanceof DerExpNode ) 
 			((DerExpNode) exp).setInAssign(true);
 		
 		errors = exp.checkEffects(env);
