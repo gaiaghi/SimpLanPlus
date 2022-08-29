@@ -113,11 +113,13 @@ public class AssignmentNode implements Node {
 		//env seq[lhs = RW]
 		// controllo che la catena del puntatore non sia a INIT
 		if( lhs.isPointer() ) {
-			for(int i = 0; i < lhs.getDereferenceNum(); i ++)
+			// controllo i primi effetti nella catena del puntatore
+			for(int i = 0; i < lhs.getDereferenceNum(); i ++) {
 				if ( ! lhsEntry.getVarEffect(i).equals(Effect.READ_WRITE) ) {
-		            res.add(new SemanticError("'"+lhs.getId().getId() + "' has not status RW. " +lhsEntry.getVarEffectList()));
+		            res.add(new SemanticError("Pointer '"+lhs.getId().getId() + "' has not status RW. " + " Assignment"));
 		            return res;
 				}
+			}
 			
 			if( exp instanceof NewExpNode ) {
 				
@@ -126,15 +128,12 @@ public class AssignmentNode implements Node {
 //		            return res;
 //				}
 				
-				System.err.println("prima " +hashEffect(lhsEntry.getVarEffectList()));
-				
-				
-				for(int i = lhs.getDereferenceNum()/*+1*/; i <= lhs.getId().getDerNumDec(); i ++) {
+				// usiamo il "+1" perchè dopo viene sovrascritto l'indice "lhs.getDereferenceNum()"
+				for(int i = lhs.getDereferenceNum()+1; i <= lhs.getId().getDerNumDec(); i ++) {
 					lhsEntry.setVarEffect(i, new Effect(Effect.INITIALIZED));
 					//lhsEntry.getVarEffect(i).setEffect(new Effect(Effect.INITIALIZED));
 				}
 				
-				System.err.println("dopo " +hashEffect(lhsEntry.getVarEffectList()));
 			}
 		}
 		

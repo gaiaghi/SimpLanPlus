@@ -57,16 +57,20 @@ public class DeletionNode implements Node{
 		
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
+		
+		
 		res.addAll(id.checkEffects(env));
 		
 		try {
 			STEntry idEntry = env.lookup(id.getId()); 
 			int derNumDec = id.getDerNumDec();
 			
+			//System.out.println("DEL "+hashEffect(idEntry.getVarEffectList()));
+			
 			//i puntatori devono essere inizializzati per poterli cancellare
 			for (int i=0; i<=derNumDec; i++) {
 				if (id.getSTEntry().getVarEffect(i).equals(Effect.INITIALIZED)) {
-					res.add(new SemanticError("Cannot delete the not initialized pointer '"+ id.getId() + "'") );
+					res.add(new SemanticError("Cannot delete the not initialized pointer '"+ id.getId() + "'.") );
 					return res;
 					}
 			}
@@ -91,6 +95,9 @@ public class DeletionNode implements Node{
 			
 			
 			id.setSTEntry(new STEntry( env.lookup(id.getId())) );
+			
+			
+			//System.out.println("DEL "+hashEffect(idEntry.getVarEffectList()));
 			
 		} catch (MissingDecException e1) {}
 	

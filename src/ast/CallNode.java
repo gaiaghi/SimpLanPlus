@@ -387,7 +387,8 @@ public class CallNode implements Node {
 			List<Effect> effettoParAttuale = null;
 			STEntry newEntry = null;
 			try {
-				newEntry = new STEntry( env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId()) );
+				//newEntry = new STEntry( env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId()) );
+				newEntry =  env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
 				effettoParAttuale = newEntry.getVarEffectList();
 			} catch (MissingDecException e) {}
 			
@@ -458,7 +459,7 @@ public class CallNode implements Node {
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 
 		env.copyFrom(updEnv);
-		
+	
 		return errors;
 	}
 	

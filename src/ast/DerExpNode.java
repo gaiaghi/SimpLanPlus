@@ -47,21 +47,39 @@ public class DerExpNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 		
+		STEntry lhsEntry = null;
+		try {
+			lhsEntry = env.lookup(lhs.getId().getId());
+		} catch (MissingDecException e1) {}
+		
+		
+		
+		
         errors.addAll(lhs.checkEffects(env));
+       
 
         if ( !lhs.isPointer() && lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
-            errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized."));
+    		errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized. derExp 1"));
             return errors;
         } 
         
         if( inAssign ) {
-        	 if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
-        		 errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized."));
+        	if ( lhs.getId().getEffect(lhs.getId().getDerNumDec()).equals(Effect.DELETED)) {
+       		 	errors.add(new SemanticError("Cannot read '" + lhs.getId().getId() + "' after its deletion."
+       		 			+" You can reinitialize the pointer."
+       		 			+ " derExp "));
+                return errors;
+            } 
+        	
+        	if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
+        		 errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized. derExp 2"));
                  return errors;
              } 
         	 
         }
        
+        //System.err.println("der env 1 "+hashEffect(lhsEntry.getVarEffectList()));
+        //System.err.println("der 2 "+hashEffect(lhs.getId().getSTEntry().getVarEffectList()));
         
         errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env)); 
         
@@ -86,7 +104,6 @@ public class DerExpNode implements Node {
 	
 	public void updateEffectsOfId(Environment env) {
 		try {
-			//System.err.println("der "+lhs.getId().getId());
 			lhs.getId().setSTEntry(new STEntry( env.lookup(lhs.getId().getId()) ));
 		} catch (MissingDecException e1) {}
 	}

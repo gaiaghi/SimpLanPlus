@@ -85,7 +85,7 @@ print y^;
 */
 
 
-
+/*
 {
 ^^int x=new ^int; 
 ^int y=new int; 
@@ -101,6 +101,86 @@ print x^;
 print x^^;
 }
 
+*/
 
-	
-	
+
+/*	
+{
+^^int x;
+//x=new ^int; 
+x^=new int; 
+//x^^=3;
+//delete x;
+//print x^^;
+//x^^=4;
+}
+*/
+
+
+
+
+
+/*
+//n66
+//#n66#ERR
+{void f (^^int a, ^int b){
+	a^=b; 
+	a^^=2; 
+	print a;
+  print a^;
+  print a^^;
+  print b;
+  print b^;
+  } 
+  
+  ^^int x=new ^int; 
+  ^int y=new int;
+  
+  print 1111111111;
+  print x;
+  print y;
+  
+   print 1111111111;
+  f(x,y); 
+  print 1111111111;
+  
+  print x;
+  print x^;
+  print x^^;
+  print y;
+  print y^;
+  
+  delete y; 
+   
+  print y;
+  print x^^; 
+ }
+*/
+
+
+
+
+{
+void f(^int x, ^int y){
+	delete x;
+}
+^int a=new int;
+a^=3;
+f(a,a);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exception.MissingDecException;
 import exception.TypeErrorException;
@@ -72,16 +73,33 @@ public class PrintNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 		
-		if( exp instanceof DerExpNode ) 
+		if( exp instanceof DerExpNode ) {
 			((DerExpNode) exp).setInAssign(true);
+			
+		}
 		
 		errors = exp.checkEffects(env);
+		
+		/*if( exp instanceof DerExpNode )
+			System.err.println("PRINT " +((DerExpNode) exp).getLhs().getId().getId() +"  "
+				+hashEffect(((DerExpNode) exp).getLhs().getId().getSTEntry().getVarEffectList()));
+		else
+			System.err.println("PRINT --------------------------------------------------------");
+		*/
 		
 		exp.updateEffectsOfId(env);
 		
 		return errors;
 	}
 	
-	
+	private String hashEffect(List<Effect> list) {
+		String str="[";
+		for(Effect e : list)
+			str = str + e + ",";
+		str=str+"]        [";
+		for(Effect e : list)
+			str = str + e.hashCode() + ",";
+		return str+"]";
+	}
 
 }

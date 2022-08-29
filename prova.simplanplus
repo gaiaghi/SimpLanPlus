@@ -365,15 +365,15 @@
 
 
 //n64
-// esempio riuso di un puntatore dopo la delete NON permesso. 
-// L'intera catena di puntatori ? messa a deleted
-//#n64#ERR
+// esempio riuso di un puntatore dopo la delete. 
+//#n64#OK
 //{^int x=new int; x^=3; delete x; x = new int; x^=4;}
 
 
 //n65
-//#n65#ERR
+//#n65#OK
 //{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; delete x; x=new ^int; x^=new int; y^=4; x^^=2; print x^^; }
+//questo err:
 //{^^int x=new ^int; ^int y=new int; x^=new int; x^^=3; print x^^; y=x^; delete x; y^=4;  }
 // questo ok:
 //{^^int x=new ^int; x^=new int; x^^=3; print x^^; delete x; }
@@ -401,10 +401,14 @@
 //{ void g(^int a) {  ^int y=a;    delete y;} void f(^^int a) {  g(a^);  print(a^^);} ^^int x=new ^int; x^=new int; x^^=2; f(x); }
 
 
-// usi dei puntatori non permessi. Tutti ad ERR: 
+// usi dei puntatori. 
+//OK:
 //{^^int x=new ^int; x^ = new int; x^^ = 22; delete x; x= new^int; x^ = new int; x^^=8; print x^^;}
+//OK:
 //{^int x=  new int; x^ = 22; print x; delete x; x= new int; print x; x^=7;} 
+//OK:
 //{^^int x ; ^int y = new int; x = new ^int; x^ = y ; y^ = 22 ; print y;  delete y; y= new int; print y;}
+//ERR:
 //{^^int x ; ^int y = new int; x = new ^int; x^ = y ; y^ = 22 ; delete y; y= new int; y^ = 8; print y^; print x^^; }
 
 
