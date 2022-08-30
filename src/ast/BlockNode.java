@@ -249,7 +249,21 @@ public class BlockNode implements Node {
 		if(! isFunBody)
 			env.removeScope();
 		
-		return errors;
+		//rimozione di eventuali messaggi di errore duplicati 
+		 var clearedStr = new ArrayList<String>();
+	        for (SemanticError element : errors) {
+	        	String msg = element.toString();
+	            if (!clearedStr.contains(msg)) {
+	            	clearedStr.add(msg);
+	            }
+	        }
+	    ArrayList<SemanticError> clearedErrors = new ArrayList<SemanticError>();
+	    for (int i = 0; i < clearedStr.size(); i++) {
+	    	clearedErrors.add(new SemanticError(clearedStr.get(i)));
+	    }
+		
+		return clearedErrors;
+		
 	}
 
 	

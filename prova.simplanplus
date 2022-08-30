@@ -1,5 +1,3 @@
-
-
 //n1
 //syntax errors
 //#n1#ERR
@@ -178,7 +176,8 @@
 //n30
 // x non e' inizializzato
 //#n30#ERR
-//{int f() {^int x = new int; return (x^);} }
+//{int f() {^int x = new int; return (x^);}}
+//{int f() {^int x; return (x^);} print(f());}
 
 
 //n31
@@ -296,8 +295,7 @@
 
 //n52
 // Output: true, false, true
-//#n52#OK
-//{void f() {print true; {return;} } bool x=false; f(); print x; print !x;  }
+//#n52#OK{void f() {print true; {return;} } bool x=false; f(); print x; print !x;  }
 
 
 //n53

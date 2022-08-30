@@ -64,7 +64,7 @@ public class DecVarNode implements Node{
 			if( derNumRightDec != derNumExpDec )
 
 				throw new TypeErrorException("not valid assignment between pointer '"
-						+ ((PointerTypeNode)decType).getErrorMsg() + "' and '" 
+						+ id.getId() + "' and '" 
 						+ ((PointerTypeNode)expType).getErrorMsg() + "'");
 			
 			decType = ((PointerTypeNode) decType).getPointedType();
