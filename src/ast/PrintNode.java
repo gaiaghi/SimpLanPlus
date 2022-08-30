@@ -73,10 +73,13 @@ public class PrintNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 		
-		if( exp instanceof DerExpNode ) {
+		/*
+		if( exp instanceof DerExpNode )
 			((DerExpNode) exp).setInAssign(true);
-			
-		}
+		if( exp instanceof BaseExpNode )
+			((BaseExpNode) exp).setInAssign(true);
+		*/
+		exp.setInAssign(true);
 		
 		errors = exp.checkEffects(env);
 		

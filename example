@@ -159,7 +159,7 @@ x^=new int;
 
 
 
-
+/*
 {
 void f(^int x, ^int y){
 	delete x;
@@ -168,19 +168,9 @@ void f(^int x, ^int y){
 a^=3;
 f(a,a);
 }
+*/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+{int f() {^int x = new int; if(x^==0) print 1; return 2;} f();}
 
 

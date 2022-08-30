@@ -347,5 +347,10 @@ public class BinExpNode implements Node {
 		leftExp.updateEffectsOfId(env);
 		rightExp.updateEffectsOfId(env);
 	}
+	
+	public void setInAssign(boolean value) {
+		leftExp.setInAssign(value);
+		rightExp.setInAssign(value);
+	}
 
 }

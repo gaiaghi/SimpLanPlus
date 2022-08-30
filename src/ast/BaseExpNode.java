@@ -64,8 +64,11 @@ public class BaseExpNode implements Node {
 	}
 	
 	public void setInAssign(boolean value) {
-		if( exp instanceof DerExpNode )
+		/*if( exp instanceof DerExpNode )
 			((DerExpNode) exp).setInAssign(true);
+		if( exp instanceof BaseExpNode )
+			((BaseExpNode) exp).setInAssign(true);*/
+		exp.setInAssign(value);
 	}
 	
 	public void updateEffectsOfId(Environment env) {

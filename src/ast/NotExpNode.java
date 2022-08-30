@@ -68,5 +68,9 @@ public class NotExpNode implements Node {
 	public void updateEffectsOfId(Environment env) {
 		exp.updateEffectsOfId(env);
 	}
+	
+	public void setInAssign(boolean value) {
+		exp.setInAssign(value);
+	}
 
 }

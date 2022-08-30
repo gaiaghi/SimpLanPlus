@@ -53,8 +53,6 @@ public class DerExpNode implements Node {
 		} catch (MissingDecException e1) {}
 		
 		
-		
-		
         errors.addAll(lhs.checkEffects(env));
        
 
@@ -70,13 +68,16 @@ public class DerExpNode implements Node {
        		 			+ " derExp "));
                 return errors;
             }
+        	
+        	
+        	if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
+       		 	errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized. derExp 2"));
+                return errors;
+            } 
         	 
         }
        
-    	if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
-    		 errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized. derExp 2"));
-             return errors;
-         } 
+    	
         
         //System.err.println("der env 1 "+hashEffect(lhsEntry.getVarEffectList()));
         //System.err.println("der 2 "+hashEffect(lhs.getId().getSTEntry().getVarEffectList()));

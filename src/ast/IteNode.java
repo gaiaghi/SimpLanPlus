@@ -105,6 +105,9 @@ public class IteNode implements Node {
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<>();
+		
+		cond.setInAssign(true);
+		
         errors.addAll(cond.checkEffects(env));
         
         cond.updateEffectsOfId(env);
