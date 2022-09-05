@@ -1,3 +1,11 @@
+
+//{^^int a = new ^int; ^int b = new int; a^ = new int; a^^ =2; b^ = 3; print a; a^=b; delete b; print a; print a^; a^ = new int; print a^; }
+//{^^int a = new ^int; ^int b = new int; a^ = new int; a^^ =2; b^ = 3; print a; a^=b; delete a;  a = new ^int; print a;}
+
+//{ void f(^int a){  delete a; a = new int;} ^^int x=new ^int; x^=new int; x^^=2; f(x^); print x; }
+//{void f(^^int a){  delete a; a = new ^int; a^= new int; a^^=29;} ^^^int x=new ^^int; x^=new ^int; x^^= new int; x^^^=2; f(x^); print x^^^; }
+
+
 //n1
 //syntax errors
 //#n1#ERR
@@ -295,7 +303,8 @@
 
 //n52
 // Output: true, false, true
-//#n52#OK{void f() {print true; {return;} } bool x=false; f(); print x; print !x;  }
+//#n52#OK
+//{void f() {print true; {return;} } bool x=false; f(); print x; print !x;  }
 
 
 //n53

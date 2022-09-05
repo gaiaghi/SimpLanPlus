@@ -111,6 +111,7 @@ public class LhsNode implements Node {
 			
 				if( leftSide ) {
 					if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) {
+						System.out.println("effetto: "+id.getEffect(getDereferenceNum()));
 			            errors.add(new SemanticError("'"+lhs.getId().getId() + "' has not status RW. lhs leftSide"));
 					}
 				}

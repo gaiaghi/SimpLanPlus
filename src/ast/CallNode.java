@@ -400,8 +400,8 @@ public class CallNode implements Node {
 			int diff = effettoParAttuale.size() - effettoParFormale.size();
 			
 			
-			//System.out.println(i+" effects   attuale  " +hashEffect( effettoParAttuale) );
-			//System.out.println(i+" effects   formale  " +hashEffect( effettoParFormale) );
+			System.out.println(i+" effects   attuale  " +hashEffect( effettoParAttuale) );
+			System.out.println(i+" effects   formale  " +hashEffect( effettoParFormale) );
 			
 			for( int j = 0; j < effettoParAttuale.size() - effettoParFormale.size(); j ++ )
 				resultSeq.add( effettoParAttuale.get(j) );
@@ -425,6 +425,8 @@ public class CallNode implements Node {
 			
 			((DerExpNode) parlist.get(i)).getLhs().getId().setSTEntry( new STEntry( newEntry ));
 		}
+		
+		
 		
 		// faccio la PAR 
 		Environment sigma_3 = new Environment();
@@ -453,8 +455,22 @@ public class CallNode implements Node {
 			}
 		}
 		
+		try {
+			System.out.println("prima "+ sigma_3.lookup("x").getVarEffectList());
+		} catch (MissingDecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		// (6) update(Sigma_2, Sigma_3)
 		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);	
+		
+		try {
+			System.out.println("dopo "+updEnv.lookup("x").getVarEffectList());
+		} catch (MissingDecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// controllo se ci sono errori nell'ambiente ottenuta dalla update
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 

@@ -84,11 +84,11 @@ public class DeletionNode implements Node{
 			//--------------------RIUSO
 			Effect seqEffect = Effect.seq(idEntry.getVarEffect(derNumDec), Effect.DELETED);
 			idEntry.getVarEffect(derNumDec).setEffect(seqEffect);
-
-			//eventuali puntatori intermedi vengono messi a INIT 
-			for (int i = 0; i < id.getDerNumDec(); i++) {
-				idEntry.getVarEffect(i).setEffect(Effect.INITIALIZED);
-			}
+//
+//			//eventuali puntatori intermedi vengono messi a INIT 
+//			for (int i = 0; i < id.getDerNumDec(); i++) {
+//				idEntry.getVarEffect(i).setEffect(Effect.INITIALIZED);
+//			}
 			//--------------------RIUSO END
 			if ( idEntry.getVarEffect(derNumDec).equals(Effect.ERROR) )
 				res.add(new SemanticError("Pointer '" + id.getId() + "' was already deleted."));

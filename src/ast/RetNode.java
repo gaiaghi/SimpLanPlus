@@ -75,9 +75,9 @@ public class RetNode implements Node {
 		if( exp instanceof BaseExpNode )
 			((BaseExpNode) exp).setInAssign(true);
 		*/
-		exp.setInAssign(true);
 		
 		if( exp != null ) {
+			exp.setInAssign(true);
 			ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 			errors = exp.checkEffects(env);
 			exp.updateEffectsOfId(env);

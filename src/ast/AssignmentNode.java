@@ -113,28 +113,20 @@ public class AssignmentNode implements Node {
 		//env seq[lhs = RW]
 		// controllo che la catena del puntatore non sia a INIT
 		if( lhs.isPointer() ) {
-			// controllo i primi effetti nella catena del puntatore
+			
 			for(int i = 0; i < lhs.getDereferenceNum(); i ++) {
 				if ( ! lhsEntry.getVarEffect(i).equals(Effect.READ_WRITE) ) {
-		            res.add(new SemanticError("Pointer '"+lhs.getId().getId() + "' has not status RW. " + " Assignment"));
+		            res.add(new SemanticError("Pointer '"+lhs.getId().getId() + "' has not status RW. " + " Assignment new"));
 		            return res;
 				}
 			}
 			
 			if( exp instanceof NewExpNode ) {
-				
-//				if( lhsEntry.getVarEffect(lhs.getDereferenceNum()+1).equals(Effect.DELETED) ) {
-//					res.add(new SemanticError("Cannot use pointer '" + lhs.getId().getId() + "', it was deleted."));
-//		            return res;
-//				}
-				
-				// usiamo il "+1" perchè dopo viene sovrascritto l'indice "lhs.getDereferenceNum()"
-				for(int i = lhs.getDereferenceNum()+1; i <= lhs.getId().getDerNumDec(); i ++) {
+				for(int i = lhs.getDereferenceNum(); i <= lhs.getId().getDerNumDec(); i ++) {
 					lhsEntry.setVarEffect(i, new Effect(Effect.INITIALIZED));
-					//lhsEntry.getVarEffect(i).setEffect(new Effect(Effect.INITIALIZED));
 				}
-				
 			}
+			
 		}
 		
 		
