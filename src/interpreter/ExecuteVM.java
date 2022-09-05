@@ -380,7 +380,7 @@ public class ExecuteVM {
     
     private void free(int index) throws MemoryException {
     	try {
-    		memory.get(index).free();;
+    		memory.get(index).free();
     	}catch(IndexOutOfBoundsException e) {
     		throw new MemoryException("Access out of memory.");
     	}

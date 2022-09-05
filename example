@@ -104,17 +104,18 @@ print x^^;
 */
 
 
-/*	
+
 {
+^^bool y;
 ^^int x;
-//x=new ^int; 
+x=new ^int; 
 x^=new int; 
-//x^^=3;
-//delete x;
+x^^=3;
+delete x;
 //print x^^;
 //x^^=4;
 }
-*/
+
 
 
 
@@ -171,6 +172,6 @@ f(a,a);
 */
 
 
-{int f() {^int x = new int; if(x^==0) print 1; return 2;} f();}
+//{int f() {^int x = new int; if(x^==0) print 1; return 2;} f();}
 
 

@@ -25,7 +25,8 @@ public class PointerTypeNode implements Node {
 
 	@Override
 	public String toPrint(String indent) {
-		return indent + "PointerType";
+		//return indent + "PointerType";
+		return indent + "PointerType (" + getPointedType().toPrint("") + ")";
 	}
 
 	@Override
