@@ -400,8 +400,8 @@ public class CallNode implements Node {
 			int diff = effettoParAttuale.size() - effettoParFormale.size();
 			
 			
-			System.out.println(i+" effects   attuale  " +hashEffect( effettoParAttuale) );
-			System.out.println(i+" effects   formale  " +hashEffect( effettoParFormale) );
+			//System.out.println(i+" effects   attuale  " +hashEffect( effettoParAttuale) );
+			//System.out.println(i+" effects   formale  " +hashEffect( effettoParFormale) );
 			
 			for( int j = 0; j < effettoParAttuale.size() - effettoParFormale.size(); j ++ )
 				resultSeq.add( effettoParAttuale.get(j) );
@@ -433,44 +433,13 @@ public class CallNode implements Node {
 		if( envList.size() > 0 ) {
 			sigma_3 = envList.get(0);
 			for( int i = 1; i < envList.size(); i ++) {
-				
-				/*try {
-					System.out.println(i+"   " +hashEffect( sigma_3.lookup("a").getVarEffectList()));
-				} catch (MissingDecException e) {}
-				
-				
-				try {
-					System.out.println(hashEffect( envList.get(i).lookup("a").getVarEffectList()));
-				} catch (MissingDecException e) {}
-				*/
-				
 				sigma_3 = Environment.parEnv(sigma_3, envList.get(i));
-				
-				/*try {
-					System.out.println(hashEffect( sigma_3.lookup("a").getVarEffectList()));
-				} catch (MissingDecException e) {}
-				
-				System.out.println("\n\n\n");
-				*/
 			}
 		}
 		
-		try {
-			System.out.println("prima "+ sigma_3.lookup("x").getVarEffectList());
-		} catch (MissingDecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		// (6) update(Sigma_2, Sigma_3)
 		Environment updEnv = Environment.updateEnv(sigma_2, sigma_3);	
-		
-		try {
-			System.out.println("dopo "+updEnv.lookup("x").getVarEffectList());
-		} catch (MissingDecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		// controllo se ci sono errori nell'ambiente ottenuta dalla update
 		errors.addAll(updEnv.checkErrors());
 		// copio l'ambiente ottenuto dalla Regola [Invk-e] nell'ambiente corrente 

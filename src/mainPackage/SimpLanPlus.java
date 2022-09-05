@@ -194,7 +194,7 @@ public class SimpLanPlus{
 			ArrayList<SemanticError> err = ast.checkSemantics(env);
 			
 			if( err.size() > 0 ){
-				System.err.println("You had: " + err.size() + " semantic errors:");
+				System.err.println("You had " + err.size() + " semantic errors:");
 				for(SemanticError e : err)
 					System.err.println("\t" + e);
 				System.exit(1);

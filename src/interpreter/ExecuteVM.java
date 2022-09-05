@@ -329,7 +329,7 @@ public class ExecuteVM {
     		printCPU("Exception");
     		System.err.println("\n\nError during execution:");
     		System.err.println(e.getMessage());
-    		System.err.println("Instruction: " + bytecode.toString());
+    		//System.err.println("Instruction: " + bytecode.toString());
     	
     		if( debug )
     			closeDebugFile(out);

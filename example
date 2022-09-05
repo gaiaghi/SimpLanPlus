@@ -12,8 +12,11 @@
 	print x^^;
 }
 
+*/
 
 
+
+/*
 {
 
 /* Il codice riporta una corretta definizione di funzione. */
@@ -28,9 +31,14 @@
 			} 
 	} 
 }
+*/
 
 
 
+
+
+
+/*
 {	void f(^int x, ^int y)
 	{
 		delete x;
@@ -47,6 +55,8 @@
 	f(a,a);
 }
 	*/
+	
+	
 	
 /*
 {^^int x=new ^int; 
@@ -81,11 +91,12 @@ print true;
 print y;
 print y^; 
 }
-
 */
 
 
+
 /*
+ERR
 {
 ^^int x=new ^int; 
 ^int y=new int; 
@@ -100,11 +111,11 @@ y^ = 6;
 print x^; 
 print x^^;
 }
-
 */
 
 
 
+/*
 {
 ^^bool y;
 ^^int x;
@@ -115,7 +126,7 @@ delete x;
 //print x^^;
 //x^^=4;
 }
-
+*/
 
 
 
@@ -154,7 +165,7 @@ delete x;
   delete y; 
    
   print y;
-  print x^^; 
+  print x; 
  }
 */
 
@@ -172,6 +183,7 @@ f(a,a);
 */
 
 
-//{int f() {^int x = new int; if(x^==0) print 1; return 2;} f();}
+
+
 
 
