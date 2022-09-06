@@ -2,11 +2,9 @@ package ast;
 
 import java.util.ArrayList;
 
-import exception.MissingDecException;
 import exception.TypeErrorException;
 import util.Effect;
 import util.Environment;
-import util.STEntry;
 import util.SemanticError;
 
 public class LhsNode implements Node {

@@ -1,7 +1,6 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import util.Environment;
 import util.SemanticError;

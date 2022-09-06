@@ -89,16 +89,11 @@ public class IdNode implements Node {
 		
 		
 		if( isInDeletionNode ) {
-			String delList = "";
 			for(int i = 0; i < getDerNumDec(); i ++ ) {
 				code = code + "lw $a0 0($a0)\n";
-//				code = code + "push $a0\n" + "lw $a0 0($a0)\n";
-//				delList = delList + "lw $a0 0($sp)\n" +"pop\n" + "del $a0\n";
 			}
-//			code = code + delList;
 			code = code + "del $a0\n";
 		}
-		
 		
 		return code;
 	}
@@ -125,7 +120,6 @@ public class IdNode implements Node {
 		
 		try {
 			entry = env.lookup(id);
-			//entry = new STEntry(env.lookup(id));
 		} catch (MissingDecException e) {}
 		
 	    return errors;

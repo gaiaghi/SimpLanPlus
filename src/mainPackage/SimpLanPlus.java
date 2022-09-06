@@ -159,7 +159,6 @@ public class SimpLanPlus{
 			ast = visitor.visit(parser.block()); 
 		}catch(Exception e) {
 			System.err.println("Error in the contents of the '"+ fileName +"' file.");
-			//e.printStackTrace();
 			System.exit(1);
 		}
 		

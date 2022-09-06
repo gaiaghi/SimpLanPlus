@@ -183,7 +183,6 @@ public class CallNode implements Node {
 			
 		}
 		
-		
 		return code;
 	}
 
@@ -250,7 +249,7 @@ public class CallNode implements Node {
 		// controllo sugli effetti dei paramatri attuali
 		if (firstArgCheck) {
 			firstArgCheck = false;
-			List<List<Effect>> pl = new ArrayList();
+			List<List<Effect>> pl = new ArrayList<List<Effect>>();
 
 			for(Node par : parlist) {
 				try {
@@ -387,7 +386,6 @@ public class CallNode implements Node {
 			List<Effect> effettoParAttuale = null;
 			STEntry newEntry = null;
 			try {
-				//newEntry = new STEntry( env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId()) );
 				newEntry =  env.lookup(((DerExpNode) parlist.get(i)).getLhs().getId().getId());
 				effettoParAttuale = newEntry.getVarEffectList();
 			} catch (MissingDecException e) {}
@@ -399,10 +397,6 @@ public class CallNode implements Node {
 			List<Effect> resultSeq = new ArrayList<Effect>();
 			int diff = effettoParAttuale.size() - effettoParFormale.size();
 			
-			
-			//System.out.println(i+" effects   attuale  " +hashEffect( effettoParAttuale) );
-			//System.out.println(i+" effects   formale  " +hashEffect( effettoParFormale) );
-			
 			for( int j = 0; j < effettoParAttuale.size() - effettoParFormale.size(); j ++ )
 				resultSeq.add( effettoParAttuale.get(j) );
 			
@@ -410,18 +404,11 @@ public class CallNode implements Node {
 				resultSeq.add( Effect.seq(effettoParAttuale.get(j+diff), effettoParFormale.get(j)) );
 			}
 			
-			
-			
 			for( int j = 0; j < resultSeq.size(); j ++)
 				newEntry.getVarEffect(j).setEffect(resultSeq.get(j));
 			
-			
-			//System.out.println(i+" effects   entry  " +hashEffect( newEntry.getVarEffectList()) );
-			//System.out.println(i+" effects   seq  " +hashEffect( resultSeq) +"\n\n");
-
 			tmp_env.safeAddEntry(((DerExpNode) parlist.get(i)).getLhs().getId().getId(), newEntry);	
 			envList.add(tmp_env);
-			
 			
 			((DerExpNode) parlist.get(i)).getLhs().getId().setSTEntry( new STEntry( newEntry ));
 		}
@@ -458,19 +445,8 @@ public class CallNode implements Node {
     }
 
 	
-	private String hashEffect(List<Effect> list) {
-		String str="[";
-		for(Effect e : list)
-			str = str + e + ",";
-		str=str+"]        [";
-		for(Effect e : list)
-			str = str + e.hashCode() + ",";
-		return str+"]";
-	}
-	
 	
 	public void updateEffectsOfId(Environment env) {
-		System.err.println("Call 1");
 		for(Node par : parlist)
 			par.updateEffectsOfId(env);
 	}

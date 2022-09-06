@@ -80,7 +80,7 @@ public class STEntry {
 		
 	}
 	
-	// Restituisce una nuova STEntry composta da una nuona copia di tutti 
+	// Restituisce una nuova STEntry composta da una nuova copia di tutti 
 	// gli attributi, tranne che degli effetti.
 	public static STEntry cloneSTEntryWithoutEffects(STEntry entry) {
 		

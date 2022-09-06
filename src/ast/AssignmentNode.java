@@ -173,15 +173,5 @@ public class AssignmentNode implements Node {
 	}
 	
 	
-	private String hashEffect(List<Effect> list) {
-		String str="[";
-		for(Effect e : list)
-			str = str + e + ",";
-		str=str+"]        [";
-		for(Effect e : list)
-			str = str + e.hashCode() + ",";
-		return str+"]";
-	}
-	
 	
 }

@@ -1,7 +1,6 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import exception.MissingDecException;
 import exception.TypeErrorException;
@@ -57,15 +56,11 @@ public class DeletionNode implements Node{
 		
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
-		
-		
 		res.addAll(id.checkEffects(env));
 		
 		try {
 			STEntry idEntry = env.lookup(id.getId()); 
 			int derNumDec = id.getDerNumDec();
-			
-			//System.out.println("DEL "+hashEffect(idEntry.getVarEffectList()));
 			
 			//i puntatori devono essere inizializzati per poterli cancellare
 			for (int i=0; i<=derNumDec; i++) {
@@ -75,46 +70,20 @@ public class DeletionNode implements Node{
 					}
 			}
 			
-			//la catena dei puntatori viene messa a seq DELETED 
-//			for (int i = 0; i <= id.getDerNumDec(); i++) {
-//				Effect seqEffect = Effect.seq(idEntry.getVarEffect(i), Effect.DELETED);
-//				idEntry.getVarEffect(i).setEffect(seqEffect);
-//			}	
-
-			//--------------------RIUSO
 			Effect seqEffect = Effect.seq(idEntry.getVarEffect(derNumDec), Effect.DELETED);
 			idEntry.getVarEffect(derNumDec).setEffect(seqEffect);
-//
-//			//eventuali puntatori intermedi vengono messi a INIT 
-//			for (int i = 0; i < id.getDerNumDec(); i++) {
-//				idEntry.getVarEffect(i).setEffect(Effect.INITIALIZED);
-//			}
-			//--------------------RIUSO END
+
 			if ( idEntry.getVarEffect(derNumDec).equals(Effect.ERROR) )
 				res.add(new SemanticError("Pointer '" + id.getId() + "' was already deleted."));
 			
 			
 			id.setSTEntry(new STEntry( env.lookup(id.getId())) );
 			
-			
-			//System.out.println("DEL "+hashEffect(idEntry.getVarEffectList()));
-			
 		} catch (MissingDecException e1) {}
 	
 		return res;
 	}
 
-	private String hashEffect(List<Effect> list) {
-		String str="[";
-		for(Effect e : list)
-			str = str + e + ",";
-		str=str+"]        [";
-		for(Effect e : list)
-			str = str + e.hashCode() + ",";
-		return str+"]";
-	}
-	
-	
-	
+
 	
 }

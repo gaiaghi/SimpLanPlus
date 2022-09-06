@@ -52,22 +52,14 @@ public class DerExpNode implements Node {
 			lhsEntry = env.lookup(lhs.getId().getId());
 		} catch (MissingDecException e1) {}
 		
-		
         errors.addAll(lhs.checkEffects(env));
        
-
         if ( !lhs.isPointer() && lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
     		errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized. derExp 1"));
             return errors;
         } 
         
         if( inAssign ) {
-//        	if ( lhs.getDereferenceNum() == lhs.getId().getDerNumDec() && lhs.getId().getEffect(lhs.getId().getDerNumDec()).equals(Effect.DELETED)) {
-//       		 	errors.add(new SemanticError("Cannot read '" + lhs.getId().getId() + "' after its deletion."
-//       		 			+" You can reinitialize the pointer."
-//       		 			+ " derExp "));
-//                return errors;
-//            }
 
         	if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.DELETED)) {
        		 	errors.add(new SemanticError("Cannot read '" + lhs.getId().getId() + "' after its deletion. derExp 3"));
@@ -81,13 +73,7 @@ public class DerExpNode implements Node {
         	 
         }
        
-    	
-        
-        //System.err.println("der env 1 "+hashEffect(lhsEntry.getVarEffectList()));
-        //System.err.println("der 2 "+hashEffect(lhs.getId().getSTEntry().getVarEffectList()));
-        
         errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env)); 
-        
         
         return errors;
 	}
@@ -113,14 +99,5 @@ public class DerExpNode implements Node {
 		} catch (MissingDecException e1) {}
 	}
 	
-	private String hashEffect(List<Effect> list) {
-		String str="[";
-		for(Effect e : list)
-			str = str + e + ",";
-		str=str+"]        [";
-		for(Effect e : list)
-			str = str + e.hashCode() + ",";
-		return str+"]";
-	}
-	
+
 }

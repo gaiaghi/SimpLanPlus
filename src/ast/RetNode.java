@@ -70,12 +70,6 @@ public class RetNode implements Node {
 	@Override
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		
-		/*if( exp instanceof DerExpNode ) 
-			((DerExpNode) exp).setInAssign(true);
-		if( exp instanceof BaseExpNode )
-			((BaseExpNode) exp).setInAssign(true);
-		*/
-		
 		if( exp != null ) {
 			exp.setInAssign(true);
 			ArrayList<SemanticError> errors = new ArrayList<SemanticError>();

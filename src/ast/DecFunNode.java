@@ -361,18 +361,7 @@ public class DecFunNode implements Node {
 		return errors;
 	}
 	
-	
-	
-	private String hashEffect(List<Effect> list) {
-		String str="[";
-		for(Effect e : list)
-			str = str + e + ",";
-		str=str+"]        [";
-		for(Effect e : list)
-			str = str + e.hashCode() + ",";
-		return str+"]";
-	}
-	
+
 	
 	public ArrayList<SemanticError> checkEffectsActualArgs(List<List<Effect>> actParList) {
 		ArrayList<SemanticError> errors = new ArrayList<SemanticError>();

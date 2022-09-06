@@ -1,13 +1,9 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import exception.MissingDecException;
 import exception.TypeErrorException;
-import util.Effect;
 import util.Environment;
-import util.STEntry;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 
@@ -134,15 +130,6 @@ public class IteNode implements Node {
 	}
 	
 	
-	private String hashEffect(List<Effect> list) {
-		String str="[";
-		for(Effect e : list)
-			str = str + e + ",";
-		str=str+"]        [";
-		for(Effect e : list)
-			str = str + e.hashCode() + ",";
-		return str+"]";
-	}
 	
 	
 	public void setInFunction(boolean b){

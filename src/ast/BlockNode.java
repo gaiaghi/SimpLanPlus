@@ -1,11 +1,9 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
 
 import exception.TypeErrorException;
 import util.Environment;
-import util.STEntry;
 import util.SemanticError;
 import util.SimpLanPlusLib;
 

@@ -1,10 +1,8 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import exception.MissingDecException;
 import exception.MultipleDecException;
 import exception.TypeErrorException;
 import util.Effect;
@@ -147,17 +145,7 @@ public class DecVarNode implements Node{
 		return res;
 	}
 	
-	
-	private String hashEffect(List<Effect> list) {
-		String str="[";
-		for(Effect e : list)
-			str = str + e + ",";
-		str=str+"]        [";
-		for(Effect e : list)
-			str = str + e.hashCode() + ",";
-		return str+"]";
-	}
-	
+
 	
 	
 }
