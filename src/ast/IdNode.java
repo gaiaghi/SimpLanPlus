@@ -87,13 +87,13 @@ public class IdNode implements Node {
 		int offset = entry.getOffset();
 		code = code + "lw $a0 " + offset + "($al)\n";
 		
-		
+		/*
 		if( isInDeletionNode ) {
-			for(int i = 0; i < getDerNumDec(); i ++ ) {
+			for(int i = 0; i < getDerNumDec()-1; i ++ ) {
 				code = code + "lw $a0 0($a0)\n";
 			}
 			code = code + "del $a0\n";
-		}
+		}*/
 		
 		return code;
 	}

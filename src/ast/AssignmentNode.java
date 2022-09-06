@@ -96,10 +96,7 @@ public class AssignmentNode implements Node {
 		
 		lhs.setLeftSide(true);
 		
-		if( exp instanceof DerExpNode )
-			((DerExpNode) exp).setInAssign(true);
-		if( exp instanceof BaseExpNode )
-			((BaseExpNode) exp).setInAssign(true);
+		exp.setCheckInit(true);
 		
 		res.addAll(exp.checkEffects(env));
 		

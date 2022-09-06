@@ -16,11 +16,11 @@ public class DerExpNode implements Node {
 	// exp	    : lhs
 	
 	private LhsNode lhs;
-	private boolean inAssign;
+	private boolean checkInit;
 	
 	public DerExpNode(LhsNode lhs) {
 		this.lhs = lhs;
-		this.inAssign = false;
+		this.checkInit = false;
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class DerExpNode implements Node {
             return errors;
         } 
         
-        if( inAssign ) {
+        if( checkInit ) {
 
         	if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.DELETED)) {
        		 	errors.add(new SemanticError("Cannot read '" + lhs.getId().getId() + "' after its deletion. derExp 3"));
@@ -89,8 +89,8 @@ public class DerExpNode implements Node {
 		return lhs;
 	}
 
-	public void setInAssign(boolean value) {
-		inAssign = value;
+	public void setCheckInit(boolean value) {
+		checkInit = value;
 	}
 	
 	public void updateEffectsOfId(Environment env) {

@@ -102,7 +102,7 @@ public class IteNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		ArrayList<SemanticError> errors = new ArrayList<>();
 		
-		cond.setInAssign(true);
+		cond.setCheckInit(true);
 		
         errors.addAll(cond.checkEffects(env));
         

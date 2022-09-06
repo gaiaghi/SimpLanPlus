@@ -71,7 +71,7 @@ public class RetNode implements Node {
 	public ArrayList<SemanticError> checkEffects(Environment env) {
 		
 		if( exp != null ) {
-			exp.setInAssign(true);
+			exp.setCheckInit(true);
 			ArrayList<SemanticError> errors = new ArrayList<SemanticError>();
 			errors = exp.checkEffects(env);
 			exp.updateEffectsOfId(env);

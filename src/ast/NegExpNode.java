@@ -69,8 +69,8 @@ public class NegExpNode implements Node {
 		exp.updateEffectsOfId(env);
 	}
 	
-	public void setInAssign(boolean value) {
-		exp.setInAssign(value);
+	public void setCheckInit(boolean value) {
+		exp.setCheckInit(value);
 	}
 
 }

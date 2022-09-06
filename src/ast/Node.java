@@ -43,5 +43,5 @@ public interface Node {
 	
 	default void updateEffectsOfId(Environment env) { }
 
-	default void setInAssign(boolean value) { }
+	default void setCheckInit(boolean value) { }
 }  

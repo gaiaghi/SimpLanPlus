@@ -40,8 +40,15 @@ public class DeletionNode implements Node{
 
 	@Override
 	public String codeGeneration() {
-		id.setDeletionNode(true);
+		
+		//id.setDeletionNode(true);
+		
 		String code = id.codeGeneration();
+		
+		for(int i = 0; i < id.getDerNumDec()-1; i ++ ) {
+			code = code + "lw $a0 0($a0)\n";
+		}
+		code = code + "del $a0\n";
 		
 		return code;
 	}

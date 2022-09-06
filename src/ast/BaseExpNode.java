@@ -63,8 +63,8 @@ public class BaseExpNode implements Node {
 		return exp;
 	}
 	
-	public void setInAssign(boolean value) {
-		exp.setInAssign(value);
+	public void setCheckInit(boolean value) {
+		exp.setCheckInit(value);
 	}
 	
 	public void updateEffectsOfId(Environment env) {
