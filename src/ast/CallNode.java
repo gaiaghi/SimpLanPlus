@@ -248,7 +248,16 @@ public class CallNode implements Node {
 			for(Node par : parlist) {
 				try {
 					if( par instanceof DerExpNode ) {
-						pl.add( env.lookup(((DerExpNode) par).getLhs().getId().getId()).getVarEffectList()  );
+						
+						DerExpNode derExp = (DerExpNode) par;
+						
+						if( derExp.getLhs().isPointer() )
+							pl.add( env.lookup(derExp.getLhs().getId().getId()).getVarEffectList()  );
+						else{
+							ArrayList<Effect> arr = new ArrayList<Effect>();
+							arr.add(new Effect(Effect.READ_WRITE));
+							pl.add(arr);
+						}
 					}
 					else {
 						ArrayList<Effect> arr = new ArrayList<Effect>();
@@ -262,6 +271,7 @@ public class CallNode implements Node {
 			try {
 				err = env.lookup(id.getId()).getDecFun().checkEffectsActualArgs(pl);
 			} catch (MissingDecException e2) {}
+			
 			if( err.size() > 0 ) {
 				errors.addAll(err);
 			}

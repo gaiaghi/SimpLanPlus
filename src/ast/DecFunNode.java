@@ -375,9 +375,10 @@ public class DecFunNode implements Node {
 			// nuova copia della entry del paramentro
 			IdNode arg = ((ArgNode) args.get(i)).getId();
 			STEntry newArgEntry = new STEntry(arg.getSTEntry());
-
+			
+			int diff = actParList.get(i).size() - newArgEntry.getSizeVarEffects();
 			for( int j = 0; j < newArgEntry.getSizeVarEffects(); j ++ ) {
-				newArgEntry.setVarEffect(j,new Effect(actParList.get(i).get(j)));
+				newArgEntry.setVarEffect(j,new Effect(actParList.get(i).get(j+diff)));
 			}
 				
 			// inserisco la entry del parametro nell'ambiente

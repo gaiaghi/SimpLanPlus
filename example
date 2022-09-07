@@ -161,7 +161,7 @@ delete x;
   print y;
   print y^;
   
-  delete y; 
+  //delete y; 
    
   print y;
   print x; 
@@ -193,5 +193,50 @@ f(a,a);
 
 }
 */
+
+/*
+{ void h(^int x)
+	{ print x^;  } 
+
+	^^^int a=new ^^int;
+	a^=new ^int; 
+	a^^=new int; 
+	h(a^^);  
+
+}
+//output: Access out of memory
+*/
+
+
+
+/*
+{ void h(^int x)
+	{ print x^;  } 
+
+	^int a=new int; 
+	h(a);  
+
+}
+//output: 'x' not initialized.
+*/
+
+
+/*
+{ void h(int x)
+	{ print x;  } 
+
+	int a; 
+	h(a);  
+
+}
+*/
+
+//{void h(^int x){print 100;} ^int a; h(a); }
+
+
+
+
+
+
 
 

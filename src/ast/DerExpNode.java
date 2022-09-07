@@ -59,6 +59,9 @@ public class DerExpNode implements Node {
             return errors;
         } 
         
+        /*
+         * Se checkInit=true vuol dire che si tratta di un'espressione che non è un parametro di una funzione.
+         * */
         if( checkInit ) {
 
         	if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.DELETED)) {
@@ -69,11 +72,12 @@ public class DerExpNode implements Node {
         	if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
        		 	errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized."));
                 return errors;
-            } 
-        	 
+            }
+        	
+        	errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env)); 
         }
        
-        errors.addAll(Environment.checkExpressionEffects(getIDsOfVariables(), env)); 
+        
         
         return errors;
 	}
