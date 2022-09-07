@@ -102,30 +102,15 @@ public class LhsNode implements Node {
 		}
 		else {
 			
-			//lhs.setLeftSide(leftSide);
-			
 			errors.addAll(lhs.checkEffects(env));
 			
-			// serve per evitare tanti errori tutti uguali relativi allo stesso puntatore
-			/*if( getDereferenceNum() == id.getDerNumLhs()) {
-				
-			
-				if( leftSide ) {
-					if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) {
-			            errors.add(new SemanticError("'"+lhs.getId().getId() + "' has not status RW. lhs leftSide"));
-					}
+			if( leftSide ) {
+				if ( ! id.getEffect(getDereferenceNum()).equals(Effect.READ_WRITE) ) {
+		            errors.add(new SemanticError("'"+lhs.getId().getId() + "' has not status RW."));
 				}
-				//questo ramo else era commentato
-				else {
-					if ( id.getEffect(getDereferenceNum()).equals(Effect.INITIALIZED) ) {
-			            errors.add(new SemanticError("'"+lhs.getId().getId() + "' has not status RW. lhs rightSide"));
-					}
-				}
+			}
 			
-			}*/
 		}
-		
-		
 		
 		return errors;
 	}

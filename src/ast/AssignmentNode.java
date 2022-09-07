@@ -113,7 +113,7 @@ public class AssignmentNode implements Node {
 			
 			for(int i = 0; i < lhs.getDereferenceNum(); i ++) {
 				if ( ! lhsEntry.getVarEffect(i).equals(Effect.READ_WRITE) ) {
-		            res.add(new SemanticError("Pointer '"+lhs.getId().getId() + "' has not status RW. " + " Assignment new"));
+		            res.add(new SemanticError("Pointer '"+lhs.getId().getId() + "' has not status RW."));
 		            return res;
 				}
 			}

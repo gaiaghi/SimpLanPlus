@@ -239,13 +239,7 @@ public class CallNode implements Node {
 		
 		for(Node par : parlist) 
 			errors.addAll(par.checkEffects(env));
-		
-		// ----DUBBIO-----------------------------------------------
-		//System.err.println("Call");
-		for(Node par : parlist)
-			par.updateEffectsOfId(env);
-		//System.err.println("----------------\n\n");
-		
+				
 		// controllo sugli effetti dei paramatri attuali
 		if (firstArgCheck) {
 			firstArgCheck = false;

@@ -41,8 +41,6 @@ public class DeletionNode implements Node{
 	@Override
 	public String codeGeneration() {
 		
-		//id.setDeletionNode(true);
-		
 		String code = id.codeGeneration();
 		
 		for(int i = 0; i < id.getDerNumDec()-1; i ++ ) {

@@ -18,11 +18,9 @@ public class IdNode implements Node {
 	private STEntry entry;
 	private int nestingLvl; 
 	private int derNum;
-	private boolean isInDeletionNode;
 	
 	public IdNode(String id) {
 		this.id = id;
-		isInDeletionNode = false;
 	}
 	
 	public String getId() {
@@ -87,14 +85,6 @@ public class IdNode implements Node {
 		int offset = entry.getOffset();
 		code = code + "lw $a0 " + offset + "($al)\n";
 		
-		/*
-		if( isInDeletionNode ) {
-			for(int i = 0; i < getDerNumDec()-1; i ++ ) {
-				code = code + "lw $a0 0($a0)\n";
-			}
-			code = code + "del $a0\n";
-		}*/
-		
 		return code;
 	}
 
@@ -151,8 +141,6 @@ public class IdNode implements Node {
 		return entry.getVarEffect(derNum);
 	}
 	
-	public void setDeletionNode(boolean value) {
-		isInDeletionNode = value;
-	}
+	
 
 }

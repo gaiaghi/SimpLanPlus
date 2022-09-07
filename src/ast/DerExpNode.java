@@ -55,19 +55,19 @@ public class DerExpNode implements Node {
         errors.addAll(lhs.checkEffects(env));
        
         if ( !lhs.isPointer() && lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
-    		errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized. derExp 1"));
+    		errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized."));
             return errors;
         } 
         
         if( checkInit ) {
 
         	if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.DELETED)) {
-       		 	errors.add(new SemanticError("Cannot read '" + lhs.getId().getId() + "' after its deletion. derExp 3"));
+       		 	errors.add(new SemanticError("Cannot read '" + lhs.getId().getId() + "' after its deletion."));
                 return errors;
             } 
         	
         	if ( lhs.getId().getEffect(lhs.getDereferenceNum()).equals(Effect.INITIALIZED)) {
-       		 	errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized. derExp 2"));
+       		 	errors.add(new SemanticError("'"+lhs.getId().getId() + "' not initialized."));
                 return errors;
             } 
         	 

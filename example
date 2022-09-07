@@ -184,11 +184,14 @@ f(a,a);
 
 
 
+/*
+{ void h(^int x)
+	{ delete x;  } 
 
-{^^int x ; ^int y = new int; x = new ^int; x^ = y ; y^ = 22 ; delete y; y= new int; y^ = 8; print y^; print x^^; }
+	^^int a=new ^int; 
+	h(a^);  
 
-
-
-
+}
+*/
 
 
