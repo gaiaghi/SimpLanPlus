@@ -175,9 +175,8 @@ delete x;
 void f(^int x, ^int y){
 	delete x;
 }
-^int a=new int;
-a^=3;
-f(a,a);
+
+^int a=new int; a^=3;  f(a,a); ;
 }
 */
 
@@ -231,7 +230,9 @@ f(a,a);
 }
 */
 
-//{void h(^int x){print 100;} ^int a; h(a); }
+
+
+
 
 
 

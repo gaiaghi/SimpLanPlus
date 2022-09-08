@@ -104,8 +104,7 @@ public class ExecuteVM {
 	    			try {
 	    			bytecode = code.get( regs.getIP() );  
 	    			}catch(IndexOutOfBoundsException e) {
-	    				System.err.println("EXE val IP="+regs.getIP());
-	    				System.err.println("EXE size code="+code.size());
+	    				System.err.println("IP register error!");
 	    				return;
 	    			}
 		    		regs.addOneToIP();
@@ -469,7 +468,7 @@ public class ExecuteVM {
     
     private BufferedWriter openDebugFile() {
     	try {
-			return new BufferedWriter(new FileWriter("examples/debug.txt"));
+    		return new BufferedWriter(new FileWriter("debug.txt"));
 			
 		} catch (IOException e) {
 			System.err.println("Write error for debug file: " + e.toString());
