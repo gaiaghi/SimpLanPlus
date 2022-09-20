@@ -220,15 +220,43 @@ void f(^int x, ^int y){
 */
 
 
+
+
+
+
+
 /*
-{ void h(int x)
-	{ print x;  } 
-
-	int a; 
-	h(a);  
-
+{ 
+	int b=1111;  
+	void h(){} 
+	int a=22222; 
+	 
+	print b; 
+	print a;
 }
 */
+
+/*
+{ 
+	void h(){} 
+	int a=22222; 
+	
+	print a;
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

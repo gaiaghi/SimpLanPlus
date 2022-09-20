@@ -100,9 +100,9 @@ public class DecVarNode implements Node{
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
   		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-  	  
-        STEntry entry = new STEntry(env.getNestingLevel(), type, env.getAndUpdateOffset()); 
-        
+		
+		STEntry entry = new STEntry(env.getNestingLevel(), type, env.getAndUpdateOffset()); 
+      
         try {
         	env.addEntry(id.getId(), entry);
         	id.setSTEntry(entry);

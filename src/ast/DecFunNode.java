@@ -154,74 +154,64 @@ public class DecFunNode implements Node {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
-		STEntry entry = new STEntry(env.getNestingLevel(), env.getAndUpdateOffset() ); 
-  
+		STEntry entry = new STEntry(env.getNestingLevel(), 0); 
+		
         try {
         	env.addEntry(id.getId(), entry);
         	entry.setFunLabels();
         	id.setSTEntry(entry);
-        	
-        	env.addScope();
-        	/* aggiungo la dichiarazione della fun anche nel nuovo
-        	   scope per evitare che vengano dichiarate altre funzioni
-        	   o variabili con lo stesso nome */
-        	env.addEntry(id.getId(), entry);
-        	
-        	ArrayList<Node> parTypes = new ArrayList<Node>();
-			int paroffset = 1;
-			// check args
-			for(Node a : args){
-				ArgNode arg = (ArgNode) a;
-				Node argType = arg.getType();
-				if( argType  instanceof PointerTypeNode )
-					 ((PointerTypeNode) argType).setDerNum(argType.getDereferenceNum(), 0, arg.getId().getId()); 
-				parTypes.add(argType);
-				try {
-					STEntry parEntry = new STEntry(env.getNestingLevel(), arg.getType(), paroffset++); 
-					env.addEntry(arg.getId().getId(), parEntry);
-					arg.getId().setSTEntry(parEntry);
-				}catch(MultipleDecException e) {
-					res.add(new SemanticError("Parameter id '" + arg.getId().getId() + "' already declared"));
-					return res;
-				}		
-			}
-        	
-			// set func type
-			entry.setType( new ArrowTypeNode(parTypes, type) );
-			
-			block.setIsFunBody(true); 
-			
-			/* creo un nuovo ambiente in cui valutare il corpo della funzione.
-			   il nuovo ambiente contiene solo le dichiarazioni di funzione precedenti.
-			   nel corpo della funzione non si può accedere alle variabili globali. */
-			Environment env_0 = null;
-			try {
-				env_0 = env.envFunc();
-				for( Node a : args ) {
-					// nuova copia della entry del paramentro
-					IdNode arg = ((ArgNode) a).getId(); 
-					STEntry newArgEntry = new STEntry(arg.getSTEntry());
-					
-					// inserisco la entry del parametro nell'ambiente
-					try {
-						env_0.addEntry(arg.getId(), newArgEntry);
-					} catch (MultipleDecException e) {
-						res.add(new SemanticError("Arg id '" + arg.getId() + "' already declared"));
-						return res;
-					}
-				}
-			} catch (MultipleDecException e1) {
-				res.add(new SemanticError("There is a function already declared"));
-				return res;
-			} 
-			res.addAll(block.checkSemantics(env_0));
-			
-			env.removeScope();
-			
         }catch(MultipleDecException e) {
         	res.add(new SemanticError("Fun id '" + id.getId() + "' already declared"));
         }
+        	
+        Environment env_0 = null;
+        try {
+			env_0 = env.envFunc();
+		} catch (MultipleDecException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         
+        env_0.addScope();			
+    		
+    	/* aggiungo la dichiarazione della fun anche nel nuovo
+    	   scope per evitare che vengano dichiarate altre funzioni
+    	   o variabili con lo stesso nome */
+    	try {
+			env_0.addEntry(id.getId(), entry);
+		} catch (MultipleDecException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+    	
+    	ArrayList<Node> parTypes = new ArrayList<Node>();
+		int paroffset = 1;
+		// check args
+		for(Node a : args){
+			ArgNode arg = (ArgNode) a;
+			Node argType = arg.getType();
+			if( argType  instanceof PointerTypeNode )
+				 ((PointerTypeNode) argType).setDerNum(argType.getDereferenceNum(), 0, arg.getId().getId()); 
+			parTypes.add(argType);
+			try {
+				STEntry parEntry = new STEntry(env.getNestingLevel()+1, arg.getType(), paroffset++); 
+				env_0.addEntry(arg.getId().getId(), parEntry);
+				arg.getId().setSTEntry(parEntry);
+			}catch(MultipleDecException e) {
+				res.add(new SemanticError("Parameter id '" + arg.getId().getId() + "' already declared"));
+				return res;
+			}		
+		}
+    	
+		// set func type
+		entry.setType( new ArrowTypeNode(parTypes, type) );
+		
+		block.setIsFunBody(true); 
+			
+		res.addAll(block.checkSemantics(env_0));
+		
+		env_0.removeScope();
+		
         return res;		
 	}
 
