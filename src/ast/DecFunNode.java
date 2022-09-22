@@ -162,14 +162,15 @@ public class DecFunNode implements Node {
         	id.setSTEntry(entry);
         }catch(MultipleDecException e) {
         	res.add(new SemanticError("Fun id '" + id.getId() + "' already declared"));
+        	return res;
         }
         	
         Environment env_0 = null;
         try {
 			env_0 = env.envFunc();
 		} catch (MultipleDecException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			res.add(new SemanticError("Error in the declaration of the function " + id.getId() ));
+			return res;
 		}
         
         env_0.addScope();			
@@ -180,8 +181,8 @@ public class DecFunNode implements Node {
     	try {
 			env_0.addEntry(id.getId(), entry);
 		} catch (MultipleDecException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			res.add(new SemanticError("Fun id '" + id.getId() + "' already declared"));
+			return res;
 		}
     	
     	ArrayList<Node> parTypes = new ArrayList<Node>();

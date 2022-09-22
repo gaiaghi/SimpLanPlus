@@ -102,9 +102,11 @@ public class ExecuteVM {
 	    		else {
 	    			// fetch
 	    			try {
-	    			bytecode = code.get( regs.getIP() );  
+	    				bytecode = code.get( regs.getIP() );  
 	    			}catch(IndexOutOfBoundsException e) {
 	    				System.err.println("IP register error!");
+	    				if( debug )
+	            			closeDebugFile(out);
 	    				return;
 	    			}
 		    		regs.addOneToIP();
@@ -174,7 +176,7 @@ public class ExecuteVM {
 		            			}
 		            			else {
 		            				if( arg3 < 0 ) {
-		            					/* quando facciamo "addi $sp $sp -n" equivale a fare "n" dec senze valore
+		            					/* quando facciamo "addi $sp $sp -n" equivale a fare "n" dec senza valore
 					            		   per settare la cella a isFree=false per visualizzarla nella printCPU
 		            					   scrivo nella cella il valore -1, non dovrebbe essere acceduta senza prima un
 		            					   assegnamento

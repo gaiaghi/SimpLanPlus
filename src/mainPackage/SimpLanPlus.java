@@ -308,7 +308,6 @@ public class SimpLanPlus{
 	    	
 	    }catch(Exception e){
 			System.err.println("Error during execution: " + e.toString());
-			e.printStackTrace();
 			System.exit(1);
 		}
 		

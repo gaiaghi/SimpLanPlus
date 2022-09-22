@@ -248,24 +248,16 @@ void f(^int x, ^int y){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
+{
+	^^int a=new ^int;
+	a^=new int;
+	{ 
+		^int b;
+		b=a^;
+		print b;
+	}
+	print a;
+}
+*/
 

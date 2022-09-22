@@ -222,7 +222,7 @@ public class CallNode implements Node {
 	 * dove:
 	 * 	(1) recupero il tipo della funzione f dalla entry
 	 * 	(2) recupero gli effetti della funzione f dalla entry
-	 * 	(3) i parametri formali y non devono avere effetto <= d
+	 * 	(3) i parametri formali y devono avere effetto <= d
 	 * 	(4) sulle variabili che compaiono in e_i si fa la SEQ con RW
 	 *  (5) faccio la PAR delle SEQ tra l'effetto del parametro attuale u_i 
 	 *  	e del parametro formale x_i corrispondente
@@ -297,7 +297,7 @@ public class CallNode implements Node {
 		List< List<Effect> > parEffectList = funEntry.getParEffectList();
 		
 		
-		// (3) i parametri formali y non devono avere effetto <= d
+		// (3) i parametri formali y devono avere effetto <= d
 		for( int i : y_indexes ) {
 			List<Effect> parEffect = parEffectList.get(i);
 	
@@ -310,7 +310,6 @@ public class CallNode implements Node {
 		}
 		
 		// (4) sulle variabili che compaiono in e_i si fa la SEQ con RW
-		//Environment sigma_2 = new Environment(env);
 		Environment sigma_2 = Environment.cloneEnvWithoutEffects(env);
 		ArrayList<LhsNode> vars = new ArrayList<>();
 		for( int i : y_indexes ) {
