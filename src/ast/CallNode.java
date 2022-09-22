@@ -43,9 +43,12 @@ public class CallNode implements Node {
 	@Override
 	public Node typeCheck() throws TypeErrorException {
 		// controllo che l'id corrisponda ad una funzione
-		ArrowTypeNode funType = (ArrowTypeNode) id.getSTEntry().getType();
-		if( !(funType instanceof ArrowTypeNode) )
-			throw new TypeErrorException("invocation of a non-function " +id);
+		ArrowTypeNode funType = null;
+		try {
+			funType = (ArrowTypeNode) id.getSTEntry().getType();
+		}catch(ClassCastException e){
+			  throw new TypeErrorException("invocation of a non-function " +id.getId());
+		}
 		
 		// controllo che la chiamata abbia il numero corretto di parametri
 	    ArrayList<Node> par_formali = funType.getParList();
