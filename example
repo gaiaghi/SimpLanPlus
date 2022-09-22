@@ -1,7 +1,7 @@
 /*
 {
 
-/* L'utilizzo dei puntatori è corretto. Il codice stampa il valore 1. */
+/* L'utilizzo dei puntatori ï¿½ corretto. Il codice stampa il valore 1. */
 
 	^^int x ; 
 	^int y = new int; 
@@ -248,7 +248,7 @@ void f(^int x, ^int y){
 
 
 
-/*
+
 {
 	^^int a=new ^int;
 	a^=new int;
@@ -259,5 +259,5 @@ void f(^int x, ^int y){
 	}
 	print a;
 }
-*/
+
 
